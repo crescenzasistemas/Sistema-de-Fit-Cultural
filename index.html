@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Crescenza 360° • Sistema de Fit Cultural v17.6 (Link Corrigido)</title>
+<title>Crescenza 360° • Sistema de Fit Cultural v17.7 (Link Corrigido)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   /* =============================
@@ -288,10 +288,10 @@
     font: 14px/1.6 Arial, Helvetica, sans-serif; 
   }
   footer a { color: #ffa64d; text-decoration: none; }
-  /* CORREÇÃO: Centraliza todos os textos do rodapé */
+  /* CORREÇÃO v17.6: Centraliza todos os textos do rodapé */
   footer .footer-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
   footer p { margin: 0 0 6px; }
-  footer p.copy { margin: 0 0 10px; /* text-align: center; - removido pois o pai já centraliza */ }
+  footer p.copy { margin: 0 0 10px; }
 
   /* --- Estilos de Impressão --- */
   @media print {
@@ -716,7 +716,7 @@
                   initCandidateIntro(true); 
                   
               } catch (e) {
-                  // Fallback: Se o atob() falhar (caso o navegador não tenha decodificado 100%)
+                  // Fallback: Se atob() falhar (por causa de um '+' que virou espaço, etc.),
                   // tentamos a lógica antiga (v17.5) que decodificava manualmente.
                   try {
                       console.warn("Falha no atob() direto, tentando com decodeURIComponent...");
@@ -808,7 +808,7 @@
       wppLink.href = wppUrl;
 
       const emailSubject = `Relatório de Fit Cultural - ${candidateName}`;
-      const emailBody = `Olá, Crescenza!\n\nSou ${candidateName} e estou enviando em anexo o meu Relatório de Fit Cultural (PDF) para análise.\n\Obrigado(a).`;
+      const emailBody = `Olá, Crescenza!\n\nSou ${candidateName} e estou enviando em anexo o meu Relatório de Fit Cultural (PDF) para análise.\n\nObrigado(a).`;
       emailLink.href = `mailto:${RECRUITER_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
       
       
@@ -1211,7 +1211,7 @@
       document.getElementById('fit-score').textContent = `${Math.max(0, fitScore).toFixed(0)}%`;
       document.getElementById('report-fit-subtitle').textContent = `Análise de aderência entre seu perfil e o alvo da '${empresaNome}'.`;
 
-      renderRecruiterRadarChart(DIM_KEYS.map(k=>alvo[key] || 0), DIM_KEYS.map(k=>candidato_0_100[k] || 0)); 
+      renderRecruiterRadarChart(DIM_KEYS.map(k=>alvo[k] || 0), DIM_KEYS.map(k=>candidato_0_100[k] || 0)); 
       renderQualitativeReport(candidato_0_100, alvo);
   }
 
@@ -1351,3 +1351,4 @@
 </script>
 </body>
 </html>
+
