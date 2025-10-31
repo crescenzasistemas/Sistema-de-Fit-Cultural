@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Crescenza 360° • Sistema de Fit Cultural v17.2 (Contatos Fixos)</title>
+<title>Crescenza 360° • Sistema de Fit Cultural v17.4 (com Nome)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   /* =============================
-     PALETA E TOKENS CRESCENZA (DO 9-BOX)
+     PALETA E TOKENS CRESCENZA
      ============================= */
   :root {
     --crescenza-orange: #ff6600;
@@ -31,7 +31,7 @@
   }
 
   /* =============================
-     ESTRUTURA BASE (DO 9-BOX)
+     ESTRUTURA BASE
      ============================= */
   * { box-sizing:border-box; }
   html, body { height: 100%; }
@@ -53,7 +53,7 @@
   .hidden { display: none !important; }
 
   /* =============================
-     CABEÇALHO (DO 9-BOX)
+     CABEÇALHO
      ============================= */
   .header { background: var(--crescenza-black); color: #fff; padding: 24px 16px; }
   .header__inner { max-width: 1200px; margin: 0 auto; }
@@ -66,7 +66,7 @@
   }
 
   /* =============================
-     ELEMENTOS DE UI (DO 9-BOX)
+     ELEMENTOS DE UI
      ============================= */
   .card { 
     background: #fff; 
@@ -143,7 +143,7 @@
   .button-group { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
 
   /* =============================
-     LAYOUTS ESPECÍFICOS (DO FIT CULTURAL)
+     LAYOUTS ESPECÍFICOS
      ============================= */
   
   /* --- Caixas de Status e Avisos --- */
@@ -189,10 +189,25 @@
 
   /* --- Candidato Intro (Passo 2) --- */
   #page-candidate-intro .card { text-align: center; }
+  /* NOVO: Estilo para o campo de nome do candidato */
+  #candidate-name-block { 
+    margin-bottom: 24px; 
+    text-align: left; 
+    max-width: 400px; 
+    margin-left: auto; 
+    margin-right: auto; 
+  }
+  #candidate-name-error { 
+    color: var(--color-low); 
+    font-weight: 600; 
+    display: none; 
+    text-align: center; 
+    margin-top: 10px; 
+  }
 
   /* --- Wizard (Teste) --- */
-  #page-candidate-test { max-width: 800px; } /* Aplicado ao .page */
-  #wizard-container { max-width: 100%; margin: 0; } /* Ajustado */
+  #page-candidate-test { max-width: 800px; } 
+  #wizard-container { max-width: 100%; margin: 0; } 
   #wizard-progress { width: 100%; background: var(--crescenza-gray-bg); height: 8px; border-radius: 4px; overflow: hidden; }
   #wizard-progress-bar { width: 0%; height: 100%; background: var(--crescenza-orange); transition: width 0.3s ease; }
   #wizard-question-title { font-size: 14px; color: var(--crescenza-dark-gray); font-weight: 600; margin: 16px 0 8px; }
@@ -265,7 +280,7 @@
     .upload-grid { grid-template-columns: 1fr; }
   }
   
-  /* --- RODAPÉ (DO 9-BOX) --- */
+  /* --- RODAPÉ --- */
   footer { 
     margin-top: auto; 
     background: #121417; 
@@ -288,6 +303,8 @@
     .header { display: flex !important; background: #fff !important; color: #000 !important; padding: 10px 0 !important; }
     .header h1 { font-size: 16pt; } 
     .header p { font-size: 10pt; color: #555;}
+    /* NOVO: Nome do candidato no PDF */
+    #report-candidate-name { color: #333 !important; opacity: 1 !important; font-size: 12pt; margin-top: 5px !important; }
     .header__bar, .logo-img { display: none !important; }
     
     .no-print { display: none !important; }
@@ -398,12 +415,22 @@
     </header>
     
   <div class="card" style="text-align: center;">
-    <img src="https://media.licdn.com/dms/image/C4D0BAQFvYyE26U-hVg/company-logo_200_200/0/1630663731174/crescenza_logo?e=2147483647&v=beta&t=m9EStgGgQCxyq1j08VCnAmr2UAj3nBv9nL79a3m2pM4" alt="Logo Crescenza 360" class="logo-img-intro">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACtWK6eAAAAbFBMVEUAAAAAAAAbGxtoaGgZGRkYGBgXFxcWFhYXFxcXFxcXFxcYGBgXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcYGBgXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxeMrw+LAAAAI3RSTlMA9eQkCAX9+vj42dLAwMA/PjswMB8eHBsZGBgWFRQTEhEQ8A9jLqwAAAPvSURBVHja7dzZbqMwEIVhCBIEAcG9R5CiVdvS/v8/L1MCNmDAgMVu0qTznGyKPA85L5FFkZOTEwQg0w11Q51Q51Q51U51U91U11UP1YP1ZA/WU/23g/VgP1gI+hUv1dM1oF/Rg/Vo/d4Y2j9U5R+q8k9V+acq/9uQ8W8r8m9X+bcq/9uQ8W9F/q1E/FuJ+LcT8W8n4t9OxL+diH87Ef92Iv7tRPzbifg30wYk3EiFjViJChuxFBU2YimpbMROVNiJTgYd5LCSkYIcVjJSj4McsD+pNo4G8uGkBjGSYyQGMeKQPQJ5UvJHKP8s5Jnlz8h8s5Bnlz4j881AnlybYDQH8uRqg9EcyJGrDUZzIEmqYyQjiXQMRSQpiWMkIUmiYyQhiaJjJCF7BIqP2CPQeIQeQcIjegQJjegRJJiL9AiS3EX6BEluIv0BknMQ6ROknIN0H5D0P0M0AOkXQ+QYkB4xyBvQbp7ICNBeHsgI0F4eyAjQ3h7ICNBuHsiM5g13U3oG5qZqIJPqK0l1kKmVlTQjybRjKe2MJNvKSjKRbCspzUeyraQ0E8m2ktJ8JNtKSjORbCspJ0fyVlIyjuStpGQcyVtJMRnJt5JkY5JvJclGJu8mScck7yaJxyT9JklGJP0myV0k/SbJHSQ9Jsn9JT0myfUkHSbJXSQdJMk9JR0kyT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2semqXeqv+qj+qj/qw/qgPqrP6kv6qP6pj+qDeqL+qUfU/wE5OTk5+Vv9A6N7zYvWw+XGAAAAAElFTkSuQmCC" alt="Logo Crescenza 360" class="logo-img-intro">
+    
     <h2>Avaliação de Perfil Cultural</h2>
     <p style="font-size: 18px; color: var(--crescenza-dark-gray);">Acreditamos que pessoas engajadas e alinhadas aos nossos valores constroem o futuro. Esta avaliação nos ajuda a entender suas preferências de trabalho.</p>
+
+    <div id="candidate-name-block">
+        <label for="candidate-name-input">Seu Nome Completo:</label>
+        <input type="text" id="candidate-name-input" placeholder="Digite seu nome aqui...">
+    </div>
+
     <p class="muted">São <strong>20 blocos</strong> de afirmações (8-12 min). Em cada um, escolha a que <strong>Mais</strong> e a que <strong>Menos</strong> se parece com você. Não há respostas "certas" ou "erradas".</p>
+    
     <button class="btn btn--primary" onclick="initCandidateTest()">Iniciar Avaliação</button>
     
+    <div id="candidate-name-error">Por favor, preencha seu nome para iniciar.</div>
+
     <div class="status-box nok hidden" id="candidate-link-error" style="margin-top: 24px; text-align: left;">
       <h4 style="color: var(--color-low);">Erro: Link de Avaliação Inválido</h4>
       <p>Este link de avaliação está incompleto ou corrompido (faltando o parâmetro 'target'). Por favor, solicite um novo link ao recrutador.</p>
@@ -457,6 +484,7 @@
     <div id="report-container" class="hidden">
         <header class="header"> <div class="header__inner">
             <h1 style="color: var(--crescenza-orange);">Relatório de Fit Cultural</h1>
+            <h2 id="report-candidate-name" style="color: #fff; opacity: 0.9; margin: 10px 0 0 0; font-size: 20px;">Candidato: ...</h2>
             <p id="report-fit-subtitle">Análise de aderência entre seu perfil e o alvo da empresa.</p>
           </div>
         </header>
@@ -544,10 +572,11 @@
   // --- CHAVES DE ARMAZENAMENTO ---
   const ALVO_KEY = 'crescenzaFitCulturalAlvo_v17'; 
   const CANDIDATO_KEY = 'crescenzaFitCulturalCandidato_v17';
+  const CANDIDATO_NAME_KEY = 'crescenzaFitCandidateName_v17'; // NOVO: Chave para o nome
   
-  // --- MODIFICADO: Contatos fixos ---
+  // --- Contatos fixos ---
   const RECRUITER_EMAIL = 'contato@crescenzaonline.com';
-  const RECRUITER_PHONE = '55996842002'; // Seu número fixo
+  const RECRUITER_PHONE = '55996842002'; 
 
   // --- CONFIGURAÇÃO CENTRAL ---
   const DIM_KEYS = ["Estrutura","Resultado","Inovação","Autonomia","Colaboração","Comunicação","Cliente","Aprendizado","Ritmo","Inclusão"];
@@ -571,7 +600,7 @@
         alto: "Motivado por metas, competição e entrega de resultados.", 
         baixo: "Motivado pela qualidade da execução, pelo processo e pelo 'como' se chega lá.",
         label_low: "Foco no Processo", label_high: "Foco na Meta",
-        question_high_gap: "Percebi que você é muito focado na qualidade do processo. Como você equilibra isso quando há uma pressão forte para entregar uma meta, mesmo que o 'como' não seja perfeito?",
+        question_high_gap: "Percebi que você é muito focado na qualidade da processo. Como você equilibra isso quando há uma pressão forte para entregar uma meta, mesmo que o 'como' não seja perfeito?",
         question_low_gap: "Você parece muito orientado a metas. Me conte sobre uma situação em que você teve que 'quebrar as regras' ou sacrificar a qualidade para atingir um resultado. Como se sentiu?"
     },
     "Inovação": { 
@@ -664,7 +693,6 @@
       window.scrollTo(0, 0);
   }
 
-  // MODIFICADO: Lógica de inicialização simplificada
   window.onload = () => {
       const params = new URLSearchParams(window.location.search);
       const mode = params.get('mode');
@@ -679,7 +707,6 @@
                   const decodedAlvoString = atob(targetData); // Decodifica de Base64
                   const alvoJson = JSON.parse(decodedAlvoString);
                   
-                  // Salva o Alvo (o telefone é hardcoded, não precisa salvar)
                   localStorage.setItem(ALVO_KEY, JSON.stringify(alvoJson));
                   
                   console.log("Alvo carregado com sucesso no navegador do candidato.");
@@ -722,11 +749,27 @@
       togglePage('page-candidate-intro'); 
       if (!success) {
           document.querySelector('#page-candidate-intro .btn').classList.add('hidden');
+          document.getElementById('candidate-name-block').classList.add('hidden');
           document.getElementById('candidate-link-error').classList.remove('hidden');
       }
   }
 
+  // NOVO: Função de iniciar teste agora valida e salva o NOME
   function initCandidateTest() {
+      const nameInput = document.getElementById('candidate-name-input');
+      const nameError = document.getElementById('candidate-name-error');
+      const candidateName = nameInput.value.trim();
+
+      if (candidateName === "") {
+          nameError.style.display = 'block';
+          nameInput.focus();
+          return;
+      }
+      
+      // Salva o nome e continua
+      nameError.style.display = 'none';
+      localStorage.setItem(CANDIDATO_NAME_KEY, candidateName);
+
       togglePage('page-candidate-test');
       currentQuestion = 0; 
       candidateRawScores = {}; 
@@ -738,18 +781,22 @@
   function initReport() {
       togglePage('page-report-generator');
       
+      // NOVO: Pega o nome do candidato salvo
+      const candidateName = localStorage.getItem(CANDIDATO_NAME_KEY) || "Candidato";
+      
       // Prepara os links de envio (WhatsApp e Email)
       const wppLink = document.getElementById('whatsapp-link-final');
       const emailLink = document.getElementById('email-link-final');
-      const phone = RECRUITER_PHONE; // Pega o valor fixo
+      const phone = RECRUITER_PHONE;
       
-      // Link WhatsApp
-      const wppUrl = `https://wa.me/${phone}?text=${encodeURIComponent('Olá! Finalizei meu teste de Fit Cultural. Estou enviando meu relatório (PDF) em anexo.')}`;
+      // Link WhatsApp (com nome)
+      const wppText = `Olá! Sou ${candidateName} e finalizei meu teste de Fit Cultural. Estou enviando meu relatório (PDF) em anexo.`;
+      const wppUrl = `https://wa.me/${phone}?text=${encodeURIComponent(wppText)}`;
       wppLink.href = wppUrl;
 
-      // Link Email
-      const emailSubject = "Relatório de Fit Cultural Finalizado";
-      const emailBody = "Olá, Crescenza!\n\nEstou enviando em anexo o meu Relatório de Fit Cultural (PDF) para análise.\n\nObrigado(a).";
+      // Link Email (com nome)
+      const emailSubject = `Relatório de Fit Cultural - ${candidateName}`;
+      const emailBody = `Olá, Crescenza!\n\nSou ${candidateName} e estou enviando em anexo o meu Relatório de Fit Cultural (PDF) para análise.\n\nObrigado(a).`;
       emailLink.href = `mailto:${RECRUITER_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
       
       
@@ -905,12 +952,11 @@
           alvoMediana[k] = v.length % 2 !== 0 ? Math.round(v[mid]) : Math.round((v[mid - 1] + v[mid]) / 2); 
       });
       
-      // Objeto que será salvo no localStorage do Admin
       const alvoParaSalvar = { 
             type: "cultural-target", 
             profile: alvoMediana, 
             empresaNome: empresaNome,
-            recruiterPhone: recruiterPhone, // Salva o telefone fixo para referência
+            recruiterPhone: recruiterPhone,
             numGestores: numGestores 
       };
       
@@ -956,7 +1002,6 @@
       container.innerHTML = html;
   }
   
-  // MODIFICADO: Esta função embute o Alvo e o Nome da Empresa
   function gerarLinkCandidato() {
       const linkInput = document.getElementById('candidate-link'); 
       
@@ -986,13 +1031,12 @@
           const alvoBase64 = btoa(alvoString); // Codifica para Base64
           
           let link = window.location.href.split('?')[0]; 
-          // O link agora só contém o 'target'
           linkInput.value = `${link}?mode=candidate&target=${alvoBase64}`; 
       }
   }
 
   function copiarLink() {
-      gerarLinkCandidato(); // Garante que o link está atualizado
+      gerarLinkCandidato(); 
       const linkInput = document.getElementById('candidate-link'); 
       if (linkInput.value.includes('...')) {
           alert('Por favor, salve o alvo primeiro para gerar o link completo.');
@@ -1116,11 +1160,12 @@
   }
 
   function gerarRelatorio() {
-      let loadedAlvoData, loadedCandidatoData;
+      let loadedAlvoData, loadedCandidatoData, candidateName;
       
       try {
         loadedAlvoData = JSON.parse(localStorage.getItem(ALVO_KEY));
         loadedCandidatoData = JSON.parse(localStorage.getItem(CANDIDATO_KEY));
+        candidateName = localStorage.getItem(CANDIDATO_NAME_KEY) || "Candidato não informado";
       } catch (e) {
           alert("Erro ao ler os dados salvos. Tente refazer o teste.");
           return;
@@ -1134,7 +1179,6 @@
       document.getElementById('report-loader-card').classList.add('hidden');
       document.getElementById('report-container')?.classList.remove('hidden');
       
-      // O 'loadedAlvoData' agora é um objeto {profile: ..., empresaNome: ...}
       const alvo = loadedAlvoData.profile; 
       const empresaNome = loadedAlvoData.empresaNome || 'A Empresa';
       const candidato_raw = loadedCandidatoData.profile;
@@ -1148,6 +1192,9 @@
       }); 
       
       const fitScore = 100 - (totalDelta / 10);
+      
+      // NOVO: Insere o nome do candidato no relatório
+      document.getElementById('report-candidate-name').textContent = `Candidato: ${candidateName}`;
       
       document.getElementById('fit-score').textContent = `${Math.max(0, fitScore).toFixed(0)}%`;
       document.getElementById('report-fit-subtitle').textContent = `Análise de aderência entre seu perfil e o alvo da '${empresaNome}'.`;
