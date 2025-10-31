@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Crescenza 360° • Sistema de Fit Cultural v17.5 (Link Corrigido)</title>
+<title>Crescenza 360° • Sistema de Fit Cultural v17.6 (Link Corrigido)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   /* =============================
@@ -288,9 +288,10 @@
     font: 14px/1.6 Arial, Helvetica, sans-serif; 
   }
   footer a { color: #ffa64d; text-decoration: none; }
-  footer .footer-inner { max-width: 1200px; margin: 0 auto; }
+  /* CORREÇÃO: Centraliza todos os textos do rodapé */
+  footer .footer-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
   footer p { margin: 0 0 6px; }
-  footer p.copy { margin: 0 0 10px; text-align: center; }
+  footer p.copy { margin: 0 0 10px; /* text-align: center; - removido pois o pai já centraliza */ }
 
   /* --- Estilos de Impressão --- */
   @media print {
@@ -675,7 +676,7 @@
     [{ dim: "Inovação", text: "Eu prefiro otimizar e melhorar sistemas existentes a criar algo do zero.", isInverted: true },{ dim: "Ritmo", text: "Eu gosto de um ritmo de trabalho cadenciado e bem planejado.", isInverted: true },{ dim: "Colaboração", text: "Eu sou mais produtivo quando posso focar no meu trabalho individual.", isInverted: true },{ dim: "Autonomia", text: "Eu prefiro ter um direcionamento claro do meu gestor sobre o que fazer.", isInverted: true }],
     [{ dim: "Cliente", text: "É mais importante focar na eficiência interna do que nas demandas do cliente.", isInverted: true },{ dim: "Aprendizado", text: "Para mim, é crucial evitar erros e garantir a consistência.", isInverted: true },{ dim: "Comunicação", text: "Eu acredito que a comunicação deve seguir a hierarquia formal.", isInverted: true },{ dim: "Inclusão", text: "Eu me sinto mais à vontade trabalhando com pessoas que pensam como eu.", isInverted: true }],
     [{ dim: "Estrutura", text: "Eu gosto de 'descobrir o caminho' à medida que trabalho.", isInverted: true },{ dim: "Ritmo", text: "Eu prefiro um ambiente ágil e intenso." },{ dim: "Autonomia", text: "Eu funciono melhor com supervisão e validação constantes.", isInverted: true },{ dim: "Inovação", text: "Eu sou mais focado em executar tarefas do que em inovar.", isInverted: true }],
-    [{ dim: "Colaboração", text: "O sucesso do time é mais importante que o meu sucesso individual." },{ dim: "Resultado", text: "Eu sou motivado por desafios e metas agressivas." },{ dim:S: "Cliente", text: "Minha prioridade é garantir que a operação interna funcione bem.", isInverted: true },{ dim: "Comunicação", text: "Eu prefiro que a comunicação seja direta e objetiva, mesmo que pareça dura." }],
+    [{ dim: "Colaboração", text: "O sucesso do time é mais importante que o meu sucesso individual." },{ dim: "Resultado", text: "Eu sou motivado por desafios e metas agressivas." },{ dim: "Cliente", text: "Minha prioridade é garantir que a operação interna funcione bem.", isInverted: true },{ dim: "Comunicação", text: "Eu prefiro que a comunicação seja direta e objetiva, mesmo que pareça dura." }],
     [{ dim: "Aprendizado", text: "Eu gosto de experimentar novas abordagens, mesmo que falhem." },{ dim: "Inclusão", text: "Eu busco ativamente incluir opiniões de todos no grupo." },{ dim: "Estrutura", text: "Eu sigo os procedimentos à risca, sempre." },{ dim: "Autonomia", text: "Eu tomo a iniciativa e resolvo problemas sem esperar por permissão." }],
     [{ dim: "Inovação", text: "Eu sou uma pessoa que gera muitas ideias novas." },{ dim: "Ritmo", text: "Eu me sinto pressionado em ambientes muito rápidos.", isInverted: true },{ dim: "Resultado", text: "Eu me preocupo mais com a forma como o trabalho é feito do que com o resultado final.", isInverted: true },{ dim: "Cliente", text: "Eu me coloco no lugar do cliente para tomar decisões." }],
     [{ dim: "Colaboração", text: "Eu prefiro ser o especialista na minha área a ser um generalista no time.", isInverted: true },{ dim: "Comunicação", text: "Eu acredito que a transparência total pode ser improdutiva.", isInverted: true },{ dim: "Aprendizado", text: "Eu prefiro usar métodos comprovados a arriscar com algo novo.", isInverted: true },{ dim: "Inclusão", text: "Eu acho que a diversidade de pensamento enriquece a equipe." }]
@@ -691,6 +692,7 @@
       window.scrollTo(0, 0);
   }
 
+  // ******** CORREÇÃO v17.6 APLICADA AQUI ********
   window.onload = () => {
       const params = new URLSearchParams(window.location.search);
       const mode = params.get('mode');
@@ -701,10 +703,9 @@
               initCandidateIntro(false); 
           } else {
               try {
-                  // ******** CORREÇÃO v17.5 APLICADA AQUI ********
-                  // Decodifica o componente da URL (para reverter o %2B, %2F, etc.)
-                  // E DEPOIS decodifica o Base64 (atob)
-                  const decodedAlvoString = atob(decodeURIComponent(targetData));
+                  // A CORREÇÃO: O navegador já fez o decodeURIComponent() ao usar params.get().
+                  // Precisamos apenas fazer o atob() (decodificar o Base64).
+                  const decodedAlvoString = atob(targetData);
                   // ************************************************
 
                   const alvoJson = JSON.parse(decodedAlvoString);
@@ -715,8 +716,20 @@
                   initCandidateIntro(true); 
                   
               } catch (e) {
-                  console.error("Erro ao decodificar o Alvo do link:", e);
-                  initCandidateIntro(false); 
+                  // Fallback: Se o atob() falhar (caso o navegador não tenha decodificado 100%)
+                  // tentamos a lógica antiga (v17.5) que decodificava manualmente.
+                  try {
+                      console.warn("Falha no atob() direto, tentando com decodeURIComponent...");
+                      const decodedAlvoString = atob(decodeURIComponent(targetData));
+                      const alvoJson = JSON.parse(decodedAlvoString);
+                      localStorage.setItem(ALVO_KEY, JSON.stringify(alvoJson));
+                      console.log("Alvo carregado com sucesso (modo fallback).");
+                      initCandidateIntro(true);
+                  } catch (e2) {
+                      // Se ambos falharem, o link está corrompido.
+                      console.error("Erro ao decodificar o Alvo do link:", e2);
+                      initCandidateIntro(false); 
+                  }
               }
           }
       } else if (mode === 'report') {
@@ -725,6 +738,7 @@
           initAdmin();
       }
   };
+  // ************************************************
 
   function initAdmin() {
       togglePage('page-admin');
@@ -794,7 +808,7 @@
       wppLink.href = wppUrl;
 
       const emailSubject = `Relatório de Fit Cultural - ${candidateName}`;
-      const emailBody = `Olá, Crescenza!\n\nSou ${candidateName} e estou enviando em anexo o meu Relatório de Fit Cultural (PDF) para análise.\n\nObrigado(a).`;
+      const emailBody = `Olá, Crescenza!\n\nSou ${candidateName} e estou enviando em anexo o meu Relatório de Fit Cultural (PDF) para análise.\n\Obrigado(a).`;
       emailLink.href = `mailto:${RECRUITER_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
       
       
@@ -1025,7 +1039,7 @@
           const alvoString = JSON.stringify(dataParaLink);
           const alvoBase64 = btoa(alvoString); 
           
-          // A CORREÇÃO: encodeURIComponent garante que caracteres como '+' e '/'
+          // A CORREÇÃO (v17.5): encodeURIComponent garante que caracteres como '+' e '/'
           // sejam seguros para a URL, evitando o "link quebrado".
           const alvoUrlSafe = encodeURIComponent(alvoBase64); 
           
@@ -1197,7 +1211,7 @@
       document.getElementById('fit-score').textContent = `${Math.max(0, fitScore).toFixed(0)}%`;
       document.getElementById('report-fit-subtitle').textContent = `Análise de aderência entre seu perfil e o alvo da '${empresaNome}'.`;
 
-      renderRecruiterRadarChart(DIM_KEYS.map(k=>alvo[k] || 0), DIM_KEYS.map(k=>candidato_0_100[k] || 0)); 
+      renderRecruiterRadarChart(DIM_KEYS.map(k=>alvo[key] || 0), DIM_KEYS.map(k=>candidato_0_100[k] || 0)); 
       renderQualitativeReport(candidato_0_100, alvo);
   }
 
