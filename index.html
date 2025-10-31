@@ -288,7 +288,7 @@
     font: 14px/1.6 Arial, Helvetica, sans-serif; 
   }
   footer a { color: #ffa64d; text-decoration: none; }
-  /* CORREÇÃO v17.6: Centraliza todos os textos do rodapé */
+  /* CORREÇÃO v17.7: Centraliza todos os textos do rodapé */
   footer .footer-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
   footer p { margin: 0 0 6px; }
   footer p.copy { margin: 0 0 10px; }
@@ -692,7 +692,17 @@
       window.scrollTo(0, 0);
   }
 
-  // ******** CORREÇÃO v17.6 APLICADA AQUI ********
+  // ******** CORREÇÃO v17.7 APLICADA AQUI ********
+  
+  // Nova função para decodificar Base64 URL-Safe
+  function base64UrlDecode(str) {
+      str = str.replace(/-/g, '+').replace(/_/g, '/'); // Reverte '-' para '+' e '_' para '/'
+      while (str.length % 4) {
+          str += '='; // Adiciona o padding '=' removido
+      }
+      return atob(str);
+  }
+
   window.onload = () => {
       const params = new URLSearchParams(window.location.search);
       const mode = params.get('mode');
@@ -700,12 +710,11 @@
 
       if (mode === 'candidate') {
           if (!targetData) { 
-              initCandidateIntro(false); 
+              initCandidateIntro(false); // Link inválido, sem target
           } else {
               try {
-                  // A CORREÇÃO: O navegador já fez o decodeURIComponent() ao usar params.get().
-                  // Precisamos apenas fazer o atob() (decodificar o Base64).
-                  const decodedAlvoString = atob(targetData);
+                  // A CORREÇÃO: Usamos a nova função de decode
+                  const decodedAlvoString = base64UrlDecode(targetData);
                   // ************************************************
 
                   const alvoJson = JSON.parse(decodedAlvoString);
@@ -713,23 +722,12 @@
                   localStorage.setItem(ALVO_KEY, JSON.stringify(alvoJson));
                   
                   console.log("Alvo carregado com sucesso no navegador do candidato.");
-                  initCandidateIntro(true); 
+                  initCandidateIntro(true); // Sucesso
                   
               } catch (e) {
-                  // Fallback: Se atob() falhar (por causa de um '+' que virou espaço, etc.),
-                  // tentamos a lógica antiga (v17.5) que decodificava manualmente.
-                  try {
-                      console.warn("Falha no atob() direto, tentando com decodeURIComponent...");
-                      const decodedAlvoString = atob(decodeURIComponent(targetData));
-                      const alvoJson = JSON.parse(decodedAlvoString);
-                      localStorage.setItem(ALVO_KEY, JSON.stringify(alvoJson));
-                      console.log("Alvo carregado com sucesso (modo fallback).");
-                      initCandidateIntro(true);
-                  } catch (e2) {
-                      // Se ambos falharem, o link está corrompido.
-                      console.error("Erro ao decodificar o Alvo do link:", e2);
-                      initCandidateIntro(false); 
-                  }
+                  // Se falhar, o link está realmente corrompido
+                  console.error("Erro ao decodificar o Alvo do link:", e);
+                  initCandidateIntro(false); // Falha
               }
           }
       } else if (mode === 'report') {
@@ -1013,7 +1011,16 @@
       container.innerHTML = html;
   }
   
-  // ******** CORREÇÃO v17.5 APLICADA AQUI ********
+  // ******** CORREÇÃO v17.7 APLICADA AQUI ********
+  
+  // Nova função para criar Base64 URL-Safe
+  function base64UrlEncode(str) {
+      return btoa(str)
+          .replace(/\+/g, '-') // Substitui '+' por '-'
+          .replace(/\//g, '_') // Substitui '/' por '_'
+          .replace(/=+$/, ''); // Remove padding '='
+  }
+  
   function gerarLinkCandidato() {
       const linkInput = document.getElementById('candidate-link'); 
       
@@ -1037,11 +1044,9 @@
       
       if (linkInput && dataParaLink) { 
           const alvoString = JSON.stringify(dataParaLink);
-          const alvoBase64 = btoa(alvoString); 
           
-          // A CORREÇÃO (v17.5): encodeURIComponent garante que caracteres como '+' e '/'
-          // sejam seguros para a URL, evitando o "link quebrado".
-          const alvoUrlSafe = encodeURIComponent(alvoBase64); 
+          // A CORREÇÃO: Usamos a nova função de encode URL-Safe
+          const alvoUrlSafe = base64UrlEncode(alvoString); 
           
           let link = window.location.href.split('?')[0]; 
           linkInput.value = `${link}?mode=candidate&target=${alvoUrlSafe}`; 
@@ -1351,4 +1356,3 @@
 </script>
 </body>
 </html>
-
