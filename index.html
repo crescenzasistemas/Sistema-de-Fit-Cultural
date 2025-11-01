@@ -3,11 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Crescenza 360° • Sistema de Fit Cultural v17.8 (Admin Seguro)</title>
+<title>Crescenza 360° • Sistema de Fit Cultural v17.9 (Enterprise)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 <style>
   /* =============================
      PALETA E TOKENS CRESCENZA
@@ -18,14 +15,11 @@
     --crescenza-light: #f8f9fa;
     --crescenza-gray-bg: #eaeaea;
     --crescenza-dark-gray: #495057;
-
-    /* Cores de ação */
     --color-high: #388e3c;     /* Verde (Sucesso, Fit Alto) */
     --color-medium: #ffc107;   /* Amarelo (Atenção) */
     --color-low: #c62828;      /* Vermelho (Risco, Gap Alto) */
     --color-invest: #1565c0;   /* Azul (Investigar, Info) */
     --color-urgent: #e65100;   /* Laranja Escuro */
-
     --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     --radius: 12px;
     --radius-sm: 8px;
@@ -55,46 +49,38 @@
   }
   .hidden { display: none !important; }
 
+  /* NOVO: Ícones SVG Embutidos */
+  .icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: currentColor;
+    vertical-align: -0.125em; /* Alinha melhor com o texto */
+  }
+  .btn .icon, .btn-small .icon {
+    margin-right: 8px;
+  }
+  .spinner .icon {
+    width: 100%;
+    height: 100%;
+    animation: spin 1s linear infinite;
+  }
+  /* Animação do spinner movida para o CSS */
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+
   /* =============================
-     CABEÇALHO
+     CABEÇALHO (Layout Padrão Mantido)
      ============================= */
   .header { background: var(--crescenza-black); color: #fff; padding: 24px 16px; }
-  
-  /* MODIFICADO: Usar Flexbox para alinhar logo e texto */
-  .header__inner { 
-    max-width: 1200px; 
-    margin: 0 auto; 
-    display: flex;
-    align-items: center; /* Centraliza verticalmente */
-    gap: 20px; /* Espaço entre logo e texto */
-    flex-wrap: wrap; /* Permite quebra de linha em telas pequenas */
-  }
-
-  /* ADICIONADO: Estilo para o Logo no cabeçalho */
-  .header__logo {
-    max-height: 50px; /* Defina a altura máxima do seu logo */
-    width: auto;
-  }
-  
-  /* ADICIONADO: Agrupador para o texto */
-  .header__text {
-    flex-grow: 1; /* Faz o texto ocupar o espaço restante */
-  }
-
+  .header__inner { max-width: 1200px; margin: 0 auto; }
   .header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 800; letter-spacing: .2px; }
   .header p { margin: 0; opacity: .9; }
-  
-  /* MODIFICADO: Faz a barra ocupar 100% da largura abaixo */
-  .header__bar { 
-    margin-top: 14px; 
-    height: 3px; 
-    width: 100%; 
-    background: var(--crescenza-orange); 
-    flex-basis: 100%;
-  }
+  .header__bar { margin-top: 14px; height: 3px; width: 100%; background: var(--crescenza-orange); }
   .logo-img-intro {
-      max-height: 80px;
-      margin-bottom: 20px;
+      /* Classe mantida para consistência, mas o <img> foi removido */
+      display: none; 
   }
 
   /* =============================
@@ -128,7 +114,7 @@
     display: block;
   }
   
-  input[type=text], input[type=number], input[type=tel], select { 
+  input[type=text], input[type=number], input[type=tel], input[type=password], select { 
     width: 100%; 
     font: inherit;
     font-size: 16px; 
@@ -154,7 +140,9 @@
     margin-top: 16px; 
     text-align: center; 
     text-decoration: none; 
-    display: inline-block;
+    display: inline-flex; /* MODIFICADO: Para alinhar ícones */
+    align-items: center;
+    justify-content: center;
     transition: filter 0.2s;
   }
   .btn:hover { filter: brightness(.95); }
@@ -166,11 +154,6 @@
   .btn--accent { background: var(--color-invest); }
   .btn--whatsapp { background-color: #25D366; }
 
-  /* ADICIONADO: Espaçamento para ícones nos botões */
-  .btn i, .btn-small i {
-    margin-right: 8px;
-  }
-
   .btn-small { 
     padding: 8px 12px; 
     font-size: 14px; 
@@ -178,6 +161,7 @@
     margin: 0 5px; 
   }
   .button-group { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .button-group.right { justify-content: flex-end; }
 
   /* =============================
      LAYOUTS ESPECÍFICOS
@@ -224,6 +208,23 @@
     line-height: 26px; text-align: center; 
   }
 
+  /* NOVO: Estilos da Página de Login */
+  #page-login {
+    max-width: 440px;
+    margin-top: 8vh;
+  }
+  #page-login .card {
+    padding: 32px;
+  }
+  #login-error {
+    background: #ffebee;
+    color: #b71c1c;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    margin-top: 16px;
+    font-weight: 600;
+  }
+
   /* --- Candidato Intro (Passo 2) --- */
   #page-candidate-intro .card { text-align: center; }
   #candidate-name-block { 
@@ -236,9 +237,9 @@
   #candidate-name-error { 
     color: var(--color-low); 
     font-weight: 600; 
-    display: none; 
     text-align: center; 
-    margin-top: 10px; 
+  	margin-top: 10px;
+  	display: none; /* Mantido do original */
   }
 
   /* --- Wizard (Teste) --- */
@@ -297,16 +298,57 @@
 
   /* Estilos para a página de carregamento */
   #page-candidate-loading .card { text-align: center; padding: 48px 24px; }
+  /* MODIFICADO: Spinner agora é um container para o SVG */
   .spinner {
       width: 56px; height: 56px;
-      border: 6px solid var(--crescenza-gray-bg);
-      border-top-color: var(--crescenza-orange);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
+      color: var(--crescenza-orange); /* Cor do spinner SVG */
       margin: 0 auto 24px auto;
   }
-  @keyframes spin { 100% { transform: rotate(360deg); } }
+  /* @keyframes spin foi movido para a definição de .spinner .icon */
 
+  /* NOVO: Modal de Notificação (Alerta/Confirmação) */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none; /* Impede cliques quando invisível */
+    transition: opacity 0.2s ease;
+  }
+  .modal-overlay.visible {
+    opacity: 1;
+    pointer-events: auto; /* Permite cliques quando visível */
+  }
+  .modal-dialog {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 24px;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+  }
+  .modal-overlay.visible .modal-dialog {
+    transform: scale(1);
+  }
+  .modal-dialog h3 {
+    margin: 0 0 12px;
+    font-size: 20px;
+  }
+  .modal-dialog h3.modal-title-success { color: var(--color-high); }
+  .modal-dialog h3.modal-title-error { color: var(--color-low); }
+  .modal-dialog h3.modal-title-confirm { color: var(--color-invest); }
+  .modal-dialog p {
+    margin: 0 0 24px;
+    color: var(--crescenza-dark-gray);
+    font-size: 16px;
+    line-height: 1.6;
+  }
 
   @media(max-width: 800px) {
     .page { width: 95%; margin: 16px auto; }
@@ -325,7 +367,6 @@
     font: 14px/1.6 Arial, Helvetica, sans-serif; 
   }
   footer a { color: #ffa64d; text-decoration: none; }
-  /* CORREÇÃO v17.8: Centraliza todos os textos do rodapé */
   footer .footer-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
   footer p { margin: 0 0 6px; }
   footer p.copy { margin: 0 0 10px; }
@@ -335,16 +376,14 @@
     body { background: #fff; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 10pt; }
     body > *:not(.printable-section) { display: none !important; }
     .printable-section { display: block !important; width: 100%; max-width: 100%; margin: 0; padding: 1cm; }
-a   .page { display: block !important; padding: 0 !important; margin: 0; }
+    .page { display: block !important; padding: 0 !important; margin: 0; }
     .card { box-shadow: none !important; border: 1px solid #ccc; margin: 0 0 0.5cm 0; padding: 10px; page-break-inside: avoid; }
-    
-    /* MODIFICADO: Ajuste no header de impressão */
+    /* MODIFICADO: .header de impressão não precisa de logo */
     .header { display: flex !important; background: #fff !important; color: #000 !important; padding: 10px 0 !important; }
-    .header__logo { max-height: 40px !important; } /* Logo no PDF */
     .header h1 { font-size: 16pt; } 
     .header p { font-size: 10pt; color: #555;}
     #report-candidate-name { color: #333 !important; opacity: 1 !important; font-size: 12pt; margin-top: 5px !important; }
-    .header__bar { display: none !important; } /* Logo .logo-img já estava none, mantido */
+    .header__bar, .logo-img { display: none !important; }
     
     .no-print { display: none !important; }
     footer { display: none !important; }
@@ -371,15 +410,72 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
 </head>
 <body>
 
-<div class="page printable-section" id="page-admin">
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="icon-copy" viewBox="0 0 16 16">
+    <path d="M13 0H6a2 2 0 0 0-2 2v3h2V2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9v2h4a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Z"/>
+    <path d="M0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H0Zm7 11H0V4h7v9Z"/>
+  </symbol>
+  <symbol id="icon-pdf" viewBox="0 0 16 16">
+    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+    <path d="M4.603 14.087a.81.81 0 0 1-.438-.42l-2.5-5.5a.81.81 0 0 1 .437-1.052.807.807 0 0 1 1.052.438l1.898 4.153 1.898-4.153a.807.807 0 0 1 1.052-.438.81.81 0 0 1 .437 1.052l-2.5 5.5a.81.81 0 0 1-.438.42z"/>
+  </symbol>
+  <symbol id="icon-whatsapp" viewBox="0 0 16 16">
+    <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+  </symbol>
+  <symbol id="icon-email" viewBox="0 0 16 16">
+    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.385L8 9.25l-1.326-.792-5.64 3.385A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105 5.708 8.28 1 5.383v5.722Z"/>
+  </symbol>
+  <symbol id="icon-plus" viewBox="0 0 16 16">
+    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+  </symbol>
+  <symbol id="icon-minus" viewBox="0 0 16 16">
+    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+  </symbol>
+  <symbol id="icon-arrow-right" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+  </symbol>
+  <symbol id="icon-lock" viewBox="0 0 16 16">
+    <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+  </symbol>
+  <symbol id="icon-spinner" viewBox="0 0 16 16">
+    <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+  </symbol>
+</svg>
+
+<div class="modal-overlay hidden" id="modal-container">
+  <div class="modal-dialog">
+    <h3 id="modal-title">Título do Modal</h3>
+    <p id="modal-message">Mensagem do modal...</p>
+    <div class="button-group right">
+      <button class="btn btn--secondary btn-small" id="modal-btn-cancel">Cancelar</button>
+      <button class="btn btn--primary btn-small" id="modal-btn-ok">OK</button>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-login">
+  <div class="card" style="text-align: center;">
+    <h2 style="margin:0 0 24px;">Acesso Administrativo</h2>
+    
+    <form id="login-form" onsubmit="handleAdminLogin(event)">
+      <div style="text-align: left; margin-bottom: 16px;">
+        <label for="admin-password">Senha de Administrador</label>
+        <input type="password" id="admin-password" placeholder="Digite sua senha...">
+      </div>
+      <button type="submit" class="btn btn--primary">
+        <svg class="icon" role="img" aria-hidden="true"><use xlink:href="#icon-lock"></use></svg>
+        Entrar
+      </button>
+      <div class="hidden" id="login-error">Senha incorreta.</div>
+    </form>
+  </div>
+</div>
+
+<div class="page printable-section hidden" id="page-admin">
     <header class="header no-print">
       <div class="header__inner">
-        <img src="logo-crescenza-light.png" alt="Logo Crescenza" class="header__logo">
-        
-        <div class="header__text">
-           <h1>Crescenza 360º — Fit Cultural (Admin)</h1>
-           <p>Passo 1: Definição da Cultura Alvo (Comitê)</p>
-        </div>
+        <h1>Crescenza 360º — Fit Cultural (Admin)</h1>
+        <p>Passo 1: Definição da Cultura Alvo (Comitê)</p>
         <div class="header__bar"></div>
       </div>
     </header>
@@ -407,8 +503,12 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
         <div id="gestor-controls">
             <label>Número de Gestores no Comitê:</label>
             <span id="num-gestores-display" style="font-weight: bold; margin: 0 10px;">3</span>
-                        <button class="btn-small btn--primary" onclick="addGestor()"><i class="fa-solid fa-plus"></i> Adicionar Gestor</button>
-            <button class="btn-small btn--secondary" onclick="removeGestor()"><i class="fa-solid fa-minus"></i> Remover Último</button>
+            <button class="btn-small btn--primary" onclick="addGestor()">
+              <svg class="icon" role="img" aria-hidden="true"><use xlink:href="#icon-plus"></use></svg> Adicionar Gestor
+            </button>
+            <button class="btn-small btn--secondary" onclick="removeGestor()">
+              <svg class="icon" role="img" aria-hidden="true"><use xlink:href="#icon-minus"></use></svg> Remover Último
+            </button>
         </div>
         <div class="comite-grid" id="gestor-panels-container">
           </div>
@@ -421,7 +521,9 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
       <h2><span class="dot"></span> 3. Link de Envio para Candidatos</h2>
       <p class="muted" style="margin-top: -10px; margin-bottom: 20px;">Envie o link abaixo para os candidatos iniciarem o teste. O Alvo cultural será embutido no link.</p>
       <input type="text" readonly id="candidate-link" value="Preencha os campos acima e salve o alvo para gerar o link...">
-            <button class="btn btn--secondary btn-small no-print" onclick="copiarLink()"><i class="fa-solid fa-copy"></i> Copiar Link</button>
+      <button class="btn btn--secondary btn-small no-print" onclick="copiarLink()">
+        <svg class="icon" role="img" aria-hidden="true"><use xlink:href="#icon-copy"></use></svg> Copiar Link
+      </button>
     </div>
 
     <div id="alvo-calculado" class="card hidden">
@@ -443,7 +545,9 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
         <table id="alvo-tabela" style="width:100%; border-collapse: collapse;"></table>
 
         <div class="button-group no-print">
-                        <button class="btn btn--secondary" onclick="printSection('page-admin')"><i class="fa-solid fa-file-pdf"></i> Baixar Relatório da Cultura Alvo (PDF)</button>
+            <button class="btn btn--secondary" onclick="printSection('page-admin')">
+              <svg class="icon" role="img" aria-hidden="true"><use xlink:href="#icon-pdf"></use></svg> Baixar Relatório da Cultura Alvo (PDF)
+            </button>
         </div>
     </div>
 </div>
@@ -451,19 +555,14 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
 <div class="page hidden" id="page-candidate-intro">
    <header class="header no-print">
       <div class="header__inner">
-        <img src="logo-crescenza-light.png" alt="Logo Crescenza" class="header__logo">
-
-        <div class="header__text">
-           <h1 style="color: var(--crescenza-orange);">Seja Bem-Vindo(a)!</h1>
-           <p>Conheça um pouco mais sobre o nosso jeito de ser e nos ajude a entender você.</p>
-        </div>
+        <h1 style="color: var(--crescenza-orange);">Seja Bem-Vindo(a)!</h1>
+        <p>Conheça um pouco mais sobre o nosso jeito de ser e nos ajude a entender você.</p>
         <div class="header__bar"></div>
       </div>
     </header>
     
   <div class="card" style="text-align: center;">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACtWK6eAAAAbFBMVEUAAAAAAAAbGxtoaGgZGRkYGBgXFxcWFhYXFxcXFxcXFxcYGBgXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcYGBgXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxeMrw+LAAAAI3RSTlMA9eQkCAX9+vj42dLAwMA/PjswMB8eHBsZGBgWFRQTEhEQ8A9jLqwAAAPvSURBVHja7dzZbqMwEIVhCBIEAcG9R5CiVdvS/v8/L1MCNmDAgMVu0qTznGyKPA85L5FFkZOTEwQg0w11Q51Q51Q51U51U91U11UP1YP1ZA/WU/23g/VgP1gI+hUv1dM1oF/Rg/Vo/d4Y2j9U5R+q8k9V+acq/9uQ8W8r8m9X+bcq/9uQ8W9F/q1E/FuJ+LcT8W8n4t9OxL+diH87Ef92Iv7tRPzbifg30wYk3EiFjViJChuxFBU2YimpbMROVNiJTgYd5LCSkYIcVjJSj4McsD+pNo4G8uGkBjGSYyQGMeKQPQJ5UvJHKP8s5Jnlz8h8s5Bnlz4j881AnlybYDQH8uRqg9EcyJGrDUZzIEmqYyQjiXQMRSQpiWMkIUmiYyQhiaJjJCF7BIqP2CPQeIQeQcIjegQJjegRJJiL9AiS3EX6BEluIv0BknMQ6ROknIN0H5D0P0M0AOkXQ+QYkB4xyBvQbp7ICNBeHsgI0F4eyAjQ3h7ICNBuHsiM5g13U3oG5qZqIJPqK0l1kKmVlTQjybRjKe2MJNvKSjKRbCspzUeyraQ0E8m2ktJ8JNtKSjORbCspJ0fyVlIyjuStpGQcyVtJMRnJt5JkY5JvJclGJu8mScck7yaJxyT9JklGJP0myV0k/SbJHSQ9Jsn9JT0myfUkHSbJXSQdJMk9JR0kyT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2semqXeqv+qj+qj/qw/qgPqrP6kv6qP6pj+qDeqL+qUfU/wE5OTk5+Vv9A6N7zYvWw+XGAAAAAElFTkSuQmCC" alt="Logo Crescenza 360" class="logo-img-intro">
-    
+        
     <h2>Avaliação de Perfil Cultural</h2>
     <p style="font-size: 18px; color: var(--crescenza-dark-gray);">Acreditamos que pessoas engajadas e alinhadas aos nossos valores constroem o futuro. Esta avaliação nos ajuda a entender suas preferências de trabalho.</p>
 
@@ -490,13 +589,20 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
     <div id="wizard-progress"><div id="wizard-progress-bar"></div></div>
     <h3 id="wizard-question-title">Bloco 1 de 20</h3>
     <div class="wizard-block"><table width="100%"><thead><tr><th>Mais (+)</th><th>Afirmação</th><th>Menos (-)</th></tr></thead><tbody id="wizard-body"></tbody></table></div>
-    <div id="wizard-nav"><div id="wizard-error">Escolha um "Mais" e um "Menos".</div><button class="btn btn--primary" style="width: 200px;" id="btn-next" onclick="nextQuestion()">Próximo &rarr;</button></div>
+    <div id="wizard-nav">
+      <div id="wizard-error">Escolha um "Mais" e um "Menos".</div>
+      <button class="btn btn--primary" style="width: 200px;" id="btn-next" onclick="nextQuestion()">
+        Próximo <svg class="icon" role="img" aria-hidden="true" style="margin-right: 0; margin-left: 8px;"><use xlink:href="#icon-arrow-right"></use></svg>
+      </button>
+    </div>
   </div>
 </div>
 
 <div class="page hidden" id="page-candidate-loading">
   <div class="card">
-    <div class="spinner"></div>
+    <div class="spinner">
+      <svg class="icon" role="img" aria-hidden="true"><use xlink:href="#icon-spinner"></use></svg>
+    </div>
     <h2 style="color: var(--crescenza-dark-gray); text-align: center;">Gerando seu Relatório...</h2>
     <p style="font-size: 18px; color: var(--crescenza-dark-gray); text-align: center;">Estamos analisando suas respostas e comparando com a nossa cultura alvo. Aguarde um momento.</p>
   </div>
@@ -506,12 +612,8 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
 <div class="page hidden printable-section" id="page-report-generator">
     <header class="header no-print">
       <div class="header__inner">
-        <img src="logo-crescenza-light.png" alt="Logo Crescenza" class="header__logo">
-
-        <div class="header__text">
-           <h1>Crescenza 360º — Seu Relatório de Fit Cultural</h1>
-           <p>Veja seu alinhamento com nossa cultura e envie o PDF ao recrutador.</p>
-        </div>
+        <h1>Crescenza 360º — Seu Relatório de Fit Cultural</h1>
+        <p>Veja seu alinhamento com nossa cultura e envie o PDF ao recrutador.</p>
         <div class="header__bar"></div>
       </div>
     </header>
@@ -533,16 +635,11 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
     </div>
 
     <div id="report-container" class="hidden">
-        <header class="header"> 
-            <div class="header__inner">
-                <img src="logo-crescenza.png" alt="Logo Crescenza" class="header__logo">
-
-                <div class="header__text">
-                    <h1 style="color: var(--crescenza-orange);">Relatório de Fit Cultural</h1>
-                    <h2 id="report-candidate-name" style="color: #fff; opacity: 0.9; margin: 10px 0 0 0; font-size: 20px;">Candidato: ...</h2>
-                    <p id="report-fit-subtitle">Análise de aderência entre seu perfil e o alvo da empresa.</p>
-                </div>
-            </div>
+        <header class="header"> <div class="header__inner">
+            <h1 style="color: var(--crescenza-orange);">Relatório de Fit Cultural</h1>
+            <h2 id="report-candidate-name" style="color: #fff; opacity: 0.9; margin: 10px 0 0 0; font-size: 20px;">Candidato: ...</h2>
+            <p id="report-fit-subtitle">Análise de aderência entre seu perfil e o alvo da empresa.</p>
+          </div>
         </header>
         
         <div class="card">
@@ -566,14 +663,14 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
           </div>
 
           <div class="button-group no-print">
-                        <button class="btn btn--secondary" style="flex-grow: 1.5;" onclick="printSection('page-report-generator')">
-                <i class="fa-solid fa-file-pdf"></i> 1. Salvar Relatório como PDF
+            <button class="btn btn--secondary" style="flex-grow: 1.5;" onclick="printSection('page-report-generator')">
+                <svg class="icon" role="img" aria-hidden="true"><use xlink:href="#icon-pdf"></use></svg> 1. Salvar Relatório como PDF
             </button>
             <a id="whatsapp-link-final" href="#" target="_blank" class="btn btn--whatsapp" style="flex-grow: 1;">
-                <i class="fa-brands fa-whatsapp"></i> 2. Enviar via WhatsApp
+                <svg class="icon" role="img" aria-hidden="true"><use xlink:href="#icon-whatsapp"></use></svg> 2. Enviar via WhatsApp
             </a>
             <a id="email-link-final" href="#" class="btn btn--accent" style="flex-grow: 1;">
-                <i class="fa-solid fa-envelope"></i> 2. Enviar via E-mail
+                <svg class="icon" role="img" aria-hidden="true"><use xlink:href="#icon-email"></use></svg> 2. Enviar via E-mail
             </a>
           </div>
           
@@ -627,6 +724,12 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
 
 
 <script>
+'use strict';
+/* ========================================================================
+   DEFINIÇÕES PRINCIPAIS E LÓGICA DE NEGÓCIO (FIT CULTURAL)
+   Esta parte é o "coração" da ferramenta e permanece intacta.
+   ======================================================================== */
+
   // --- CHAVES DE ARMAZENAMENTO ---
   const ALVO_KEY = 'crescenzaFitCulturalAlvo_v17'; 
   const CANDIDATO_KEY = 'crescenzaFitCulturalCandidato_v17';
@@ -636,18 +739,18 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
   const RECRUITER_EMAIL = 'contato@crescenzaonline.com';
   const RECRUITER_PHONE = '55996842002'; 
   
-  // --- NOVO v17.8: Senha do Admin ---
+  // --- SENHA DO ADMIN ---
   // Altere esta senha para o que desejar
   const ADMIN_PASSWORD = 'Crescer@2025'; 
 
-  // --- CONFIGURAÇÃO CENTRAL ---
+  // --- CONFIGURAÇÃO CENTRAL (INTACTA) ---
   const DIM_KEYS = ["Estrutura","Resultado","Inovação","Autonomia","Colaboração","Comunicação","Cliente","Aprendizado","Ritmo","Inclusão"];
   let recruiterRadarChart = null; 
   let candidateOwnRadarChart = null; 
   let currentQuestion = 0;
   let candidateRawScores = {}; 
   
-  // (Sua Propriedade Intelectual - Aprimorada)
+  // (Propriedade Intelectual Crescenza - Aprimorada)
   const DIMENSION_DESCRIPTIONS = { 
     "Estrutura": { 
         desc: "Preferência por regras, processos e previsibilidade.", 
@@ -731,7 +834,7 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
     }
    };
    
-  // (Sua Propriedade Intelectual)
+  // (Propriedade Intelectual Crescenza - Blocos de Perguntas Intactos)
   const BASE_BLOCKS = [ 
     [{ dim: "Estrutura", text: "Eu prefiro ter processos claros e regras definidas." },{ dim: "Inovação", text: "Eu gosto de questionar o 'status quo' e tentar coisas novas." },{ dim: "Colaboração", text: "Eu me sinto melhor trabalhando em equipe do que sozinho." },{ dim: "Ritmo", text: "Eu prospero em ambientes de alta velocidade e com prazos curtos." }],
     [{ dim: "Resultado", text: "Meu foco principal é bater as metas, não importa como." },{ dim: "Autonomia", text: "Eu gosto de ter liberdade para decidir como fazer meu trabalho." },{ dim: "Aprendizado", text: "Eu vejo erros como oportunidades de aprender e experimentar." },{ dim: "Cliente", text: "Eu sempre penso primeiro no impacto que minha ação terá no cliente." }],
@@ -740,12 +843,84 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
     [{ dim: "Cliente", text: "É mais importante focar na eficiência interna do que nas demandas do cliente.", isInverted: true },{ dim: "Aprendizado", text: "Para mim, é crucial evitar erros e garantir a consistência.", isInverted: true },{ dim: "Comunicação", text: "Eu acredito que a comunicação deve seguir a hierarquia formal.", isInverted: true },{ dim: "Inclusão", text: "Eu me sinto mais à vontade trabalhando com pessoas que pensam como eu.", isInverted: true }],
     [{ dim: "Estrutura", text: "Eu gosto de 'descobrir o caminho' à medida que trabalho.", isInverted: true },{ dim: "Ritmo", text: "Eu prefiro um ambiente ágil e intenso." },{ dim: "Autonomia", text: "Eu funciono melhor com supervisão e validação constantes.", isInverted: true },{ dim: "Inovação", text: "Eu sou mais focado em executar tarefas do que em inovar.", isInverted: true }],
     [{ dim: "Colaboração", text: "O sucesso do time é mais importante que o meu sucesso individual." },{ dim: "Resultado", text: "Eu sou motivado por desafios e metas agressivas." },{ dim: "Cliente", text: "Minha prioridade é garantir que a operação interna funcione bem.", isInverted: true },{ dim: "Comunicação", text: "Eu prefiro que a comunicação seja direta e objetiva, mesmo que pareça dura." }],
-    [{ dim: "Aprendizado", text: "Eu gosto de experimentar novas abordagens, mesmo que falhem." },{ dim: "Inclusão", text: "Eu busco ativamente incluir opiniões de todos no grupo." },{ dim: "Estrutura", text: "Eu sigo os procedimentos à risca, sempre." },{ dim:V:"Autonomia", text: "Eu tomo a iniciativa e resolvo problemas sem esperar por permissão." }],
+    [{ dim: "Aprendizado", text: "Eu gosto de experimentar novas abordagens, mesmo que falhem." },{ dim: "Inclusão", text: "Eu busco ativamente incluir opiniões de todos no grupo." },{ dim: "Estrutura", text: "Eu sigo os procedimentos à risca, sempre." },{ dim: "Autonomia", text: "Eu tomo a iniciativa e resolvo problemas sem esperar por permissão." }],
     [{ dim: "Inovação", text: "Eu sou uma pessoa que gera muitas ideias novas." },{ dim: "Ritmo", text: "Eu me sinto pressionado em ambientes muito rápidos.", isInverted: true },{ dim: "Resultado", text: "Eu me preocupo mais com a forma como o trabalho é feito do que com o resultado final.", isInverted: true },{ dim: "Cliente", text: "Eu me coloco no lugar do cliente para tomar decisões." }],
     [{ dim: "Colaboração", text: "Eu prefiro ser o especialista na minha área a ser um generalista no time.", isInverted: true },{ dim: "Comunicação", text: "Eu acredito que a transparência total pode ser improdutiva.", isInverted: true },{ dim: "Aprendizado", text: "Eu prefiro usar métodos comprovados a arriscar com algo novo.", isInverted: true },{ dim: "Inclusão", text: "Eu acho que a diversidade de pensamento enriquece a equipe." }]
    ];
   const SHUFFLED_BLOCKS = BASE_BLOCKS.map(block => [...block].sort(() => 0.5 - Math.random()));
   const QUESTION_BLOCKS = [...BASE_BLOCKS, ...SHUFFLED_BLOCKS]; // 20 blocos
+
+
+/* ========================================================================
+   NOVA LÓGICA DE UI (INTERFACE DO USUÁRIO)
+   Gerenciamento de páginas, modais e eventos.
+   ======================================================================== */
+
+  // --- Gerenciador de Modais (Substitui alert/confirm) ---
+  const modal = {
+    _container: null,
+    _title: null,
+    _message: null,
+    _btnOk: null,
+    _btnCancel: null,
+    _resolve: null,
+
+    init() {
+      this._container = document.getElementById('modal-container');
+      this._title = document.getElementById('modal-title');
+      this._message = document.getElementById('modal-message');
+      this._btnOk = document.getElementById('modal-btn-ok');
+      this._btnCancel = document.getElementById('modal-btn-cancel');
+
+      this._btnOk.addEventListener('click', () => this.hide(true));
+      this._btnCancel.addEventListener('click', () => this.hide(false));
+      this._container.addEventListener('click', (e) => {
+        if (e.target === this._container) this.hide(false);
+      });
+    },
+
+    show(message, title = 'Aviso', type = 'alert') {
+      return new Promise((resolve) => {
+        this._title.textContent = title;
+        this._message.textContent = message;
+        this._resolve = resolve;
+
+        // Resetar classes de cor
+        this._title.classList.remove('modal-title-success', 'modal-title-error', 'modal-title-confirm');
+
+        if (type === 'alert' || type === 'success' || type === 'error') {
+          this._btnCancel.classList.add('hidden');
+          this._btnOk.textContent = 'OK';
+          if (type === 'success') this._title.classList.add('modal-title-success');
+          if (type === 'error') this._title.classList.add('modal-title-error');
+        } else if (type === 'confirm') {
+          this._btnCancel.classList.remove('hidden');
+          this._btnOk.textContent = 'Confirmar';
+          this._title.classList.add('modal-title-confirm');
+        }
+
+        this._container.classList.remove('hidden');
+        setTimeout(() => this._container.classList.add('visible'), 10); // Para transição
+      });
+    },
+
+    hide(value) {
+      this._container.classList.remove('visible');
+      setTimeout(() => {
+        this._container.classList.add('hidden');
+        if (this._resolve) this._resolve(value);
+      }, 200); // Aguarda a transição de opacidade
+    }
+  };
+
+  // Funções helper para facilitar a chamada (substitutos do alert/confirm)
+  function showModal(message, title = 'Aviso', type = 'alert') {
+    return modal.show(message, title, type);
+  }
+  
+  async function showConfirm(message, title = 'Confirmação') {
+    return await modal.show(message, title, 'confirm');
+  }
 
   // --- LÓGICA DE NAVEGAÇÃO E INICIALIZAÇÃO ---
   function hideAllPages() { document.querySelectorAll('.page').forEach(page => page.classList.add('hidden')); }
@@ -755,9 +930,7 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
       window.scrollTo(0, 0);
   }
 
-  // ******** CORREÇÃO v17.7 APLICADA AQUI ********
-  
-  // Nova função para decodificar Base64 URL-Safe
+  // Decodificador Base64 URL-Safe
   function base64UrlDecode(str) {
       str = str.replace(/-/g, '+').replace(/_/g, '/'); // Reverte '-' para '+' e '_' para '/'
       while (str.length % 4) {
@@ -766,44 +939,39 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
       return atob(str);
   }
 
+  // Codificador Base64 URL-Safe
+  function base64UrlEncode(str) {
+      return btoa(str)
+          .replace(/\+/g, '-') // Substitui '+' por '-'
+          .replace(/\//g, '_') // Substitui '/' por '_'
+          .replace(/=+$/, ''); // Remove padding '='
+  }
+
   window.onload = () => {
+      // Inicializa o sistema de modais
+      modal.init(); 
+
       const params = new URLSearchParams(window.location.search);
       const mode = params.get('mode');
       const targetData = params.get('target'); 
       const defaultPage = window.location.href.split('?')[0] + '?mode=candidate';
 
       if (mode === 'admin') {
-          // NOVO v17.8: Pedir senha para o Admin
-          const inputPassword = prompt("Digite a senha de administrador para acessar:");
-          if (inputPassword === ADMIN_PASSWORD) {
-              console.log("Acesso de Admin concedido.");
-              initAdmin();
-          } else {
-              if (inputPassword !== null) { // Só mostra alerta se não clicou em "Cancelar"
-                alert("Senha incorreta. Acesso negado.");
-              }
-              // Redireciona para a página de candidato, que mostrará o erro de link inválido
-              window.location.href = defaultPage;
-          }
+          // Página de Admin: Mostra a tela de login primeiro
+          togglePage('page-login');
+          document.getElementById('admin-password').focus();
 
       } else if (mode === 'candidate') {
           if (!targetData) { 
               initCandidateIntro(false); // Link inválido, sem target
           } else {
               try {
-                  // A CORREÇÃO: Usamos a nova função de decode URL-Safe
                   const decodedAlvoString = base64UrlDecode(targetData);
-                  // ************************************************
-
                   const alvoJson = JSON.parse(decodedAlvoString);
-                  
                   localStorage.setItem(ALVO_KEY, JSON.stringify(alvoJson));
-                  
                   console.log("Alvo carregado com sucesso no navegador do candidato.");
                   initCandidateIntro(true); // Sucesso
-                  
               } catch (e) {
-                  // Se falhar, o link está realmente corrompido
                   console.error("Erro ao decodificar o Alvo do link:", e);
                   initCandidateIntro(false); // Falha
               }
@@ -812,15 +980,32 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
           initReport();
       } else {
           // Modo padrão (sem parâmetros)
-          // Redireciona para a página de candidato, que mostrará o erro de link inválido
-          // Isso "tranca" a raiz do site.
-          window.location.href = defaultPage;
+          // Redireciona para o admin (que mostrará o login)
+          window.location.href = window.location.href.split('?')[0] + '?mode=admin';
       }
   };
-  // ************************************************
+
+  // NOVO: Função de Login (Substitui o prompt)
+  function handleAdminLogin(event) {
+    event.preventDefault(); // Impede o envio do formulário
+    const passInput = document.getElementById('admin-password');
+    const errorEl = document.getElementById('login-error');
+    
+    if (passInput.value === ADMIN_PASSWORD) {
+      console.log("Acesso de Admin concedido.");
+      errorEl.classList.add('hidden');
+      initAdmin(); // Inicia a página de admin
+    } else {
+      console.warn("Senha incorreta.");
+      errorEl.classList.remove('hidden');
+      passInput.focus();
+      passInput.select();
+    }
+  }
 
   function initAdmin() {
-      togglePage('page-admin');
+      // Esta função agora é chamada APÓS o login
+      togglePage('page-admin');
       if (!document.querySelector('#gestor-panels-container .gestor-card')) {
           renderGestorPanels(3);
       }
@@ -834,7 +1019,7 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
               }
               gerarLinkCandidato(); 
           }
-  _   } catch(e) {
+      } catch(e) {
           console.warn("Nenhum dado de alvo salvo encontrado.");
       }
   }
@@ -946,18 +1131,26 @@ a   .page { display: block !important; padding: 0 !important; margin: 0; }
       if (c.children.length < 7) renderGestorPanels(c.children.length + 1); 
   }
 
-  function removeGestor(index = -1) { 
+  async function removeGestor(index = -1) { 
       const c = document.getElementById('gestor-panels-container');
-      if (c.children.length > 3) {
-          if(index > 0 && index <= c.children.length) {
-               c.removeChild(c.children[index-1]);
-               renderGestorPanels(c.children.length);
-          } else {
-               c.removeChild(c.lastChild);
-a              document.getElementById('num-gestores-display').textContent = c.children.length;
-               updateGestorButtons();
-          }
-      }
+      if (c.children.length <= 3) {
+      // MODIFICADO: Usa modal em vez de alert
+      await showModal('São necessários no mínimo 3 gestores para calcular a mediana.', 'Aviso', 'error');
+      return;
+    }
+
+    if (index > 0 && index <= c.children.length) {
+      const confirmado = await showConfirm(`Tem certeza que deseja remover o Gestor ${index}? A pontuação será perdida.`, 'Confirmar Remoção');
+      if (!confirmado) return;
+      c.removeChild(c.children[index - 1]);
+      renderGestorPanels(c.children.length); // Re-renderiza para re-numerar
+    } else {
+      const confirmado = await showConfirm('Tem certeza que deseja remover o último gestor? A pontuação será perdida.', 'Confirmar Remoção');
+      if (!confirmado) return;
+      c.removeChild(c.lastChild);
+      document.getElementById('num-gestores-display').textContent = c.children.length;
+      updateGestorButtons();
+    }
   }
 
   function updateGestorButtons() { 
@@ -1001,12 +1194,13 @@ a              document.getElementById('num-gestores-display').textConten
       return p;
   }
 
-  function salvarAlvo() {
+  async function salvarAlvo() {
       const empresaNome = document.getElementById('empresa-nome').value;
       const recruiterPhone = RECRUITER_PHONE; 
       
       if (!empresaNome || empresaNome.trim() === "") {
-          alert('Erro: Por favor, preencha o Nome da Empresa.');
+          // MODIFICADO: Usa modal
+        await showModal('Por favor, preencha o Nome da Empresa.', 'Erro de Validação', 'error');
           document.getElementById('empresa-nome').focus();
           return;
       }
@@ -1016,7 +1210,8 @@ a              document.getElementById('num-gestores-display').textConten
       const numGestores = gestorCards.length; 
 
       if (numGestores < 3) {
-          alert('Erro: São necessários no mínimo 3 gestores para calcular a mediana.');
+          // MODIFICADO: Usa modal
+        await showModal('São necessários no mínimo 3 gestores para calcular a mediana.', 'Erro de Validação', 'error');
           return;
       }
 
@@ -1025,12 +1220,14 @@ a              document.getElementById('num-gestores-display').textConten
           const total = updateAdminTotal(id);
           if (total !== 100) {
               const gestorNome = card.querySelector('h3').textContent || `(ID: ${id})`;
-              alert(`Erro de Validação!\nO ${gestorNome} está com Total ${total}.\nO total DEVE ser 100.`);
+              // MODIFICADO: Usa modal
+              await showModal(`O ${gestorNome} está com Total ${total}. O total DEVE ser 100.`, 'Erro de Validação', 'error');
               card.style.borderColor = 'var(--color-low)';
               card.style.boxShadow = '0 0 10px var(--color-low)';
+              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
               return; 
           }
-          card.style.borderColor = '#fff';
+          card.style.borderColor = '';
           card.style.boxShadow = 'var(--shadow)';
           profiles.push(getAdminPerfil(id));
       }
@@ -1060,11 +1257,14 @@ a              document.getElementById('num-gestores-display').textConten
 
         document.getElementById('alvo-calculado')?.classList.remove('hidden');
         gerarLinkCandidato(); // Atualiza o link
-        alert('Alvo (Mediana) salvo com sucesso no navegador!');
+        // MODIFICADO: Usa modal
+        await showModal('Alvo (Mediana) salvo com sucesso no navegador!', 'Sucesso', 'success');
+        document.getElementById('alvo-calculado').scrollIntoView({ behavior: 'smooth' });
       
       } catch (e) {
-          alert('Erro ao salvar o alvo no armazenamento local.');
-section       console.error("Erro localStorage:", e);
+          // MODIFICADO: Usa modal
+        await showModal('Erro ao salvar o alvo no armazenamento local.', 'Erro Técnico', 'error');
+          console.error("Erro localStorage:", e);
       }
   }
 
@@ -1092,16 +1292,6 @@ section       console.error("Erro localStorage:", e);
       container.innerHTML = html;
   }
   
-  // ******** CORREÇÃO v17.7 APLICADA AQUI ********
-  
-  // Nova função para criar Base64 URL-Safe
-  function base64UrlEncode(str) {
-      return btoa(str)
-          .replace(/\+/g, '-') // Substitui '+' por '-'
-          .replace(/\//g, '_') // Substitui '/' por '_'
-          .replace(/=+$/, ''); // Remove padding '='
-  }
-  
   function gerarLinkCandidato() {
       const linkInput = document.getElementById('candidate-link'); 
       
@@ -1115,7 +1305,7 @@ section       console.error("Erro localStorage:", e);
           }
 
           if (!dataParaLink || !dataParaLink.profile) {
-section           throw new Error("Alvo não encontrado ou inválido no localStorage.");
+              throw new Error("Alvo não encontrado ou inválido no localStorage.");
           }
       } catch (e) {
           console.error(e);
@@ -1125,26 +1315,37 @@ section           throw new Error("Alvo não encontrado ou inválido no loc
       
       if (linkInput && dataParaLink) { 
           const alvoString = JSON.stringify(dataParaLink);
-          
-          // A CORREÇÃO: Usamos a nova função de encode URL-Safe
           const alvoUrlSafe = base64UrlEncode(alvoString); 
-          
           let link = window.location.href.split('?')[0]; 
           linkInput.value = `${link}?mode=candidate&target=${alvoUrlSafe}`; 
       }
   }
-  // ************************************************
 
-  function copiarLink() {
+  async function copiarLink() {
       gerarLinkCandidato(); 
       const linkInput = document.getElementById('candidate-link'); 
       if (linkInput.value.includes('...')) {
-          alert('Por favor, salve o alvo primeiro para gerar o link completo.');
-section           return;
+          // MODIFICADO: Usa modal
+        await showModal('Por favor, salve o alvo primeiro para gerar o link completo.', 'Aviso', 'error');
+          return;
       }
-      linkInput.select(); 
-      document.execCommand('copy'); 
-      alert('Link copiado!'); 
+      
+      // NOVO: Lógica de cópia moderna
+      try {
+        await navigator.clipboard.writeText(linkInput.value);
+        await showModal('Link copiado para a área de transferência!', 'Sucesso', 'success');
+      } catch (err) {
+        console.warn('Falha ao copiar com navigator.clipboard, usando fallback.', err);
+        // Fallback para navegadores mais antigos
+        try {
+          linkInput.select(); 
+          document.execCommand('copy'); 
+          await showModal('Link copiado (usando método alternativo)!', 'Sucesso', 'success');
+        } catch (fallbackErr) {
+          console.error('Falha no fallback de cópia.', fallbackErr);
+          await showModal('Não foi possível copiar o link. Selecione e copie manualmente.', 'Erro', 'error');
+        }
+      }
   }
 
   // --- LÓGICA DO PASSO 2: WIZARD CANDIDATO ---
@@ -1162,19 +1363,27 @@ section           return;
       
       document.getElementById('wizard-question-title').textContent = `Bloco ${index + 1} de ${QUESTION_BLOCKS.length}`;
       document.getElementById('wizard-progress-bar').style.width = `${((index + 1) / QUESTION_BLOCKS.length) * 100}%`;
-      document.getElementById('btn-next').textContent = (index === QUESTION_BLOCKS.length - 1) ? 'Finalizar e Gerar Relatório' : 'Próximo →';
+      
+      // MODIFICADO: Atualiza o texto do botão
+      const btnNext = document.getElementById('btn-next');
+      if (index === QUESTION_BLOCKS.length - 1) {
+        btnNext.innerHTML = `Finalizar e Gerar Relatório`;
+      } else {
+        btnNext.innerHTML = `Próximo <svg class="icon" role="img" aria-hidden="true" style="margin-right: 0; margin-left: 8px;"><use xlink:href="#icon-arrow-right"></use></svg>`;
+      }
       
       document.querySelectorAll(`#wizard-body input[type=radio]`).forEach(r => { 
           r.onchange = (e) => { 
               if (!e.target.checked) return;
-              const n = e.target.name, v = e.target.value;content               const other = n.startsWith('most')?'least':'most'; 
+              const n = e.target.name, v = e.target.value; 
+              const other = n.startsWith('most')?'least':'most'; 
               const otherRadio = document.querySelector(`input[name=${other}-${index}][value="${v}"]`); 
               if (otherRadio?.checked) otherRadio.checked = false; 
           }; 
       });
   }
 
-  function nextQuestion() {
+  async function nextQuestion() {
       const err = document.getElementById('wizard-error'); 
       const most = document.querySelector(`input[name=most-${currentQuestion}]:checked`); 
       const least = document.querySelector(`input[name=least-${currentQuestion}]:checked`);
@@ -1207,7 +1416,8 @@ section           return;
               }, 1500); 
               
           } catch(e) {
-              alert("Houve um erro ao salvar suas respostas. Tente novamente.");
+              // MODIFICADO: Usa modal
+            await showModal("Houve um erro ao salvar suas respostas. Tente novamente.", "Erro Técnico", "error");
               console.error("Erro localStorage:", e);
           }
       }
@@ -1246,18 +1456,18 @@ section           return;
       }
       if (["Autonomia", "Inovação"].includes(top1) && ["Autonomia", "Inovação"].includes(top2)) {
           return { title: "Pioneiro(a) Independente", desc: "Perfil 'desbravador', que prefere ter liberdade para explorar novas ideias e tomar decisões por conta própria." };
-      }
+a     }
       
       switch(top1) {
           case "Resultado": return { title: "Foco em Resultado", desc: "A principal motivação é a entrega de metas e o atingimento de objetivos." };
-section           case "Autonomia": return { title: "Foco em Autonomia", desc: "A principal motivação é a liberdade para tomar decisões e executar o trabalho." };
+          case "Autonomia": return { title: "Foco em Autonomia", desc: "A principal motivação é a liberdade para tomar decisões e executar o trabalho." };
           case "Estrutura": return { title: "Foco em Estrutura", desc: "A principal motivação é um ambiente claro, previsível e com regras definidas." };
           case "Colaboração": return { title: "Foco em Colaboração", desc: "A principal motivação é o trabalho em equipe e o sucesso coletivo." };
           default: return { title: "Perfil Equilibrado", desc: "Perfil com preferências distribuídas, capaz de se adaptar a diferentes contextos." };
       }
   }
 
-  function gerarRelatorio() {
+  async function gerarRelatorio() {
       let loadedAlvoData, loadedCandidatoData, candidateName;
       
       try {
@@ -1265,11 +1475,14 @@ section           case "Autonomia": return { title: "Foco em Autonomia", de
         loadedCandidatoData = JSON.parse(localStorage.getItem(CANDIDATO_KEY));
         candidateName = localStorage.getItem(CANDIDATO_NAME_KEY) || "Candidato não informado";
       } catch (e) {
-          alert("Erro ao ler os dados salvos. Tente refazer o teste.");
+          // MODIFICADO: Usa modal
+        await showModal("Erro ao ler os dados salvos. Tente refazer o teste.", "Erro Técnico", "error");
           return;
       }
 
-      if (!loadedAlvoData || !loadedCandidatoData) {s           alert("Dados faltando. Certifique-se de que o link estava correto e o teste foi finalizado."); 
+      if (!loadedAlvoData || !loadedCandidatoData) { 
+          // MODIFICADO: Usa modal
+        await showModal("Dados faltando. Certifique-se de que o link estava correto e o teste foi finalizado.", "Erro de Dados", "error"); 
           return; 
       }
       
@@ -1278,13 +1491,13 @@ section           case "Autonomia": return { title: "Foco em Autonomia", de
       
       const alvo = loadedAlvoData.profile; 
       const empresaNome = loadedAlvoData.empresaNome || 'A Empresa';
-    f   const candidato_raw = loadedCandidatoData.profile;
+      const candidato_raw = loadedCandidatoData.profile;
       const candidato_0_100 = normalizeProfileToPercent(candidato_raw);
       
       let totalDelta = 0; 
       DIM_KEYS.forEach(key => { 
           const alvoScore = alvo[key] || 0;
-section           const candScore = candidato_0_100[key] || 0;
+          const candScore = candidato_0_100[key] || 0;
           totalDelta += Math.abs(alvoScore - candScore); 
       }); 
       
@@ -1300,12 +1513,14 @@ section           const candScore = candidato_0_100[key] || 0;
   }
 
   function renderRecruiterRadarChart(alvoData, candidatoData) {
-      const canvas = document.getElementById('recruiter-radar-chart'); if (!canvas) return;t       const ctx = canvas.getContext('2d'); 
+      const canvas = document.getElementById('recruiter-radar-chart'); if (!canvas) return; 
+      const ctx = canvas.getContext('2d'); 
       if (recruiterRadarChart) recruiterRadarChart.destroy();
       recruiterRadarChart = new Chart(ctx, { 
           type: 'radar', 
           data: { 
-              labels: DIM_KEYS,s               datasets: [ 
+              labels: DIM_KEYS, 
+              datasets: [ 
                   { label: 'Alvo da Empresa', data: alvoData, fill: true, backgroundColor: 'rgba(255, 102, 0, 0.2)', borderColor: 'rgb(255, 102, 0)', pointBackgroundColor: 'rgb(255, 102, 0)'}, 
                   { label: 'Seu Perfil', data: candidatoData, fill: true, backgroundColor: 'rgba(21, 101, 192, 0.2)', borderColor: 'rgb(21, 101, 192)', pointBackgroundColor: 'rgb(21, 101, 192)'} 
               ]
@@ -1319,7 +1534,7 @@ section           const candScore = candidato_0_100[key] || 0;
   }
 
   function renderQualitativeReport(candidato, alvo) {
-s       const scored = []; 
+      const scored = []; 
       DIM_KEYS.forEach(key => { 
           const alvoScore = alvo[key] || 0;
           const candScore = candidato[key] || 0;
@@ -1331,7 +1546,8 @@ s       const scored = []; 
           }); 
       });
       
-      const perfilOrd = [...scored].sort((a, b) => b.candScore - a.candScore);s       const ulPerfil = document.getElementById('report-perfil'); 
+      const perfilOrd = [...scored].sort((a, b) => b.candScore - a.score); 
+      const ulPerfil = document.getElementById('report-perfil'); 
       ulPerfil.innerHTML = '';
       
       const archetype = getArchetype(candidato);
@@ -1352,11 +1568,12 @@ s       const scored = []; 
       const ulGaps = document.getElementById('report-gaps'); 
       const ulPerguntas = document.getElementById('report-perguntas');
       ulAderencia.innerHTML = ''; ulGaps.innerHTML = ''; ulPerguntas.innerHTML = '';
-      
+  nbsp;  
       let aderenciasCount = 0;
       let gapsCount = 0;
       let perguntasCount = 0;
-      const ADERENCIA_THRESHOLD = 20;s       const MAX_ITEMS = 4;
+      const ADERENCIA_THRESHOLD = 20; 
+      const MAX_ITEMS = 4;
       const MAX_PERGUNTAS = 3;
 
       gapsOrd.forEach(i => {
@@ -1365,7 +1582,7 @@ s       const scored = []; 
           if (diffAbs <= ADERENCIA_THRESHOLD) {
               if (aderenciasCount < MAX_ITEMS) {
                 ulAderencia.innerHTML += `<li><strong>${i.key}:</strong> Perfil alinhado (Seu: ${i.candScore.toFixed(0)} vs Alvo: ${i.alvoScore.toFixed(0)}).</li>`;
-s               aderenciasCount++;
+                aderenciasCount++;
               }
           } else { 
               if (gapsCount < MAX_ITEMS) {
@@ -1375,7 +1592,7 @@ s               aderenciasCount++;
                         ulPerguntas.innerHTML += `<li style="margin-bottom: 15px;"><strong>[Reflexão sobre ${i.key}]</strong> ${DIMENSION_DESCRIPTIONS[i.key].question_high_gap}</li>`;
                         perguntasCount++;
                     }
-              s } else { 
+                } else { 
                     ulGaps.innerHTML += `<li><strong>${i.key} (Gap Baixo):</strong> Você (<strong>${i.candScore.toFixed(0)}</strong>) valoriza esta dimensão **menos** do que o Alvo (<strong>${i.alvoScore.toFixed(0)}</strong>).</li>`;
                     if (perguntasCount < MAX_PERGUNTAS) {
                         ulPerguntas.innerHTML += `<li style="margin-bottom: 15px;"><strong>[Reflexão sobre ${i.key}]</strong> ${DIMENSION_DESCRIPTIONS[i.key].question_low_gap}</li>`;
@@ -1383,7 +1600,7 @@ s               aderenciasCount++;
                     }
                 }
                 gapsCount++;
-section           }
+              }
           }
       });
       
@@ -1394,12 +1611,13 @@ section           }
 
   // --- FUNÇÕES UTILITÁRIAS ---
 
-  function limparStorage() {
-      // Esta função é apenas para o Admin
-      if (confirm('Isso apagará o Alvo da Empresa salvo neste navegador. Deseja continuar?')) {
+  async function limparStorage() {
+      // MODIFICADO: Usa modal
+      const confirmado = await showConfirm('Isso apagará o Alvo da Empresa salvo neste navegador. Deseja continuar?', 'Limpar Dados');
+      if (confirmado) {
           localStorage.removeItem(ALVO_KEY);
-          alert('Alvo limpo. A página será recarregada.');
-          window.location.href = window.location.href.split('?')[0]; // Recarrega para o Admin
+          await showModal('Alvo limpo. A página será recarregada.', 'Sucesso', 'success');
+->       window.location.href = window.location.href.split('?')[0] + '?mode=admin'; // Recarrega para o Admin
       }
   }
 
@@ -1420,10 +1638,13 @@ section           }
           window.print();
            setTimeout(() => {
               document.body.classList.remove('printing-mode');
-              const params = new URLSearchParams(window.location.search); const mode = params.get('mode');
-              if (mode === 'report') initReport(); 
-              else if (mode === 'candidate') initReport(); 
-              else initAdmin();
+a             const params = new URLSearchParams(window.location.search); const mode = params.get('mode');
+              // MODIFICADO: Lógica de recarga melhorada
+            if (mode === 'report' || mode === 'candidate') {
+              initReport();
+            } else {
+              initAdmin(); 
+            }
            }, 1000);
       }, 500);
    }
@@ -1431,4 +1652,3 @@ section           }
 </script>
 </body>
 </html>
-
