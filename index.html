@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Crescenza 360° • Sistema de Fit Cultural v17.9 (Admin Seguro)</title>
+<title>Crescenza 360° • Sistema de Fit Cultural v19.0 (Admin Seguro)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   /* =============================
@@ -61,7 +61,7 @@
   .header p { margin: 0; opacity: .9; }
   .header__bar { margin-top: 14px; height: 3px; width: 100%; background: var(--crescenza-orange); }
 
-  /* --- CORREÇÃO v17.9: Logo em CSS --- */
+  /* --- Logo em CSS (Aprimoramento v17.9) --- */
   .logo-img-intro-css {
       background: var(--crescenza-black);
       color: #fff;
@@ -203,16 +203,6 @@
  
   input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; } 
   input[type=number] { -moz-appearance: textfield; }
- 
-  /* --- CORREÇÃO v17.9: Botão 'X' removido do CSS pois foi removido do JS
-  .remove-gestor-btn { 
-    position: absolute; top: 15px; right: 15px; 
-    background: var(--color-low); color: white; 
-    border: none; border-radius: 50%; width: 28px; height: 28px; 
-    font-weight: bold; font-size: 16px; cursor: pointer; 
-    line-height: 26px; text-align: center; 
-  }
-  */
 
   /* --- Candidato Intro (Passo 2) --- */
   #page-candidate-intro .card { text-align: center; }
@@ -315,7 +305,6 @@
     font: 14px/1.6 Arial, Helvetica, sans-serif; 
   }
   footer a { color: #ffa64d; text-decoration: none; }
-  /* CORREÇÃO v17.8: Centraliza todos os textos do rodapé */
   footer .footer-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
   footer p { margin: 0 0 6px; }
   footer p.copy { margin: 0 0 10px; }
@@ -405,6 +394,7 @@
       <p class="muted" style="margin-top: -10px; margin-bottom: 20px;">Envie o link abaixo para os candidatos iniciarem o teste. O Alvo cultural será embutido no link.</p>
       <input type="text" readonly id="candidate-link" value="Preencha os campos acima e salve o alvo para gerar o link...">
       <button class="btn btn--secondary btn-small no-print" onclick="copiarLink()">Copiar Link</button>
+      <button class="btn btn--danger btn-small no-print" onclick="limparStorage()">Limpar Alvo Salvo</button>
     </div>
 
     <div id="alvo-calculado" class="card hidden">
@@ -484,7 +474,6 @@
     <p style="font-size: 18px; color: var(--crescenza-dark-gray); text-align: center;">Estamos analisando suas respostas e comparando com a nossa cultura alvo. Aguarde um momento.</p>
   </div>
 </div>
-
 
 <div class="page hidden printable-section" id="page-report-generator">
     <header class="header no-print">
@@ -597,7 +586,6 @@
     </div>
 </footer>
 
-
 <script>
   // --- CHAVES DE ARMAZENAMENTO ---
   const ALVO_KEY = 'crescenzaFitCulturalAlvo_v17'; 
@@ -608,9 +596,9 @@
   const RECRUITER_EMAIL = 'contato@crescenzaonline.com';
   const RECRUITER_PHONE = '55996842002'; 
  
-  // --- CORREÇÃO v17.9: Senha do Admin (SEGURANÇA) ---
+  // --- MELHORIA DE SEGURANÇA v19.0 (Netlify-Ready) ---
   // A senha 'Crescer@2025' foi convertida para um hash SHA-256.
-  // Mude este hash se quiser alterar a senha.
+  // Esta é a abordagem moderna e robusta que você solicitou.
   const ADMIN_HASH = 'e5a953b063a8a3182859b8a7c15e8f4c71850123565f4d1d1139e1449c258d1b'; 
 
   // --- CONFIGURAÇÃO CENTRAL ---
@@ -628,14 +616,14 @@
         baixo: "Prefere flexibilidade, ambiguidade e adaptação.",
         label_low: "Flexibilidade Total", label_high: "Processos Rígidos",
         question_high_gap: "Notei que você valoriza mais flexibilidade do que o esperado para esta função. Como você se adapta a ambientes que exigem conformidade estrita com processos?",
-        question_low_gap: "Seu perfil sugere uma preferência por estrutura. Como você lide com situações ambíguas ou quando um processo precisa ser alterado rapidamente?"
+        question_low_gap: "Seu perfil sugere uma preferência por estrutura. Como você lida com situações ambíguas ou quando um processo precisa ser alterado rapidamente?"
     },
     "Resultado": { 
         desc: "Foco em metas (o 'quê') vs. processo (o 'como').", 
         alto: "Motivado por metas, competição e entrega de resultados.", 
         baixo: "Motivado pela qualidade da execução, pelo processo e pelo 'como' se chega lá.",
         label_low: "Foco no Processo", label_high: "Foco na Meta",
-        question_high_gap: "Percebi que você é muito focado na qualidade da processo. Como você equilibra isso quando há uma pressão forte para entregar uma meta, mesmo que o 'como' não seja perfeito?",
+        question_high_gap: "Percebi que você é muito focado na qualidade do processo. Como você equilibra isso quando há uma pressão forte para entregar uma meta, mesmo que o 'como' não seja perfeito?",
         question_low_gap: "Você parece muito orientado a metas. Me conte sobre uma situação em que você teve que 'quebrar as regras' ou sacrificar a qualidade para atingir um resultado. Como se sentiu?"
     },
     "Inovação": { 
@@ -699,7 +687,7 @@
         alto: "Busca ativamente a diversidade de pensamento e a inclusão.", 
         baixo: "Prefere afinidade, consenso e homogeneidade de pensamento.",
         label_low: "Consenso/Afinidade", label_high: "Diversidade/Debate",
-        question_high_gap: "Nosso time valoriza o consenso rápido. Como você, que busca ativamente a diversidade de opiniões, reagiria if sentisse que o grupo está 'concordando rápido demais'?",
+        question_high_gap: "Nosso time valoriza o consenso rápido. Como você, que busca ativamente a diversidade de opiniões, reagiria se sentisse que o grupo está 'concordando rápido demais'?",
         question_low_gap: "Temos muitos debates e opiniões divergentes aqui. Como você, que prefere afinidade, age quando há um conflito de ideias forte em uma reunião?"
     }
    };
@@ -708,7 +696,7 @@
   const BASE_BLOCKS = [ 
     [{ dim: "Estrutura", text: "Eu prefiro ter processos claros e regras definidas." },{ dim: "Inovação", text: "Eu gosto de questionar o 'status quo' e tentar coisas novas." },{ dim: "Colaboração", text: "Eu me sinto melhor trabalhando em equipe do que sozinho." },{ dim: "Ritmo", text: "Eu prospero em ambientes de alta velocidade e com prazos curtos." }],
     [{ dim: "Resultado", text: "Meu foco principal é bater as metas, não importa como." },{ dim: "Autonomia", text: "Eu gosto de ter liberdade para decidir como fazer meu trabalho." },{ dim: "Aprendizado", text: "Eu vejo erros como oportunidades de aprender e experimentar." },{ dim: "Cliente", text: "Eu sempre penso primeiro no impacto que minha ação terá no cliente." }],
-    [{ dim: "Comunicação", text: "Acredito que a informação deve ser aberta e transparente para todos." },{ dim: "Inclusão", text: "Eu valorizo ativamente perspectivas de pessoas com históricos diferentes do meu." },{ dim: "Estrutura", text: "Eu me sinto confortável com ambiguidades e pouca estrutura formal.", isInverted: true },{ dim: "Resultado", text: "Eu prefiro focar na qualidade da execução e processo, mesmo que a meta atrase.", isInverted: true }],
+    [{ dim: "Comunicação", text: "Acredito que η informação deve ser aberta e transparente para todos." },{ dim: "Inclusão", text: "Eu valorizo ativamente perspectivas de pessoas com históricos diferentes do meu." },{ dim: "Estrutura", text: "Eu me sinto confortável com ambiguidades e pouca estrutura formal.", isInverted: true },{ dim: "Resultado", text: "Eu prefiro focar na qualidade da execução e processo, mesmo que a meta atrase.", isInverted: true }],
     [{ dim: "Inovação", text: "Eu prefiro otimizar e melhorar sistemas existentes a criar algo do zero.", isInverted: true },{ dim: "Ritmo", text: "Eu gosto de um ritmo de trabalho cadenciado e bem planejado.", isInverted: true },{ dim: "Colaboração", text: "Eu sou mais produtivo quando posso focar no meu trabalho individual.", isInverted: true },{ dim: "Autonomia", text: "Eu prefiro ter um direcionamento claro do meu gestor sobre o que fazer.", isInverted: true }],
     [{ dim: "Cliente", text: "É mais importante focar na eficiência interna do que nas demandas do cliente.", isInverted: true },{ dim: "Aprendizado", text: "Para mim, é crucial evitar erros e garantir a consistência.", isInverted: true },{ dim: "Comunicação", text: "Eu acredito que a comunicação deve seguir a hierarquia formal.", isInverted: true },{ dim: "Inclusão", text: "Eu me sinto mais à vontade trabalhando com pessoas que pensam como eu.", isInverted: true }],
     [{ dim: "Estrutura", text: "Eu gosto de 'descobrir o caminho' à medida que trabalho.", isInverted: true },{ dim: "Ritmo", text: "Eu prefiro um ambiente ágil e intenso." },{ dim: "Autonomia", text: "Eu funciono melhor com supervisão e validação constantes.", isInverted: true },{ dim: "Inovação", text: "Eu sou mais focado em executar tarefas do que em inovar.", isInverted: true }],
@@ -728,32 +716,19 @@
       window.scrollTo(0, 0);
   }
 
-  // --- CORREÇÃO v17.9: Funções de Hash (SEGURANÇA) ---
+  // --- FUNÇÕES DE HASH (SEGURANÇA v19.0) ---
   /**
    * Converte uma string para um hash SHA-256 em hexadecimal.
    * @param {string} inputString A string a ser hasheada.
    * @returns {Promise<string>} O hash em formato hexadecimal.
    */
   async function hashStringSHA256(inputString) {
-      try {
-          const encoder = new TextEncoder();
-          const data = encoder.encode(inputString);
-          const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-          const hashArray = Array.from(new Uint8Array(hashBuffer));
-          const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-          return hashHex;
-      } catch (error) {
-          console.error("Erro no hashing:", error);
-          // Fallback para navegadores antigos ou ambientes inseguros (http)
-          // Isso é menos seguro, mas melhor que nada.
-          let hash = 0;
-          for (let i = 0; i < inputString.length; i++) {
-              const char = inputString.charCodeAt(i);
-              hash = ((hash << 5) - hash) + char;
-              hash = hash & hash; // Converte para 32bit integer
-          }
-          return `fallback_${hash}`;
-      }
+      const encoder = new TextEncoder();
+      const data = encoder.encode(inputString);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return hashHex;
   }
   
   /**
@@ -763,15 +738,20 @@
    */
   async function checkAdminPassword(inputPassword) {
       if (!inputPassword) return false;
-      const inputHash = await hashStringSHA256(inputPassword);
-      return inputHash === ADMIN_HASH;
+      try {
+        const inputHash = await hashStringSHA256(inputPassword);
+        return inputHash === ADMIN_HASH;
+      } catch (err) {
+        console.error("Erro no hashing:", err);
+        return false; // Falha segura
+      }
   }
-  // --- Fim da Correção de Segurança ---
+  // --- Fim das Funções de Hash ---
 
-
-  // ******** CORREÇÃO v17.7 (Mantida) ********
  
-  // Nova função para decodificar Base64 URL-Safe
+  /**
+   * Decodifica Base64 URL-Safe (para o link do candidato)
+   */
   function base64UrlDecode(str) {
       str = str.replace(/-/g, '+').replace(/_/g, '/'); // Reverte '-' para '+' e '_' para '/'
       while (str.length % 4) {
@@ -779,8 +759,21 @@
       }
       return atob(str);
   }
+  
+  /**
+   * Codifica para Base64 URL-Safe (para gerar o link do candidato)
+   */
+  function base64UrlEncode(str) {
+      return btoa(str)
+          .replace(/\+/g, '-') // Substitui '+' por '-'
+          .replace(/\//g, '_') // Substitui '/' por '_'
+          .replace(/=+$/, ''); // Remove padding '='
+  }
 
-  // CORREÇÃO v17.9: Convertido para async para suportar o hash da senha
+  /**
+   * Roteador Principal da Aplicação (window.onload)
+   * Lida com os modos: 'admin', 'candidate', 'report'
+   */
   window.onload = async () => {
       const params = new URLSearchParams(window.location.search);
       const mode = params.get('mode');
@@ -788,58 +781,81 @@
       const defaultPage = window.location.href.split('?')[0] + '?mode=candidate';
 
       if (mode === 'admin') {
-          // CORREÇÃO v17.9: Pedir senha e verificar HASH
+          // ROTA DE ADMIN (SEGURA)
+          
+          // 1. Verificar se o ambiente é seguro (HTTPS), o que o Netlify é.
+          if (!window.crypto || !window.crypto.subtle) {
+              alert("Erro de Segurança: O login de admin não pode ser carregado.\n\nO seu navegador ou a conexão (HTTP) não é segura. O sistema de criptografia não está disponível.\n\nO acesso de candidato ainda funcionará.");
+              window.location.href = defaultPage; // Envia para a pág. de candidato (que mostrará erro)
+              return; // Para a execução
+          }
+
+          // 2. Pedir a senha
           const inputPassword = prompt("Digite a senha de administrador para acessar:");
-          if (await checkAdminPassword(inputPassword)) {
-              console.log("Acesso de Admin concedido.");
-              initAdmin();
-          } else {
-              if (inputPassword !== null) { // Só mostra alerta se não clicou em "Cancelar"
-                alert("Senha incorreta. Acesso negado.");
+          
+          // 3. Verificar a senha (usando HASH)
+          try {
+              if (await checkAdminPassword(inputPassword)) {
+                  console.log("Acesso de Admin concedido.");
+                  initAdmin(); // Inicia a página de admin
+              } else {
+                  if (inputPassword !== null) { // Não mostra alerta se o usuário clicou em "Cancelar"
+                    alert("Senha incorreta. Acesso negado.");
+                  }
+                  window.location.href = defaultPage; // Redireciona se a senha estiver errada
               }
-              // Redireciona para a página de candidato, que mostrará o erro de link inválido
+          } catch (err) {
+              console.error("Erro fatal durante a verificação de senha:", err);
+              alert("Ocorreu um erro de criptografia. Não foi possível fazer o login.");
               window.location.href = defaultPage;
           }
 
       } else if (mode === 'candidate') {
+          // ROTA DE CANDIDATO
           if (!targetData) { 
-              initCandidateIntro(false); // Link inválido, sem target
+              initCandidateIntro(false); // Link inválido, sem 'target'
           } else {
               try {
-                  // A CORREÇÃO: Usamos a nova função de decode URL-Safe
+                  // Decodifica o Alvo embutido no link
                   const decodedAlvoString = base64UrlDecode(targetData);
-                  // ************************************************
-
                   const alvoJson = JSON.parse(decodedAlvoString);
                  
+                  // Salva o alvo no navegador do candidato
                   localStorage.setItem(ALVO_KEY, JSON.stringify(alvoJson));
                  
                   console.log("Alvo carregado com sucesso no navegador do candidato.");
-                  initCandidateIntro(true); // Sucesso
+                  initCandidateIntro(true); // Sucesso, mostra a página de introdução
                  
               } catch (e) {
-                  // Se falhar, o link está realmente corrompido
+                  // Se falhar, o link está corrompido
                   console.error("Erro ao decodificar o Alvo do link:", e);
-                  initCandidateIntro(false); // Falha
+                  initCandidateIntro(false); // Falha, mostra erro de link corrompido
               }
           }
       } else if (mode === 'report') {
+          // ROTA DO RELATÓRIO (Após o candidato terminar)
           initReport();
       } else {
-          // Modo padrão (sem parâmetros)
+          // MODO PADRÃO (Sem parâmetros)
           // Redireciona para a página de candidato, que mostrará o erro de link inválido
-          // Isso "tranca" a raiz do site.
+          // Isso "tranca" a raiz do site, como solicitado.
           window.location.href = defaultPage;
       }
   };
-  // ************************************************
 
+  // --- LÓGICA DO PASSO 1: PAINEL ADMIN ---
+
+  /**
+   * Inicia a página de Admin (renderiza painéis, carrega dados salvos)
+   */
   function initAdmin() {
       togglePage('page-admin');
+      // Renderiza 3 painéis de gestor por padrão, se ainda não houver nenhum
       if (!document.querySelector('#gestor-panels-container .gestor-card')) {
           renderGestorPanels(3);
       }
       updateGestorButtons();
+      // Tenta carregar dados de um alvo salvo anteriormente no navegador
       try {
           const alvoData = JSON.parse(localStorage.getItem(ALVO_KEY));
           if(alvoData) {
@@ -847,52 +863,378 @@
               if(alvoData.numGestores) {
                   renderGestorPanels(alvoData.numGestores);
               }
-              gerarLinkCandidato(); 
+              gerarLinkCandidato(); // Gera o link com os dados salvos
           }
       } catch(e) {
           console.warn("Nenhum dado de alvo salvo encontrado.");
       }
   }
 
-  function initCandidateIntro(success = false) { 
-      togglePage('page-candidate-intro'); 
-      if (!success) {
-          document.querySelector('#page-candidate-intro .btn')?.classList.add('hidden');
-          document.getElementById('candidate-name-block')?.classList.add('hidden');
-          document.getElementById('candidate-link-error')?.classList.remove('hidden');
-      } else {
-          // Limpa o nome antigo e o perfil antigo, se houver
-          localStorage.removeItem(CANDIDATO_NAME_KEY);
-          localStorage.removeItem(CANDIDATO_KEY);
+  /**
+   * Renderiza os painéis de pontuação para o número de gestores
+   */
+  function renderGestorPanels(count) {
+      const container = document.getElementById('gestor-panels-container'); 
+      if (!container) return;
+      container.innerHTML = ''; // Limpa os painéis existentes
+      for (let i = 1; i <= count; i++) {
+          const gestorId = `gestor-${i}`; const card = document.createElement('div');
+          card.className = 'card gestor-card'; card.id = gestorId;
+          
+          // Bug-fix: Removido o botão 'X' individual para prevenir perda de dados.
+          card.innerHTML = `<h3>Gestor ${i}</h3>`;
+         
+          let panelHtml = '';
+          // Cria um input para cada dimensão
+          DIM_KEYS.forEach(key => { panelHtml += createAdminInput(key, gestorId); });
+          card.innerHTML += panelHtml;
+         
+          card.innerHTML += `<div class="total-bar" id="total-${gestorId}">Total: 0 / 100</div>`;
+          container.appendChild(card);
+          updateAdminTotal(gestorId); // Atualiza o total (0/100)
+      }
+      document.getElementById('num-gestores-display').textContent = count; 
+      updateGestorButtons(); // Habilita/desabilita botões +/-
+  }
+
+  function addGestor() { 
+      const c = document.getElementById('gestor-panels-container'); 
+      // Limite de 7 gestores
+      if (c && c.children.length < 7) renderGestorPanels(c.children.length + 1); 
+  }
+
+  function removeGestor() { 
+      const c = document.getElementById('gestor-panels-container');
+      // Limite de 3 gestores
+      if (c && c.children.length > 3) {
+          c.removeChild(c.lastChild); // Remove apenas o último
+          document.getElementById('num-gestores-display').textContent = c.children.length;
+          updateGestorButtons();
       }
   }
 
-  function initCandidateTest() {
-      const nameInput = document.getElementById('candidate-name-input');
-      const nameError = document.getElementById('candidate-name-error');
-      const candidateName = nameInput.value.trim();
+  function updateGestorButtons() { 
+      const c = document.getElementById('gestor-panels-container'); 
+      if (!c) return;
+      const count = c.children.length; 
+      // Desabilita + se >= 7, desabilita - se <= 3
+      document.querySelector('#gestor-controls button:nth-of-type(1)').disabled = count >= 7; 
+      document.querySelector('#gestor-controls button:nth-of-type(2)').disabled = count <= 3; 
+  }
 
-      if (candidateName === "") {
-          nameError?.classList.remove('hidden');
-          nameInput?.focus();
+  /**
+   * Cria o HTML para um único input de dimensão do admin
+   */
+  function createAdminInput(dimKey, gestorId) {
+    const uniqueId = `${gestorId}-${dimKey}`;
+    const desc = DIMENSION_DESCRIPTIONS[dimKey].desc; 
+    const label_low = DIMENSION_DESCRIPTIONS[dimKey].label_low; 
+    const label_high = DIMENSION_DESCRIPTIONS[dimKey].label_high;
+   
+    return `
+    <div class="dimensao-admin">
+        <div class="label-row"> 
+            <label for="${uniqueId}">${DIM_KEYS.indexOf(dimKey) + 1}. ${dimKey}</label> 
+            <input type="number" id="${uniqueId}" data-key="${dimKey}" min="0" max="100" value="10" oninput="updateAdminTotal('${gestorId}')"> 
+        </div>
+        <p class="desc">${desc}</p>
+        <p class="scale-desc"><strong>0</strong> = ${label_low} &harr; <strong>50</strong> = Equilíbrio &harr; <strong>100</strong> = ${label_high}</p>
+    </div>`;
+  }
+
+  /**
+   * Atualiza a soma (Total: X / 100) para um painel de gestor
+   */
+  function updateAdminTotal(gestorId) {
+      let total = 0; 
+      document.querySelectorAll(`#${gestorId} input[type=number]`).forEach(i => { total += parseInt(i.value, 10) || 0; });
+      const totalEl = document.getElementById(`total-${gestorId}`);
+      if(totalEl){ 
+          totalEl.textContent = `Total: ${total} / 100`; 
+          // Validação visual
+          totalEl.classList.toggle('valid', total === 100); 
+          totalEl.classList.toggle('invalid', total !== 100); 
+      }
+      return total; 
+  }
+
+  /**
+   * Pega os valores de um gestor e retorna um objeto {dim: score}
+   */
+  function getAdminPerfil(gestorId) {
+      const p = {}; 
+      document.querySelectorAll(`#${gestorId} input[type=number]`).forEach(i => { p[i.getAttribute('data-key')] = parseInt(i.value, 10); }); 
+      return p;
+  }
+
+  /**
+   * Função principal do Admin: Valida, Calcula Mediana, Salva no Storage e Gera Link
+   */
+  function salvarAlvo() {
+      const empresaNome = document.getElementById('empresa-nome').value;
+      const recruiterPhone = RECRUITER_PHONE; 
+     
+      // 1. Validar Nome da Empresa
+      if (!empresaNome || empresaNome.trim() === "") {
+          alert('Erro: Por favor, preencha o Nome da Empresa.');
+          document.getElementById('empresa-nome')?.focus();
+          return;
+      }
+
+      const gestorCards = document.querySelectorAll('#gestor-panels-container .gestor-card'); 
+      const profiles = [];
+      const numGestores = gestorCards.length; 
+
+      // 2. Validar mínimo de 3 gestores
+      if (numGestores < 3) {
+          alert('Erro: São necessários no mínimo 3 gestores para calcular a mediana.');
+          return;
+      }
+
+      // 3. Validar se TODOS os gestores somam 100 pontos
+      for (const card of gestorCards) {
+          const id = card.id;
+          const total = updateAdminTotal(id);
+          if (total !== 100) {
+              const gestorNome = card.querySelector('h3')?.textContent || `(ID: ${id})`;
+              alert(`Erro de Validação!\nO ${gestorNome} está com Total ${total}.\nO total DEVE ser 100.`);
+              card.style.borderColor = 'var(--color-low)'; // Destaca o painel com erro
+              card.style.boxShadow = '0 0 10px var(--color-low)';
+              return; 
+          }
+          card.style.borderColor = '#fff'; // Reseta o destaque
+          card.style.boxShadow = 'var(--shadow)';
+          profiles.push(getAdminPerfil(id)); // Adiciona perfil à lista
+      }
+
+      // 4. Calcular a Mediana
+      const alvoMediana = {}; 
+      DIM_KEYS.forEach(k => { 
+          const v = profiles.map(p => p[k]).sort((a,b)=>a-b); // Pega a pontuação de todos para a dim 'k' e ordena
+          const mid = Math.floor(v.length / 2); 
+          // Lógica de mediana (par ou ímpar)
+          alvoMediana[k] = v.length % 2 !== 0 ? Math.round(v[mid]) : Math.round((v[mid - 1] + v[mid]) / 2); 
+      });
+     
+      // 5. Preparar dados para salvar
+      const alvoParaSalvar = { 
+            type: "cultural-target", 
+            profile: alvoMediana, 
+            empresaNome: empresaNome,
+            recruiterPhone: recruiterPhone,
+            numGestores: numGestores 
+      };
+     
+      // 6. Salvar no LocalStorage e Renderizar Relatório de Alvo
+      try {
+        localStorage.setItem(ALVO_KEY, JSON.stringify(alvoParaSalvar));
+
+        // Preenche a tabela no admin
+        const tabela = document.getElementById('alvo-tabela');
+        if(tabela){ tabela.innerHTML = '<thead><tr><th>Dimensão</th><th>Pontos (Mediana)</th></tr></thead><tbody>' + DIM_KEYS.map(k => `<tr style="border-bottom: 1px solid #eee;"><td>${k}</td><td>${alvoMediana[k]}</td></tr>`).join('') + '</tbody>'; }
+       
+        // Renderiza a análise qualitativa (Focos, Otimizações)
+        renderAlvoQualitativeReport(alvoMediana, empresaNome, numGestores);
+
+        document.getElementById('alvo-calculado')?.classList.remove('hidden');
+        gerarLinkCandidato(); // Atualiza o link do candidato
+        alert('Alvo (Mediana) salvo com sucesso no navegador!');
+       
+      } catch (e) {
+          alert('Erro ao salvar o alvo no armazenamento local.');
+          console.error("Erro localStorage:", e);
+      }
+  }
+
+  /**
+   * Renderiza a análise qualitativa do Alvo (Focos/Otimizações)
+   */
+  function renderAlvoQualitativeReport(alvoProfile, empresaNome, numGestores) {
+      document.getElementById('alvo-empresa-nome').textContent = empresaNome;
+      document.getElementById('alvo-num-gestores').textContent = numGestores;
+
+      const container = document.getElementById('alvo-qualitativo-report');
+      if (!container) return;
+     
+      const scored = [];
+      DIM_KEYS.forEach(key => scored.push({ key: key, score: alvoProfile[key] }));
+      scored.sort((a, b) => b.score - a.score); // Ordena do mais alto para o mais baixo
+
+      let html = '<h3 class="report-section-title" style="margin-top: 0;">Perfil da Cultura Alvo</h3>';
+      html += '<div class="report-grid"><div class="report-card" style="background: #f0fdf4;"><h4>Principais Focos da Cultura (Notas Altas)</h4><ul>';
+      // Pega os 3 maiores
+      scored.slice(0, 3).forEach(i => {
+          html += `<li><strong>Foco em ${i.key} (${i.score.toFixed(0)} pts):</strong> ${DIMENSION_DESCRIPTIONS[i.key].alto}</li>`;
+      });
+      html += '</ul></div><div class="report-card" style="background: #fffbeb;"><h4>Principais Focos de Otimização (Notas Baixas)</h4><ul>';
+      // Pega os 3 menores
+      scored.slice(-3).reverse().forEach(i => {
+          html += `<li><strong>Foco em ${i.key} (${i.score.toFixed(0)} pts):</strong> ${DIMENSION_DESCRIPTIONS[i.key].baixo}</li>`;
+      });
+      html += '</ul></div></div>';
+      container.innerHTML = html;
+  }
+ 
+  /**
+   * Gera o Link do Candidato com o Alvo embutido (codificado em Base64-URL-Safe)
+   */
+  function gerarLinkCandidato() {
+      const linkInput = document.getElementById('candidate-link'); 
+     
+      let dataParaLink;
+      try {
+          // Pega o alvo salvo no storage
+          const alvoData = JSON.parse(localStorage.getItem(ALVO_KEY));
+         
+          // Extrai apenas os dados necessários para o link
+          dataParaLink = {
+              profile: alvoData.profile,
+              empresaNome: alvoData.empresaNome
+          }
+
+          if (!dataParaLink || !dataParaLink.profile) {
+              throw new Error("Alvo não encontrado ou inválido no localStorage.");
+          }
+      } catch (e) {
+          console.error(e);
+          if (linkInput) linkInput.value = "Erro: Salve o Alvo primeiro.";
           return;
       }
      
-      nameError?.classList.add('hidden');
-      localStorage.setItem(CANDIDATO_NAME_KEY, candidateName);
-
-      togglePage('page-candidate-test');
-      currentQuestion = 0; 
-      candidateRawScores = {}; 
-      DIM_KEYS.forEach(k => candidateRawScores[k] = 0); 
-      renderWizardQuestion(currentQuestion);
+      if (linkInput && dataParaLink) { 
+          const alvoString = JSON.stringify(dataParaLink);
+         
+          // Codifica o JSON para ser seguro na URL
+          const alvoUrlSafe = base64UrlEncode(alvoString); 
+         
+          let link = window.location.href.split('?')[0]; 
+          linkInput.value = `${link}?mode=candidate&target=${alvoUrlSafe}`; 
+      }
   }
 
+  /**
+   * Copia o Link do Candidato (API Moderna)
+   */
+  async function copiarLink() {
+      gerarLinkCandidato(); // Garante que o link está atualizado
+      const linkInput = document.getElementById('candidate-link'); 
+      if (!linkInput || linkInput.value.includes('...')) {
+          alert('Por favor, salve o alvo primeiro para gerar o link completo.');
+          return;
+      }
+      
+      try {
+          // API Moderna (só funciona em HTTPS, como o Netlify)
+          await navigator.clipboard.writeText(linkInput.value);
+          linkInput.select(); 
+          alert('Link copiado!'); 
+      } catch (err) {
+          console.error('Falha ao copiar o link: ', err);
+          // Fallback para o método antigo (execCommand)
+          try {
+              linkInput.select(); 
+              document.execCommand('copy'); 
+              alert('Link copiado! (modo fallback)'); 
+          } catch (e) {
+              alert('Não foi possível copiar o link. Por favor, copie manualmente.');
+          }
+      }
+  }
+
+  // --- LÓGICA DO PASSO 2: WIZARD CANDIDATO ---
+
+  /**
+   * Renderiza um bloco de perguntas do wizard
+   */
+  function renderWizardQuestion(index) {
+      const block = QUESTION_BLOCKS[index]; 
+      const body = document.getElementById('wizard-body'); 
+      if (!body) return; body.innerHTML = '';
+     
+      // Cria as 4 linhas da tabela
+      block.forEach((item, i) => { 
+          const id = `q${index}-i${i}`; const tr = document.createElement('tr'); 
+          tr.innerHTML = `<td><input type="radio" id="most-${id}" name="most-${index}" value="${i}"></td><td><label for="most-${id}" onclick="document.getElementById('most-${id}').checked = true; document.getElementById('most-${id}').dispatchEvent(new Event('change'));">${item.text}</label></td><td><input type="radio" id="least-${id}" name="least-${index}" value="${i}"></td>`; 
+          body.appendChild(tr); 
+      });
+     
+      // Atualiza a UI (título, barra de progresso, botão)
+      document.getElementById('wizard-question-title').textContent = `Bloco ${index + 1} de ${QUESTION_BLOCKS.length}`;
+      document.getElementById('wizard-progress-bar').style.width = `${((index + 1) / QUESTION_BLOCKS.length) * 100}%`;
+      document.getElementById('btn-next').textContent = (index === QUESTION_BLOCKS.length - 1) ? 'Finalizar e Gerar Relatório' : 'Próximo →';
+     
+      // Adiciona lógica para desmarcar "Mais" se "Menos" for clicado (e vice-versa)
+      document.querySelectorAll(`#wizard-body input[type=radio]`).forEach(r => { 
+          r.onchange = (e) => { 
+              if (!e.target.checked) return;
+              const n = e.target.name, v = e.target.value; 
+              const other = n.startsWith('most')?'least':'most'; 
+              const otherRadio = document.querySelector(`input[name=${other}-${index}][value="${v}"]`); 
+              if (otherRadio?.checked) otherRadio.checked = false; 
+          }; 
+      });
+  }
+
+  /**
+   * Valida a resposta e avança para o próximo bloco ou finaliza
+   */
+  function nextQuestion() {
+      const err = document.getElementById('wizard-error'); 
+      const most = document.querySelector(`input[name=most-${currentQuestion}]:checked`); 
+      const least = document.querySelector(`input[name=least-${currentQuestion}]:checked`);
+     
+      // 1. Validar se "Mais" e "Menos" foram marcados
+      if (!most || !least) { 
+          if(err) err.style.display = 'block'; return; 
+      } 
+      if(err) err.style.display = 'none';
+     
+      // 2. Calcular pontuação (lógica de Discernimento)
+      const block = QUESTION_BLOCKS[currentQuestion], mostItem = block[most.value], leastItem = block[least.value];
+      candidateRawScores[mostItem.dim] += (mostItem.isInverted ? -1 : 1); // +1 se 'Mais' (ou -1 se invertido)
+      candidateRawScores[leastItem.dim] += (leastItem.isInverted ? 1 : -1); // -1 se 'Menos' (ou +1 se invertido)
+     
+      currentQuestion++;
+     
+      // 3. Avançar ou Finalizar
+      if (currentQuestion < QUESTION_BLOCKS.length) {
+          renderWizardQuestion(currentQuestion);
+      } else {
+          // Fim do teste
+          try {
+              const dataPayload = { 
+                  type: "cultural-profile", 
+                  profile: candidateRawScores 
+              };
+              // Salva o perfil do candidato no storage
+              localStorage.setItem(CANDIDATO_KEY, JSON.stringify(dataPayload));
+             
+              togglePage('page-candidate-loading'); // Mostra a tela de "Carregando"
+             
+              // Redireciona para a página de Relatório
+              setTimeout(() => {
+                  window.location.search = '?mode=report';
+              }, 1500); 
+             
+          } catch(e) {
+              alert("Houve um erro ao salvar suas respostas. Tente novamente.");
+              console.error("Erro localStorage:", e);
+          }
+      }
+  }
+ 
+
+  // --- LÓGICA DO PASSO 3: RELATÓRIO (FINAL DO CANDIDATO) ---
+
+  /**
+   * Inicia a página de Relatório (verifica dados, prepara links de envio)
+   */
   function initReport() {
       togglePage('page-report-generator');
      
       const candidateName = localStorage.getItem(CANDIDATO_NAME_KEY) || "Candidato";
      
+      // Prepara os links de WhatsApp e E-mail
       const wppLink = document.getElementById('whatsapp-link-final');
       const emailLink = document.getElementById('email-link-final');
       const phone = RECRUITER_PHONE;
@@ -906,6 +1248,7 @@
       if (emailLink) emailLink.href = `mailto:${RECRUITER_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
      
      
+      // Verifica se os dados (Alvo e Candidato) estão no localStorage
       const alvoBox = document.getElementById('upload-box-alvo');
       const candBox = document.getElementById('upload-box-candidato');
       const statusAlvo = document.getElementById('status-alvo');
@@ -931,338 +1274,33 @@
           if(statusCand) statusCand.textContent = "Seu Perfil não foi encontrado.";
       }
      
+      // Habilita o botão de gerar relatório apenas se os dois dados existirem
       if(btn) btn.disabled = !(alvoPronto && candPronto);
   }
 
-  // --- LÓGICA DO PASSO 1: PAINEL ADMIN ---
-
-  function renderGestorPanels(count) {
-      const container = document.getElementById('gestor-panels-container'); 
-      if (!container) return;
-      container.innerHTML = '';
-      for (let i = 1; i <= count; i++) {
-          const gestorId = `gestor-${i}`; const card = document.createElement('div');
-          card.className = 'card gestor-card'; card.id = gestorId;
-          
-          // CORREÇÃO v17.9: Removido o botão 'X' (removeGestor(i)) que causava o bug de perda de dados.
-          card.innerHTML = `<h3>Gestor ${i}</h3>`;
-         
-          let panelHtml = '';
-          DIM_KEYS.forEach(key => { panelHtml += createAdminInput(key, gestorId); });
-          card.innerHTML += panelHtml;
-         
-          card.innerHTML += `<div class="total-bar" id="total-${gestorId}">Total: 0 / 100</div>`;
-          container.appendChild(card);
-          updateAdminTotal(gestorId);
-      }
-      document.getElementById('num-gestores-display').textContent = count; 
-      updateGestorButtons();
-  }
-
-  function addGestor() { 
-      const c = document.getElementById('gestor-panels-container'); 
-      if (c && c.children.length < 7) renderGestorPanels(c.children.length + 1); 
-  }
-
-  // --- CORREÇÃO v17.9: Simplificada a função para apenas remover o último.
-  function removeGestor() { 
-      const c = document.getElementById('gestor-panels-container');
-      if (c && c.children.length > 3) {
-          c.removeChild(c.lastChild);
-          document.getElementById('num-gestores-display').textContent = c.children.length;
-          updateGestorButtons();
-      }
-  }
-
-  function updateGestorButtons() { 
-      const c = document.getElementById('gestor-panels-container'); 
-      if (!c) return;
-      const count = c.children.length; 
-      document.querySelector('#gestor-controls button:nth-of-type(1)').disabled = count >= 7; 
-      document.querySelector('#gestor-controls button:nth-of-type(2)').disabled = count <= 3; 
-  }
-
-  function createAdminInput(dimKey, gestorId) {
-    const uniqueId = `${gestorId}-${dimKey}`;
-    const desc = DIMENSION_DESCRIPTIONS[dimKey].desc; 
-    const label_low = DIMENSION_DESCRIPTIONS[dimKey].label_low; 
-    const label_high = DIMENSION_DESCRIPTIONS[dimKey].label_high;
-   
-    return `
-    <div class="dimensao-admin">
-        <div class="label-row"> 
-            <label for="${uniqueId}">${DIM_KEYS.indexOf(dimKey) + 1}. ${dimKey}</label> 
-            <input type="number" id="${uniqueId}" data-key="${dimKey}" min="0" max="100" value="10" oninput="updateAdminTotal('${gestorId}')"> 
-        </div>
-        <p class="desc">${desc}</p>
-        <p class="scale-desc"><strong>0</strong> = ${label_low} &harr; <strong>50</strong> = Equilíbrio &harr; <strong>100</strong> = ${label_high}</p>
-    </div>`;
-  }
-
-  function updateAdminTotal(gestorId) {
-      let total = 0; 
-      document.querySelectorAll(`#${gestorId} input[type=number]`).forEach(i => { total += parseInt(i.value, 10) || 0; });
-      const totalEl = document.getElementById(`total-${gestorId}`);
-      if(totalEl){ 
-          totalEl.textContent = `Total: ${total} / 100`; 
-          totalEl.classList.toggle('valid', total === 100); 
-          totalEl.classList.toggle('invalid', total !== 100); 
-      }
-      return total; 
-  }
-
-  function getAdminPerfil(gestorId) {
-      const p = {}; 
-      document.querySelectorAll(`#${gestorId} input[type=number]`).forEach(i => { p[i.getAttribute('data-key')] = parseInt(i.value, 10); }); 
-      return p;
-  }
-
-  function salvarAlvo() {
-      const empresaNome = document.getElementById('empresa-nome').value;
-      const recruiterPhone = RECRUITER_PHONE; 
-     
-      if (!empresaNome || empresaNome.trim() === "") {
-          alert('Erro: Por favor, preencha o Nome da Empresa.');
-          document.getElementById('empresa-nome')?.focus();
-          return;
-      }
-
-      const gestorCards = document.querySelectorAll('#gestor-panels-container .gestor-card'); 
-      const profiles = [];
-      const numGestores = gestorCards.length; 
-
-      if (numGestores < 3) {
-          alert('Erro: São necessários no mínimo 3 gestores para calcular a mediana.');
-          return;
-      }
-
-      for (const card of gestorCards) {
-          const id = card.id;
-          const total = updateAdminTotal(id);
-          if (total !== 100) {
-              const gestorNome = card.querySelector('h3')?.textContent || `(ID: ${id})`;
-              alert(`Erro de Validação!\nO ${gestorNome} está com Total ${total}.\nO total DEVE ser 100.`);
-              card.style.borderColor = 'var(--color-low)';
-              card.style.boxShadow = '0 0 10px var(--color-low)';
-              return; 
-          }
-          card.style.borderColor = '#fff';
-          card.style.boxShadow = 'var(--shadow)';
-          profiles.push(getAdminPerfil(id));
-      }
-
-      const alvoMediana = {}; 
-      DIM_KEYS.forEach(k => { 
-          const v = profiles.map(p => p[k]).sort((a,b)=>a-b); 
-          const mid = Math.floor(v.length / 2); 
-          alvoMediana[k] = v.length % 2 !== 0 ? Math.round(v[mid]) : Math.round((v[mid - 1] + v[mid]) / 2); 
-      });
-     
-      const alvoParaSalvar = { 
-            type: "cultural-target", 
-            profile: alvoMediana, 
-            empresaNome: empresaNome,
-            recruiterPhone: recruiterPhone,
-            numGestores: numGestores 
-      };
-     
-      try {
-        localStorage.setItem(ALVO_KEY, JSON.stringify(alvoParaSalvar));
-
-        const tabela = document.getElementById('alvo-tabela');
-        if(tabela){ tabela.innerHTML = '<thead><tr><th>Dimensão</th><th>Pontos (Mediana)</th></tr></thead><tbody>' + DIM_KEYS.map(k => `<tr style="border-bottom: 1px solid #eee;"><td>${k}</td><td>${alvoMediana[k]}</td></tr>`).join('') + '</tbody>'; }
-       
-        renderAlvoQualitativeReport(alvoMediana, empresaNome, numGestores);
-
-        document.getElementById('alvo-calculado')?.classList.remove('hidden');
-        gerarLinkCandidato(); // Atualiza o link
-        alert('Alvo (Mediana) salvo com sucesso no navegador!');
-       
-      } catch (e) {
-          alert('Erro ao salvar o alvo no armazenamento local.');
-          console.error("Erro localStorage:", e);
-      }
-  }
-
-  function renderAlvoQualitativeReport(alvoProfile, empresaNome, numGestores) {
-      document.getElementById('alvo-empresa-nome').textContent = empresaNome;
-      document.getElementById('alvo-num-gestores').textContent = numGestores;
-
-      const container = document.getElementById('alvo-qualitativo-report');
-      if (!container) return;
-     
-      const scored = [];
-      DIM_KEYS.forEach(key => scored.push({ key: key, score: alvoProfile[key] }));
-      scored.sort((a, b) => b.score - a.score); 
-
-      let html = '<h3 class="report-section-title" style="margin-top: 0;">Perfil da Cultura Alvo</h3>';
-      html += '<div class="report-grid"><div class="report-card" style="background: #f0fdf4;"><h4>Principais Focos da Cultura (Notas Altas)</h4><ul>';
-      scored.slice(0, 3).forEach(i => {
-          html += `<li><strong>Foco em ${i.key} (${i.score.toFixed(0)} pts):</strong> ${DIMENSION_DESCRIPTIONS[i.key].alto}</li>`;
-      });
-      html += '</ul></div><div class="report-card" style="background: #fffbeb;"><h4>Principais Focos de Otimização (Notas Baixas)</h4><ul>';
-      scored.slice(-3).reverse().forEach(i => {
-          html += `<li><strong>Foco em ${i.key} (${i.score.toFixed(0)} pts):</strong> ${DIMENSION_DESCRIPTIONS[i.key].baixo}</li>`;
-      });
-      html += '</ul></div></div>';
-      container.innerHTML = html;
-  }
- 
-  // ******** CORREÇÃO v17.7 (Mantida) ********
- 
-  // Nova função para criar Base64 URL-Safe
-  function base64UrlEncode(str) {
-      return btoa(str)
-          .replace(/\+/g, '-') // Substitui '+' por '-'
-          .replace(/\//g, '_') // Substitui '/' por '_'
-          .replace(/=+$/, ''); // Remove padding '='
-  }
- 
-  function gerarLinkCandidato() {
-      const linkInput = document.getElementById('candidate-link'); 
-     
-      let dataParaLink;
-      try {
-          const alvoData = JSON.parse(localStorage.getItem(ALVO_KEY));
-         
-          dataParaLink = {
-              profile: alvoData.profile,
-              empresaNome: alvoData.empresaNome
-          }
-
-          if (!dataParaLink || !dataParaLink.profile) {
-              throw new Error("Alvo não encontrado ou inválido no localStorage.");
-          }
-      } catch (e) {
-          console.error(e);
-          if (linkInput) linkInput.value = "Erro: Salve o Alvo primeiro.";
-          return;
-      }
-     
-      if (linkInput && dataParaLink) { 
-          const alvoString = JSON.stringify(dataParaLink);
-         
-          // A CORREÇÃO: Usamos a nova função de encode URL-Safe
-          const alvoUrlSafe = base64UrlEncode(alvoString); 
-         
-          let link = window.location.href.split('?')[0]; 
-          linkInput.value = `${link}?mode=candidate&target=${alvoUrlSafe}`; 
-      }
-  }
-  // ************************************************
-
-  // --- CORREÇÃO v17.9: API de Clipboard Moderna ---
-  async function copiarLink() {
-      gerarLinkCandidato(); 
-      const linkInput = document.getElementById('candidate-link'); 
-      if (!linkInput || linkInput.value.includes('...')) {
-          alert('Por favor, salve o alvo primeiro para gerar o link completo.');
-          return;
-      }
-      
-      try {
-          await navigator.clipboard.writeText(linkInput.value);
-          linkInput.select(); 
-          alert('Link copiado!'); 
-      } catch (err) {
-          console.error('Falha ao copiar o link: ', err);
-          // Fallback para o método antigo se a API moderna falhar
-          try {
-              linkInput.select(); 
-              document.execCommand('copy'); 
-              alert('Link copiado! (modo fallback)'); 
-          } catch (e) {
-              alert('Não foi possível copiar o link. Por favor, copie manualmente.');
-          }
-      }
-  }
-
-  // --- LÓGICA DO PASSO 2: WIZARD CANDIDATO ---
-
-  function renderWizardQuestion(index) {
-      const block = QUESTION_BLOCKS[index]; 
-      const body = document.getElementById('wizard-body'); 
-      if (!body) return; body.innerHTML = '';
-     
-      block.forEach((item, i) => { 
-          const id = `q${index}-i${i}`; const tr = document.createElement('tr'); 
-          tr.innerHTML = `<td><input type="radio" id="most-${id}" name="most-${index}" value="${i}"></td><td><label for="most-${id}" onclick="document.getElementById('most-${id}').checked = true; document.getElementById('most-${id}').dispatchEvent(new Event('change'));">${item.text}</label></td><td><input type="radio" id="least-${id}" name="least-${index}" value="${i}"></td>`; 
-          body.appendChild(tr); 
-      });
-     
-      document.getElementById('wizard-question-title').textContent = `Bloco ${index + 1} de ${QUESTION_BLOCKS.length}`;
-      document.getElementById('wizard-progress-bar').style.width = `${((index + 1) / QUESTION_BLOCKS.length) * 100}%`;
-      document.getElementById('btn-next').textContent = (index === QUESTION_BLOCKS.length - 1) ? 'Finalizar e Gerar Relatório' : 'Próximo →';
-     
-      document.querySelectorAll(`#wizard-body input[type=radio]`).forEach(r => { 
-          r.onchange = (e) => { 
-              if (!e.target.checked) return;
-              const n = e.target.name, v = e.target.value; 
-              const other = n.startsWith('most')?'least':'most'; 
-              const otherRadio = document.querySelector(`input[name=${other}-${index}][value="${v}"]`); 
-              if (otherRadio?.checked) otherRadio.checked = false; 
-          }; 
-      });
-  }
-
-  function nextQuestion() {
-      const err = document.getElementById('wizard-error'); 
-      const most = document.querySelector(`input[name=most-${currentQuestion}]:checked`); 
-      const least = document.querySelector(`input[name=least-${currentQuestion}]:checked`);
-     
-      if (!most || !least) { 
-          if(err) err.style.display = 'block'; return; 
-      } 
-      if(err) err.style.display = 'none';
-     
-      const block = QUESTION_BLOCKS[currentQuestion], mostItem = block[most.value], leastItem = block[least.value];
-      candidateRawScores[mostItem.dim] += (mostItem.isInverted ? -1 : 1); 
-      candidateRawScores[leastItem.dim] += (leastItem.isInverted ? 1 : -1);
-     
-      currentQuestion++;
-     
-      if (currentQuestion < QUESTION_BLOCKS.length) {
-          renderWizardQuestion(currentQuestion);
-      } else {
-          try {
-              const dataPayload = { 
-                  type: "cultural-profile", 
-                  profile: candidateRawScores 
-              };
-              localStorage.setItem(CANDIDATO_KEY, JSON.stringify(dataPayload));
-             
-              togglePage('page-candidate-loading');
-             
-              setTimeout(() => {
-                  window.location.search = '?mode=report';
-              }, 1500); 
-             
-          } catch(e) {
-              alert("Houve um erro ao salvar suas respostas. Tente novamente.");
-              console.error("Erro localStorage:", e);
-          }
-      }
-  }
- 
-
-  // --- LÓGICA DO PASSO 3: RELATÓRIO (FINAL DO CANDIDATO) ---
-
+  /**
+   * Normaliza o perfil bruto (ex: -5 a +5) para uma escala de 0 a 100
+   */
   function normalizeProfileToPercent(profile) {
       const scores = Object.values(profile); 
       const min = Math.min(...scores); 
       const max = Math.max(...scores); 
       const range = max - min; 
-      if (range === 0) return DIM_KEYS.reduce((acc, key) => { acc[key] = 50; return acc; }, {}); 
+      if (range === 0) return DIM_KEYS.reduce((acc, key) => { acc[key] = 50; return acc; }, {}); // Evita divisão por zero
       const norm = {}; 
       DIM_KEYS.forEach(key => { norm[key] = Math.round(((profile[key] - min) / range) * 100); }); 
       return norm;
   }
  
+  /**
+   * Define um "Arquétipo" com base nas 2 maiores pontuações do candidato
+   */
   function getArchetype(profile) {
       const scored = Object.keys(profile).map(key => ({ key, score: profile[key] })).sort((a, b) => b.score - a.score);
       const top1 = scored[0].key;
       const top2 = scored[1].key;
      
+      // Combinações específicas
       if (["Resultado", "Ritmo"].includes(top1) && ["Resultado", "Ritmo"].includes(top2)) {
           return { title: "Executor(a) Ágil", desc: "Perfil orientado para a entrega rápida e eficiente de metas, prosperando em ambientes de alta velocidade." };
       }
@@ -1279,6 +1317,7 @@
           return { title: "Pioneiro(a) Independente", desc: "Perfil 'desbravador', que prefere ter liberdade para explorar novas ideias e tomar decisões por conta própria." };
       }
      
+      // Títulos genéricos baseados no Top 1
       switch(top1) {
           case "Resultado": return { title: "Foco em Resultado", desc: "A principal motivação é a entrega de metas e o atingimento de objetivos." };
           case "Autonomia": return { title: "Foco em Autonomia", desc: "A principal motivação é a liberdade para tomar decisões e executar o trabalho." };
@@ -1288,9 +1327,13 @@
       }
   }
 
+  /**
+   * Função principal do Relatório: Lê dados, calcula Fit e renderiza tudo
+   */
   function gerarRelatorio() {
       let loadedAlvoData, loadedCandidatoData, candidateName;
      
+      // 1. Carregar dados do localStorage
       try {
         loadedAlvoData = JSON.parse(localStorage.getItem(ALVO_KEY));
         loadedCandidatoData = JSON.parse(localStorage.getItem(CANDIDATO_KEY));
@@ -1305,14 +1348,17 @@
           return; 
       }
      
+      // 2. Esconder o "loader" e mostrar o container do relatório
       document.getElementById('report-loader-card')?.classList.add('hidden');
       document.getElementById('report-container')?.classList.remove('hidden');
      
+      // 3. Pegar perfis e normalizar o do candidato
       const alvo = loadedAlvoData.profile; 
       const empresaNome = loadedAlvoData.empresaNome || 'A Empresa';
       const candidato_raw = loadedCandidatoData.profile;
-      const candidato_0_100 = normalizeProfileToPercent(candidato_raw);
+      const candidato_0_100 = normalizeProfileToPercent(candidato_raw); // Converte para escala 0-100
      
+      // 4. Calcular o Índice de Fit (Soma das diferenças absolutas)
       let totalDelta = 0; 
       DIM_KEYS.forEach(key => { 
           const alvoScore = alvo[key] || 0;
@@ -1320,21 +1366,25 @@
           totalDelta += Math.abs(alvoScore - candScore); 
       }); 
      
-      const fitScore = 100 - (totalDelta / 10);
+      const fitScore = 100 - (totalDelta / 10); // 100% - (delta total / 10 dimensões)
      
+      // 5. Preencher a UI com os dados
       document.getElementById('report-candidate-name').textContent = `Candidato: ${candidateName}`;
-     
       document.getElementById('fit-score').textContent = `${Math.max(0, fitScore).toFixed(0)}%`;
       document.getElementById('report-fit-subtitle').textContent = `Análise de aderência entre seu perfil e o alvo da '${empresaNome}'.`;
 
+      // 6. Renderizar Gráfico e Relatórios Qualitativos
       renderRecruiterRadarChart(DIM_KEYS.map(k=>alvo[k] || 0), DIM_KEYS.map(k=>candidato_0_100[k] || 0)); 
       renderQualitativeReport(candidato_0_100, alvo);
   }
 
+  /**
+   * Renderiza o Gráfico de Radar (usando Chart.js)
+   */
   function renderRecruiterRadarChart(alvoData, candidatoData) {
       const canvas = document.getElementById('recruiter-radar-chart'); if (!canvas) return; 
       const ctx = canvas.getContext('2d'); 
-      if (recruiterRadarChart) recruiterRadarChart.destroy();
+      if (recruiterRadarChart) recruiterRadarChart.destroy(); // Limpa gráfico anterior
       recruiterRadarChart = new Chart(ctx, { 
           type: 'radar', 
           data: { 
@@ -1352,6 +1402,9 @@
       });
   }
 
+  /**
+   * Renderiza a Análise Qualitativa (Arquétipo, Perfil, Gaps, Aderências, Perguntas)
+   */
   function renderQualitativeReport(candidato, alvo) {
       const scored = []; 
       DIM_KEYS.forEach(key => { 
@@ -1361,10 +1414,11 @@
               key: key, 
               candScore: candScore, 
               alvoScore: alvoScore, 
-              diff: candScore - alvoScore 
+              diff: candScore - alvoScore // Diferença (Gap)
           }); 
       });
      
+      // 1. Renderizar Arquétipo e Perfil (Top 3 / Bottom 3)
       const perfilOrd = [...scored].sort((a, b) => b.candScore - a.candScore); 
       const ulPerfil = document.getElementById('report-perfil'); 
       if (!ulPerfil) return;
@@ -1383,7 +1437,8 @@
           ulPerfil.innerHTML += `<li><strong>${i.key}:</strong> ${DIMENSION_DESCRIPTIONS[i.key].baixo}</li>`;
       });
 
-      const gapsOrd = [...scored].sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff)); 
+      // 2. Renderizar Aderências, Gaps e Perguntas de Diálogo
+      const gapsOrd = [...scored].sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff)); // Ordena pelo maior gap
       const ulAderencia = document.getElementById('report-aderencia'); 
       const ulGaps = document.getElementById('report-gaps'); 
       const ulPerguntas = document.getElementById('report-perguntas');
@@ -1394,27 +1449,31 @@
       let aderenciasCount = 0;
       let gapsCount = 0;
       let perguntasCount = 0;
-      const ADERENCIA_THRESHOLD = 20; 
-      const MAX_ITEMS = 4;
-      const MAX_PERGUNTAS = 3;
+      const ADERENCIA_THRESHOLD = 20; // Abaixo de 20 pontos de diferença = Aderência
+      const MAX_ITEMS = 4; // Máximo de 4 itens em Gaps/Aderências
+      const MAX_PERGUNTAS = 3; // Máximo de 3 perguntas
 
       gapsOrd.forEach(i => {
           const diffAbs = Math.abs(i.diff);
 
           if (diffAbs <= ADERENCIA_THRESHOLD) {
+              // É uma ADERÊNCIA
               if (aderenciasCount < MAX_ITEMS) {
                 ulAderencia.innerHTML += `<li><strong>${i.key}:</strong> Perfil alinhado (Seu: ${i.candScore.toFixed(0)} vs Alvo: ${i.alvoScore.toFixed(0)}).</li>`;
                 aderenciasCount++;
               }
           } else { 
+              // É um GAP
               if (gapsCount < MAX_ITEMS) {
                   if (i.diff > 0) { 
+                      // Gap Alto (Candidato > Alvo)
                       ulGaps.innerHTML += `<li><strong>${i.key} (Gap Alto):</strong> Você (<strong>${i.candScore.toFixed(0)}</strong>) valoriza esta dimensão **mais** do que o Alvo (<strong>${i.alvoScore.toFixed(0)}</strong>).</li>`;
                       if (perguntasCount < MAX_PERGUNTAS) {
                           ulPerguntas.innerHTML += `<li style="margin-bottom: 15px;"><strong>[Reflexão sobre ${i.key}]</strong> ${DIMENSION_DESCRIPTIONS[i.key].question_high_gap}</li>`;
                           perguntasCount++;
                       }
                   } else { 
+                      // Gap Baixo (Candidato < Alvo)
                       ulGaps.innerHTML += `<li><strong>${i.key} (Gap Baixo):</strong> Você (<strong>${i.candScore.toFixed(0)}</strong>) valoriza esta dimensão **menos** do que o Alvo (<strong>${i.alvoScore.toFixed(0)}</strong>).</li>`;
                       if (perguntasCount < MAX_PERGUNTAS) {
                           ulPerguntas.innerHTML += `<li style="margin-bottom: 15px;"><strong>[Reflexão sobre ${i.key}]</strong> ${DIMENSION_DESCRIPTIONS[i.key].question_low_gap}</li>`;
@@ -1426,6 +1485,7 @@
           }
       });
      
+      // Fallbacks caso não haja gaps ou aderências
       if (ulAderencia.innerHTML === '') ulAderencia.innerHTML = '<li>Não foram identificadas aderências significativas (diferença < 20 pontos).</li>'; 
       if (ulGaps.innerHTML === '') ulGaps.innerHTML = '<li>Não foram identificados gaps significativos (diferença > 20 pontos).</li>';
       if (ulPerguntas.innerHTML === '') ulPerguntas.innerHTML = '<li>Seu alinhamento é alto, não foram geradas perguntas de gap. Reflita sobre suas principais aderências!</li>';
@@ -1433,8 +1493,10 @@
 
   // --- FUNÇÕES UTILITÁRIAS ---
 
+  /**
+   * Limpa o Alvo Salvo (Função de Admin)
+   */
   function limparStorage() {
-      // Esta função é apenas para o Admin
       if (confirm('Isso apagará o Alvo da Empresa salvo neste navegador. Deseja continuar?')) {
           localStorage.removeItem(ALVO_KEY);
           alert('Alvo limpo. A página será recarregada.');
@@ -1442,8 +1504,37 @@
       }
   }
 
+  /**
+   * Ativa o modo de impressão para uma seção específica
+   */
   function printSection(pageId) {
       console.log("Imprimindo seção:", pageId);
       document.body.classList.add('printing-mode');
       const targetPage = document.getElementById(pageId); 
-      if
+      if(!targetPage) { console.error("Elemento não encontrado:", pageId); document.body.classList.remove('printing-mode'); return; }
+     
+      hideAllPages(); 
+      targetPage.classList.remove('hidden');
+     
+      // Força o Chart.js a se redimensionar para o layout de impressão
+      if (pageId === 'page-report-generator' && recruiterRadarChart) {
+          recruiterRadarChart.resize();
+      }
+     
+      setTimeout(() => {
+          window.print(); // Abre a caixa de diálogo de impressão
+           setTimeout(() => {
+              // Restaura a página ao normal após a impressão
+              document.body.classList.remove('printing-mode');
+              const params = new URLSearchParams(window.location.search); const mode = params.get('mode');
+              // Retorna à página correta
+              if (mode === 'report') initReport(); 
+              else if (mode === 'candidate') initReport(); // Candidato que acabou de ver o relatório
+              else initAdmin(); // Admin imprimindo o alvo
+           }, 1000);
+      }, 500);
+   }
+
+</script>
+</body>
+</html>
