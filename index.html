@@ -5,1375 +5,1428 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Crescenza 360° • Sistema de Fit Cultural v17.8 (Admin Seguro)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style>
-  /* =============================
-     PALETA E TOKENS CRESCENZA
-     ============================= */
-  :root {
-    --crescenza-orange: #ff6600;
-    --crescenza-black: #212529;
-    --crescenza-light: #f8f9fa;
-    --crescenza-gray-bg: #eaeaea;
-    --crescenza-dark-gray: #495057;
+  /* =============================
+     PALETA E TOKENS CRESCENZA
+     ============================= */
+  :root {
+    --crescenza-orange: #ff6600;
+    --crescenza-black: #212529;
+    --crescenza-light: #f8f9fa;
+    --crescenza-gray-bg: #eaeaea;
+    --crescenza-dark-gray: #495057;
 
-    /* Cores de ação */
-    --color-high: #388e3c;     /* Verde (Sucesso, Fit Alto) */
-    --color-medium: #ffc107;   /* Amarelo (Atenção) */
-    --color-low: #c62828;      /* Vermelho (Risco, Gap Alto) */
-    --color-invest: #1565c0;   /* Azul (Investigar, Info) */
-    --color-urgent: #e65100;   /* Laranja Escuro */
+    /* Cores de ação */
+    --color-high: #388e3c;     /* Verde (Sucesso, Fit Alto) */
+    --color-medium: #ffc107;   /* Amarelo (Atenção) */
+    --color-low: #c62828;      /* Vermelho (Risco, Gap Alto) */
+    --color-invest: #1565c0;   /* Azul (Investigar, Info) */
+    --color-urgent: #e65100;   /* Laranja Escuro */
 
-    --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    --radius: 12px;
-    --radius-sm: 8px;
-    --shadow-sm: 0 2px 8px rgba(0,0,0,.06);
-    --shadow: 0 8px 24px rgba(0,0,0,.07);
-  }
+    --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,.06);
+    --shadow: 0 8px 24px rgba(0,0,0,.07);
+  }
 
-  /* =============================
-     ESTRUTURA BASE
-     ============================= */
-  * { box-sizing:border-box; }
-  html, body { height: 100%; }
-  body { 
-    margin: 0; 
-    font: 16px/1.5 var(--font-family); 
-    color: var(--crescenza-black); 
-    background: var(--crescenza-light); 
-    display: flex; 
-    flex-direction: column;
-  }
-  .page { 
+  /* =============================
+     ESTRUTURA BASE
+     ============================= */
+  * { box-sizing:border-box; }
+  html, body { height: 100%; }
+  body { 
+    margin: 0; 
+    font: 16px/1.5 var(--font-family); 
+    color: var(--crescenza-black); 
+    background: var(--crescenza-light); 
+    display: flex; 
+    flex-direction: column;
+  }
+  .page { 
+    max-width: 1200px; 
+    width: 94%;
+    margin: 28px auto; 
+    padding: 0 16px; 
+    flex-grow: 1;
+  }
+  .hidden { display: none !important; }
+
+  /* =============================
+     CABEÇALHO
+     ============================= */
+  .header { background: var(--crescenza-black); color: #fff; padding: 24px 16px; }
+  
+  /* MODIFICADO: Usar Flexbox para alinhar logo e texto */
+  .header__inner { 
     max-width: 1200px; 
-    width: 94%;
-    margin: 28px auto; 
-    padding: 0 16px; 
-    flex-grow: 1;
-  }
-  .hidden { display: none !important; }
-
-  /* =============================
-     CABEÇALHO
-     ============================= */
-  .header { background: var(--crescenza-black); color: #fff; padding: 24px 16px; }
-  .header__inner { max-width: 1200px; margin: 0 auto; }
-  .header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 800; letter-spacing: .2px; }
-  .header p { margin: 0; opacity: .9; }
-  .header__bar { margin-top: 14px; height: 3px; width: 100%; background: var(--crescenza-orange); }
-  .logo-img-intro {
-      max-height: 80px;
-      margin-bottom: 20px;
+    margin: 0 auto; 
+    display: flex;
+    align-items: center; /* Centraliza verticalmente */
+    gap: 20px; /* Espaço entre logo e texto */
+    flex-wrap: wrap; /* Permite quebra de linha em telas pequenas */
   }
 
-  /* =============================
-     ELEMENTOS DE UI
-     ============================= */
-  .card { 
-    background: #fff; 
-    border-radius: var(--radius); 
-    box-shadow: var(--shadow); 
-    padding: 24px; 
-    margin: 16px 0; 
+  /* ADICIONADO: Estilo para o Logo no cabeçalho */
+  .header__logo {
+    max-height: 50px; /* Defina a altura máxima do seu logo */
+    width: auto;
   }
-  .card h2 { 
-    margin: 0 0 12px; 
-    font-size: 22px; 
-    display: flex; 
-    align-items: center; 
-    gap: 8px; 
+  
+  /* ADICIONADO: Agrupador para o texto */
+  .header__text {
+    flex-grow: 1; /* Faz o texto ocupar o espaço restante */
   }
-  .card h2 .dot { 
-    width: 10px; height: 10px; border-radius: 50%; 
+
+  .header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 800; letter-spacing: .2px; }
+  .header p { margin: 0; opacity: .9; }
+  
+  /* MODIFICADO: Faz a barra ocupar 100% da largura abaixo */
+  .header__bar { 
+    margin-top: 14px; 
+    height: 3px; 
+    width: 100%; 
     background: var(--crescenza-orange); 
-    display: inline-block; 
+    flex-basis: 100%;
+  }
+  .logo-img-intro {
+      max-height: 80px;
+      margin-bottom: 20px;
+  }
+
+  /* =============================
+     ELEMENTOS DE UI
+     ============================= */
+  .card { 
+    background: #fff; 
+    border-radius: var(--radius); 
+    box-shadow: var(--shadow); 
+    padding: 24px; 
+    margin: 16px 0; 
+  }
+  .card h2 { 
+    margin: 0 0 12px; 
+    font-size: 22px; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+  }
+  .card h2 .dot { 
+    width: 10px; height: 10px; border-radius: 50%; 
+    background: var(--crescenza-orange); 
+    display: inline-block; 
+  }
+
+  label { 
+    font-weight: 700; 
+    font-size: 15px; 
+    color: var(--crescenza-black); 
+    margin-bottom: 6px; 
+    display: block;
+  }
+  
+  input[type=text], input[type=number], input[type=tel], select { 
+    width: 100%; 
+    font: inherit;
+    font-size: 16px; 
+    padding: 10px 12px; 
+    border: 1px solid #dcdcdc; 
+    border-radius: var(--radius-sm); 
+  }
+  input:focus, select:focus { 
+    outline: 2px solid #d7e9ff; 
+    border-color: #b8d7ff; 
+  }
+
+  .btn { 
+    appearance: none; 
+    border: 0; 
+    border-radius: var(--radius-sm); 
+    color: #fff; 
+    font-weight: 700; 
+    padding: 12px 18px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    width: 100%; 
+    margin-top: 16px; 
+    text-align: center; 
+    text-decoration: none; 
+    display: inline-block;
+    transition: filter 0.2s;
+  }
+  .btn:hover { filter: brightness(.95); }
+  .btn:disabled { background: var(--crescenza-dark-gray); cursor: not-allowed; filter: brightness(1); }
+
+  .btn--primary { background: var(--color-high); }
+  .btn--secondary { background: var(--crescenza-dark-gray); }
+  .btn--danger { background: var(--color-low); }
+  .btn--accent { background: var(--color-invest); }
+  .btn--whatsapp { background-color: #25D366; }
+
+  /* ADICIONADO: Espaçamento para ícones nos botões */
+  .btn i, .btn-small i {
+    margin-right: 8px;
   }
 
-  label { 
-    font-weight: 700; 
-    font-size: 15px; 
-    color: var(--crescenza-black); 
-    margin-bottom: 6px; 
-    display: block;
-  }
-  
-  input[type=text], input[type=number], input[type=tel], select { 
-    width: 100%; 
-    font: inherit;
-    font-size: 16px; 
-    padding: 10px 12px; 
-    border: 1px solid #dcdcdc; 
-    border-radius: var(--radius-sm); 
-  }
-  input:focus, select:focus { 
-    outline: 2px solid #d7e9ff; 
-    border-color: #b8d7ff; 
-  }
+  .btn-small { 
+    padding: 8px 12px; 
+    font-size: 14px; 
+    width: auto; 
+    margin: 0 5px; 
+  }
+  .button-group { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
 
-  .btn { 
-    appearance: none; 
-    border: 0; 
-    border-radius: var(--radius-sm); 
-    color: #fff; 
-    font-weight: 700; 
-    padding: 12px 18px; 
-    cursor: pointer; 
-    font-size: 16px; 
-    width: 100%; 
-    margin-top: 16px; 
-    text-align: center; 
-    text-decoration: none; 
-    display: inline-block;
-    transition: filter 0.2s;
-  }
-  .btn:hover { filter: brightness(.95); }
-  .btn:disabled { background: var(--crescenza-dark-gray); cursor: not-allowed; filter: brightness(1); }
+  /* =============================
+     LAYOUTS ESPECÍFICOS
+     ============================= */
+  
+  /* --- Caixas de Status e Avisos --- */
+  .status-box { 
+    padding: 16px; 
+    border-radius: var(--radius-sm); 
+    font-weight: 600; 
+    margin-top: 20px; 
+    border: 1px solid;
+  }
+  .status-box.ok { background: #d0f8d7; border-color: var(--color-high); color: #0b6b0b; }
+  .status-box.nok { background: #ffebee; border-color: var(--color-low); color: #b71c1c; }
+  .status-box.info { background: #e3f2fd; border-color: var(--color-invest); color: #166cc2; text-align: left; }
+  .status-box h4 { margin: 0 0 8px; }
+  .status-box p { margin: 0; font-weight: 500; }
+  
+  /* --- Admin (Passo 1) --- */
+  #gestor-controls { margin-bottom: 16px; }
+  .comite-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 24px; }
+  .gestor-card { position: relative; padding-top: 16px; }
+  .gestor-card h3 { margin: 0 0 16px 0; font-size: 18px; font-weight: 900; }
+  .gestor-card .total-bar { font-weight: 700; text-align: right; font-size: 16px; padding: 12px 0; border-top: 2px solid var(--crescenza-gray-bg); margin-top: 16px; }
+  .gestor-card .total-bar.invalid { color: var(--color-low); } 
+  .gestor-card .total-bar.valid { color: var(--color-high); }
+  
+  .dimensao-admin { margin-bottom: 18px; }
+  .dimensao-admin .label-row { display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px; }
+  .dimensao-admin label { font-weight: 700; font-size: 15px; flex-grow: 1; color: var(--crescenza-black); margin-bottom: 0;}
+  .dimensao-admin input[type=number] { width: 70px; font-size: 16px; font-weight: 700; padding: 6px 8px; border: 1px solid #dcdcdc; border-radius: 6px; text-align: center; margin-left: 10px; }
+  .dimensao-admin p.desc { font-size: 13px; color: var(--crescenza-dark-gray); margin: 2px 0 0; padding-left: 4px; }
+  .dimensao-admin p.scale-desc { font-size: 12px; color: var(--color-invest); margin: 6px 0 0; padding: 8px 10px; background: #e3f2fd; border-radius: var(--radius-sm); border: 1px dashed var(--color-invest); }
+  
+  input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; } 
+  input[type=number] { -moz-appearance: textfield; }
+  
+  .remove-gestor-btn { 
+    position: absolute; top: 15px; right: 15px; 
+    background: var(--color-low); color: white; 
+    border: none; border-radius: 50%; width: 28px; height: 28px; 
+    font-weight: bold; font-size: 16px; cursor: pointer; 
+    line-height: 26px; text-align: center; 
+  }
 
-  .btn--primary { background: var(--color-high); }
-  .btn--secondary { background: var(--crescenza-dark-gray); }
-  .btn--danger { background: var(--color-low); }
-  .btn--accent { background: var(--color-invest); }
-  .btn--whatsapp { background-color: #25D366; }
+  /* --- Candidato Intro (Passo 2) --- */
+  #page-candidate-intro .card { text-align: center; }
+  #candidate-name-block { 
+    margin-bottom: 24px; 
+    text-align: left; 
+    max-width: 400px; 
+    margin-left: auto; 
+    margin-right: auto; 
+  }
+  #candidate-name-error { 
+    color: var(--color-low); 
+    font-weight: 600; 
+    display: none; 
+    text-align: center; 
+    margin-top: 10px; 
+  }
 
-  .btn-small { 
-    padding: 8px 12px; 
-    font-size: 14px; 
-    width: auto; 
-    margin: 0 5px; 
-  }
-  .button-group { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  /* --- Wizard (Teste) --- */
+  #page-candidate-test { max-width: 800px; } 
+  #wizard-container { max-width: 100%; margin: 0; } 
+  #wizard-progress { width: 100%; background: var(--crescenza-gray-bg); height: 8px; border-radius: 4px; overflow: hidden; }
+  #wizard-progress-bar { width: 0%; height: 100%; background: var(--crescenza-orange); transition: width 0.3s ease; }
+  #wizard-question-title { font-size: 14px; color: var(--crescenza-dark-gray); font-weight: 600; margin: 16px 0 8px; }
+  .wizard-block { border: 1px solid #ddd; border-radius: var(--radius-sm); background: #fff; box-shadow: var(--shadow-sm); }
+  .wizard-block th, .wizard-block td { padding: 12px 16px; vertical-align: middle; }
+  .wizard-block td:first-child, .wizard-block td:last-child { width: 1%; text-align: center;}
+  .wizard-block th { font-size: 12px; text-transform: uppercase; color: var(--crescenza-dark-gray); text-align: center;}
+  .wizard-block tr { border-bottom: 1px solid var(--crescenza-gray-bg); }
+  .wizard-block tr:last-child { border: 0; }
+  .wizard-block label { font-weight: 500; font-size: 15px; display: block; cursor: pointer; padding: 8px 0;}
+  input[type=radio] { accent-color: var(--crescenza-orange); transform: scale(1.4); cursor: pointer; }
+  #wizard-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+  #wizard-error { color: var(--color-low); font-weight: 600; display: none; }
 
-  /* =============================
-     LAYOUTS ESPECÍFICOS
-     ============================= */
-  
-  /* --- Caixas de Status e Avisos --- */
-  .status-box { 
-    padding: 16px; 
-    border-radius: var(--radius-sm); 
-    font-weight: 600; 
-    margin-top: 20px; 
-    border: 1px solid;
-  }
-  .status-box.ok { background: #d0f8d7; border-color: var(--color-high); color: #0b6b0b; }
-  .status-box.nok { background: #ffebee; border-color: var(--color-low); color: #b71c1c; }
-  .status-box.info { background: #e3f2fd; border-color: var(--color-invest); color: #166cc2; text-align: left; }
-  .status-box h4 { margin: 0 0 8px; }
-  .status-box p { margin: 0; font-weight: 500; }
-  
-  /* --- Admin (Passo 1) --- */
-  #gestor-controls { margin-bottom: 16px; }
-  .comite-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 24px; }
-  .gestor-card { position: relative; padding-top: 16px; }
-  .gestor-card h3 { margin: 0 0 16px 0; font-size: 18px; font-weight: 900; }
-  .gestor-card .total-bar { font-weight: 700; text-align: right; font-size: 16px; padding: 12px 0; border-top: 2px solid var(--crescenza-gray-bg); margin-top: 16px; }
-  .gestor-card .total-bar.invalid { color: var(--color-low); } 
-  .gestor-card .total-bar.valid { color: var(--color-high); }
-  
-  .dimensao-admin { margin-bottom: 18px; }
-  .dimensao-admin .label-row { display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px; }
-  .dimensao-admin label { font-weight: 700; font-size: 15px; flex-grow: 1; color: var(--crescenza-black); margin-bottom: 0;}
-  .dimensao-admin input[type=number] { width: 70px; font-size: 16px; font-weight: 700; padding: 6px 8px; border: 1px solid #dcdcdc; border-radius: 6px; text-align: center; margin-left: 10px; }
-  .dimensao-admin p.desc { font-size: 13px; color: var(--crescenza-dark-gray); margin: 2px 0 0; padding-left: 4px; }
-  .dimensao-admin p.scale-desc { font-size: 12px; color: var(--color-invest); margin: 6px 0 0; padding: 8px 10px; background: #e3f2fd; border-radius: var(--radius-sm); border: 1px dashed var(--color-invest); }
-  
-  input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; } 
-  input[type=number] { -moz-appearance: textfield; }
-  
-  .remove-gestor-btn { 
-    position: absolute; top: 15px; right: 15px; 
-    background: var(--color-low); color: white; 
-    border: none; border-radius: 50%; width: 28px; height: 28px; 
-    font-weight: bold; font-size: 16px; cursor: pointer; 
-    line-height: 26px; text-align: center; 
-  }
+  /* --- Relatório (Admin e Candidato) --- */
+  .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .upload-box { background: var(--crescenza-light); border: 2px dashed #ccc; border-radius: var(--radius-sm); padding: 24px; text-align: center; }
+  .upload-box.loaded { border-style: solid; border-color: var(--color-high); background: #d0f8d7; }
+  .upload-box.missing { border-style: dashed; border-color: var(--color-low); background: #ffebee; }
+  .upload-box h4 { margin: 0 0 8px 0; }
+  
+  #resultado-wrapper { display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: center; margin-bottom: 32px; }
+  #fit-score-box { text-align: center; background: var(--crescenza-light); padding: 24px; border-radius: var(--radius); border: 1px solid var(--crescenza-gray-bg); }
+  #fit-score-box h3 { margin: 0 0 8px; color: var(--crescenza-dark-gray); font-size: 16px; }
+  #fit-score { font-size: 64px; font-weight: 900; color: var(--crescenza-orange); line-height: 1; }
+  
+  .report-section { margin-top: 24px; }
+  .report-section-title { 
+    font-size: 20px; font-weight: 800; 
+    color: var(--crescenza-black); 
+    margin: 24px 0 16px 0; 
+    padding-bottom: 8px; 
+    border-bottom: 2px solid var(--crescenza-orange); 
+  }
+  .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .report-card { background: var(--crescenza-light); border-radius: var(--radius-sm); padding: 16px; border: 1px solid var(--crescenza-gray-bg); }
+  .report-card h4 { margin: 0 0 12px; font-size: 16px; color: var(--crescenza-black); padding-bottom: 8px; border-bottom: 1px solid #ddd; }
+  .report-card ul { margin: 0; padding-left: 18px; }
+  .report-card li { font-size: 14px; color: #333; margin-bottom: 10px; line-height: 1.4; }
+  .report-card .archetype-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--color-invest);
+    margin-bottom: 8px;
+  }
+  .report-card .archetype-desc {
+    font-size: 14px;
+    color: var(--crescenza-dark-gray);
+    margin-top: 0;
+  }
 
-  /* --- Candidato Intro (Passo 2) --- */
-  #page-candidate-intro .card { text-align: center; }
-  #candidate-name-block { 
-    margin-bottom: 24px; 
-    text-align: left; 
-    max-width: 400px; 
-    margin-left: auto; 
-    margin-right: auto; 
-  }
-  #candidate-name-error { 
-    color: var(--color-low); 
-    font-weight: 600; 
-    display: none; 
-    text-align: center; 
-    margin-top: 10px; 
-  }
-
-  /* --- Wizard (Teste) --- */
-  #page-candidate-test { max-width: 800px; } 
-  #wizard-container { max-width: 100%; margin: 0; } 
-  #wizard-progress { width: 100%; background: var(--crescenza-gray-bg); height: 8px; border-radius: 4px; overflow: hidden; }
-  #wizard-progress-bar { width: 0%; height: 100%; background: var(--crescenza-orange); transition: width 0.3s ease; }
-  #wizard-question-title { font-size: 14px; color: var(--crescenza-dark-gray); font-weight: 600; margin: 16px 0 8px; }
-  .wizard-block { border: 1px solid #ddd; border-radius: var(--radius-sm); background: #fff; box-shadow: var(--shadow-sm); }
-  .wizard-block th, .wizard-block td { padding: 12px 16px; vertical-align: middle; }
-  .wizard-block td:first-child, .wizard-block td:last-child { width: 1%; text-align: center;}
-  .wizard-block th { font-size: 12px; text-transform: uppercase; color: var(--crescenza-dark-gray); text-align: center;}
-  .wizard-block tr { border-bottom: 1px solid var(--crescenza-gray-bg); }
-  .wizard-block tr:last-child { border: 0; }
-  .wizard-block label { font-weight: 500; font-size: 15px; display: block; cursor: pointer; padding: 8px 0;}
-  input[type=radio] { accent-color: var(--crescenza-orange); transform: scale(1.4); cursor: pointer; }
-  #wizard-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
-  #wizard-error { color: var(--color-low); font-weight: 600; display: none; }
-
-  /* --- Relatório (Admin e Candidato) --- */
-  .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-  .upload-box { background: var(--crescenza-light); border: 2px dashed #ccc; border-radius: var(--radius-sm); padding: 24px; text-align: center; }
-  .upload-box.loaded { border-style: solid; border-color: var(--color-high); background: #d0f8d7; }
-  .upload-box.missing { border-style: dashed; border-color: var(--color-low); background: #ffebee; }
-  .upload-box h4 { margin: 0 0 8px 0; }
-  
-  #resultado-wrapper { display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: center; margin-bottom: 32px; }
-  #fit-score-box { text-align: center; background: var(--crescenza-light); padding: 24px; border-radius: var(--radius); border: 1px solid var(--crescenza-gray-bg); }
-  #fit-score-box h3 { margin: 0 0 8px; color: var(--crescenza-dark-gray); font-size: 16px; }
-  #fit-score { font-size: 64px; font-weight: 900; color: var(--crescenza-orange); line-height: 1; }
-  
-  .report-section { margin-top: 24px; }
-  .report-section-title { 
-    font-size: 20px; font-weight: 800; 
-    color: var(--crescenza-black); 
-    margin: 24px 0 16px 0; 
-    padding-bottom: 8px; 
-    border-bottom: 2px solid var(--crescenza-orange); 
-  }
-  .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .report-card { background: var(--crescenza-light); border-radius: var(--radius-sm); padding: 16px; border: 1px solid var(--crescenza-gray-bg); }
-  .report-card h4 { margin: 0 0 12px; font-size: 16px; color: var(--crescenza-black); padding-bottom: 8px; border-bottom: 1px solid #ddd; }
-  .report-card ul { margin: 0; padding-left: 18px; }
-  .report-card li { font-size: 14px; color: #333; margin-bottom: 10px; line-height: 1.4; }
-  .report-card .archetype-title {
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--color-invest);
-    margin-bottom: 8px;
-  }
-  .report-card .archetype-desc {
-    font-size: 14px;
-    color: var(--crescenza-dark-gray);
-    margin-top: 0;
-  }
-
-  /* Estilos para a página de carregamento */
-  #page-candidate-loading .card { text-align: center; padding: 48px 24px; }
-  .spinner {
-      width: 56px; height: 56px;
-      border: 6px solid var(--crescenza-gray-bg);
-      border-top-color: var(--crescenza-orange);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 24px auto;
-  }
-  @keyframes spin { 100% { transform: rotate(360deg); } }
+  /* Estilos para a página de carregamento */
+  #page-candidate-loading .card { text-align: center; padding: 48px 24px; }
+  .spinner {
+      width: 56px; height: 56px;
+      border: 6px solid var(--crescenza-gray-bg);
+      border-top-color: var(--crescenza-orange);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 24px auto;
+  }
+  @keyframes spin { 100% { transform: rotate(360deg); } }
 
 
-  @media(max-width: 800px) {
-    .page { width: 95%; margin: 16px auto; }
-    .header h1 { font-size: 22px; }
-    #resultado-wrapper { grid-template-columns: 1fr; }
-    .report-grid { grid-template-columns: 1fr; }
-    .upload-grid { grid-template-columns: 1fr; }
-  }
-  
-  /* --- RODAPÉ --- */
-  footer { 
-    margin-top: auto; 
-    background: #121417; 
-    color: #f2f2f2; 
-    padding: 24px 16px; 
-    font: 14px/1.6 Arial, Helvetica, sans-serif; 
-  }
-  footer a { color: #ffa64d; text-decoration: none; }
-  /* CORREÇÃO v17.8: Centraliza todos os textos do rodapé */
-  footer .footer-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
-  footer p { margin: 0 0 6px; }
-  footer p.copy { margin: 0 0 10px; }
+  @media(max-width: 800px) {
+    .page { width: 95%; margin: 16px auto; }
+    .header h1 { font-size: 22px; }
+    #resultado-wrapper { grid-template-columns: 1fr; }
+    .report-grid { grid-template-columns: 1fr; }
+    .upload-grid { grid-template-columns: 1fr; }
+  }
+  
+  /* --- RODAPÉ --- */
+  footer { 
+    margin-top: auto; 
+    background: #121417; 
+    color: #f2f2f2; 
+    padding: 24px 16px; 
+    font: 14px/1.6 Arial, Helvetica, sans-serif; 
+  }
+  footer a { color: #ffa64d; text-decoration: none; }
+  /* CORREÇÃO v17.8: Centraliza todos os textos do rodapé */
+  footer .footer-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
+  footer p { margin: 0 0 6px; }
+  footer p.copy { margin: 0 0 10px; }
 
-  /* --- Estilos de Impressão --- */
-  @media print {
-    body { background: #fff; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 10pt; }
-    body > *:not(.printable-section) { display: none !important; }
-    .printable-section { display: block !important; width: 100%; max-width: 100%; margin: 0; padding: 1cm; }
-    .page { display: block !important; padding: 0 !important; margin: 0; }
-    .card { box-shadow: none !important; border: 1px solid #ccc; margin: 0 0 0.5cm 0; padding: 10px; page-break-inside: avoid; }
-    .header { display: flex !important; background: #fff !important; color: #000 !important; padding: 10px 0 !important; }
-    .header h1 { font-size: 16pt; } 
-    .header p { font-size: 10pt; color: #555;}
-    #report-candidate-name { color: #333 !important; opacity: 1 !important; font-size: 12pt; margin-top: 5px !important; }
-    .header__bar, .logo-img { display: none !important; }
-    
-    .no-print { display: none !important; }
-    footer { display: none !important; }
-    
-    /* PDF do Alvo (Admin) */
-    #page-admin .card.no-print { display: none !important; }
-    #page-admin #alvo-calculado { display: block !important; } #page-admin #alvo-calculado h2 { margin-top: 0;}
+  /* --- Estilos de Impressão --- */
+  @media print {
+    body { background: #fff; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 10pt; }
+    body > *:not(.printable-section) { display: none !important; }
+    .printable-section { display: block !important; width: 100%; max-width: 100%; margin: 0; padding: 1cm; }
+a   .page { display: block !important; padding: 0 !important; margin: 0; }
+    .card { box-shadow: none !important; border: 1px solid #ccc; margin: 0 0 0.5cm 0; padding: 10px; page-break-inside: avoid; }
+    
+    /* MODIFICADO: Ajuste no header de impressão */
+    .header { display: flex !important; background: #fff !important; color: #000 !important; padding: 10px 0 !important; }
+    .header__logo { max-height: 40px !important; } /* Logo no PDF */
+    .header h1 { font-size: 16pt; } 
+    .header p { font-size: 10pt; color: #555;}
+    #report-candidate-name { color: #333 !important; opacity: 1 !important; font-size: 12pt; margin-top: 5px !important; }
+    .header__bar { display: none !important; } /* Logo .logo-img já estava none, mantido */
+    
+    .no-print { display: none !important; }
+    footer { display: none !important; }
+    
+    /* PDF do Alvo (Admin) */
+    #page-admin .card.no-print { display: none !important; }
+    #page-admin #alvo-calculado { display: block !important; } #page-admin #alvo-calculado h2 { margin-top: 0;}
 
-    /* PDF do Relatório de Aderência (Gerado pelo Candidato) */
-    #page-report-generator .card.no-print { display: none !important; }
-    #page-report-generator #report-container { display: block !important; }
-    #resultado-wrapper { grid-template-columns: 180px 1fr; gap: 0.5cm; align-items: flex-start;}
-    #fit-score-box { padding: 0.5cm; background: #eee;} #fit-score { font-size: 32pt; }
-    #recruiter-chart-container { max-height: 300px; }
+    /* PDF do Relatório de Aderência (Gerado pelo Candidato) */
+    #page-report-generator .card.no-print { display: none !important; }
+    #page-report-generator #report-container { display: block !important; }
+    #resultado-wrapper { grid-template-columns: 180px 1fr; gap: 0.5cm; align-items: flex-start;}
+    #fit-score-box { padding: 0.5cm; background: #eee;} #fit-score { font-size: 32pt; }
+    #recruiter-chart-container { max-height: 300px; }
 
-    /* Estilos comuns de PDF */
-    canvas { max-width: 100%; height: auto !important; }
-    .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; } 
-    .report-card { background: #f9f9f9; }
-    h2, h3, h4 { page-break-after: avoid; } ul, li { page-break-inside: avoid; }
-    table { font-size: 8pt; width: 100%; border-collapse: collapse;} th, td { padding: 4px; border: 1px solid #ccc;} th { background: #eee; }
-  }
+    /* Estilos comuns de PDF */
+    canvas { max-width: 100%; height: auto !important; }
+    .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; } 
+    .report-card { background: #f9f9f9; }
+    h2, h3, h4 { page-break-after: avoid; } ul, li { page-break-inside: avoid; }
+    table { font-size: 8pt; width: 100%; border-collapse: collapse;} th, td { padding: 4px; border: 1px solid #ccc;} th { background: #eee; }
+  }
 </style>
 </head>
 <body>
 
 <div class="page printable-section" id="page-admin">
-    <header class="header no-print">
-      <div class="header__inner">
-        <h1>Crescenza 360º — Fit Cultural (Admin)</h1>
-        <p>Passo 1: Definição da Cultura Alvo (Comitê)</p>
-        <div class="header__bar"></div>
-      </div>
-    </header>
-
-    <div class="card no-print">
-        <h2><span class="dot"></span> 1. Configurações da Empresa</h2>
-        <div class="upload-grid">
-            <div>
-                <label for="empresa-nome">Nome da Empresa</label>
-                <input type="text" id="empresa-nome" placeholder="Digite o nome da sua empresa...">
-            </div>
-            <div class="status-box info" style="margin-top:0; padding: 12px; text-align: left;">
-                <h4 style="color: var(--color-invest); margin: 0 0 5px;">Contatos do Recrutador</h4>
-                <p style="font-weight: 700; font-size: 16px; margin: 0;">WhatsApp: (55) 99684-2002</p>
-                <p style="font-weight: 700; font-size: 16px; margin: 0;">E-mail: contato@crescenzaonline.com</p>
-                <p style="font-weight: 500; font-size: 12px; margin-top: 5px;">(Valores fixos no código)</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="card no-print">
-        <h2><span class="dot"></span> 2. Comitê de Cultura</h2>
-        <p class="muted" style="margin-top: -10px; margin-bottom: 20px;">Peça para cada gestor (3-7) distribuir <strong>100 pontos</strong> entre as 10 dimensões abaixo. A ferramenta calculará a mediana.</p>
-
-        <div id="gestor-controls">
-            <label>Número de Gestores no Comitê:</label>
-            <span id="num-gestores-display" style="font-weight: bold; margin: 0 10px;">3</span>
-            <button class="btn-small btn--primary" onclick="addGestor()">+ Adicionar Gestor</button>
-            <button class="btn-small btn--secondary" onclick="removeGestor()">- Remover Último</button>
-        </div>
-        <div class="comite-grid" id="gestor-panels-container">
-          </div>
-        <div class="button-group">
-          <button class="btn btn--primary" id="btn-salvar-alvo" onclick="salvarAlvo()" style="flex-grow: 2;">Calcular Mediana e Salvar Alvo</button>
-        </div>
-    </div>
-    
-    <div class="card no-print">
-      <h2><span class="dot"></span> 3. Link de Envio para Candidatos</h2>
-      <p class="muted" style="margin-top: -10px; margin-bottom: 20px;">Envie o link abaixo para os candidatos iniciarem o teste. O Alvo cultural será embutido no link.</p>
-      <input type="text" readonly id="candidate-link" value="Preencha os campos acima e salve o alvo para gerar o link...">
-      <button class="btn btn--secondary btn-small no-print" onclick="copiarLink()">Copiar Link</button>
-    </div>
-
-    <div id="alvo-calculado" class="card hidden">
-        <h2><span class="dot"></span> Relatório de Cultura Alvo: <span id="alvo-empresa-nome" style="color: var(--crescenza-orange);"></span></h2>
-        <p class="muted">Este é o seu alvo cultural, definido pela mediana das respostas de <strong id="alvo-num-gestores"></strong> gestores.</p>
+    <header class="header no-print">
+      <div class="header__inner">
+        <img src="logo-crescenza-light.png" alt="Logo Crescenza" class="header__logo">
         
-        <div class="status-box info no-print" style="margin: 24px 0;">
-            <h4 style="color: var(--color-invest); margin-top: 0;">Como Ler este Relatório?</h4>
-            <p>Este relatório mostra a "cultura desejada" para a empresa, com base no consenso (mediana) do comitê.</p>
-            <ul style="margin-top: 8px; padding-left: 20px; font-weight: 500;">
-                <li><strong>Principais Focos:</strong> São as dimensões que receberam mais pontos. Elas representam os comportamentos e valores que a empresa mais deseja ver e incentivar.</li>
-                <li><strong>Pontos de Otimização:</strong> São as dimensões que receberam menos pontos. Elas não são "ruins", mas representam características que a empresa *menos* prioriza no momento.</li>
-            </ul>
+        <div class="header__text">
+           <h1>Crescenza 360º — Fit Cultural (Admin)</h1>
+           <p>Passo 1: Definição da Cultura Alvo (Comitê)</p>
         </div>
-        
-        <div id="alvo-qualitativo-report" style="margin-top: 24px;"></div>
+        <div class="header__bar"></div>
+      </div>
+    </header>
 
-        <h3 class="report-section-title" style="margin-top: 24px;">Pontuação Final (Mediana)</h3>
-        <table id="alvo-tabela" style="width:100%; border-collapse: collapse;"></table>
+    <div class="card no-print">
+        <h2><span class="dot"></span> 1. Configurações da Empresa</h2>
+        <div class="upload-grid">
+            <div>
+                <label for="empresa-nome">Nome da Empresa</label>
+                <input type="text" id="empresa-nome" placeholder="Digite o nome da sua empresa...">
+            </div>
+            <div class="status-box info" style="margin-top:0; padding: 12px; text-align: left;">
+                <h4 style="color: var(--color-invest); margin: 0 0 5px;">Contatos do Recrutador</h4>
+                <p style="font-weight: 700; font-size: 16px; margin: 0;">WhatsApp: (55) 99684-2002</p>
+                <p style="font-weight: 700; font-size: 16px; margin: 0;">E-mail: contato@crescenzaonline.com</p>
+                <p style="font-weight: 500; font-size: 12px; margin-top: 5px;">(Valores fixos no código)</p>
+            </div>
+        </div>
+    </div>
 
-        <div class="button-group no-print">
-            <button class="btn btn--secondary" onclick="printSection('page-admin')">Baixar Relatório da Cultura Alvo (PDF)</button>
-        </div>
-    </div>
+    <div class="card no-print">
+        <h2><span class="dot"></span> 2. Comitê de Cultura</h2>
+        <p class="muted" style="margin-top: -10px; margin-bottom: 20px;">Peça para cada gestor (3-7) distribuir <strong>100 pontos</strong> entre as 10 dimensões abaixo. A ferramenta calculará a mediana.</p>
+
+        <div id="gestor-controls">
+            <label>Número de Gestores no Comitê:</label>
+            <span id="num-gestores-display" style="font-weight: bold; margin: 0 10px;">3</span>
+                        <button class="btn-small btn--primary" onclick="addGestor()"><i class="fa-solid fa-plus"></i> Adicionar Gestor</button>
+            <button class="btn-small btn--secondary" onclick="removeGestor()"><i class="fa-solid fa-minus"></i> Remover Último</button>
+        </div>
+        <div class="comite-grid" id="gestor-panels-container">
+          </div>
+        <div class="button-group">
+          <button class="btn btn--primary" id="btn-salvar-alvo" onclick="salvarAlvo()" style="flex-grow: 2;">Calcular Mediana e Salvar Alvo</button>
+        </div>
+    </div>
+    
+    <div class="card no-print">
+      <h2><span class="dot"></span> 3. Link de Envio para Candidatos</h2>
+      <p class="muted" style="margin-top: -10px; margin-bottom: 20px;">Envie o link abaixo para os candidatos iniciarem o teste. O Alvo cultural será embutido no link.</p>
+      <input type="text" readonly id="candidate-link" value="Preencha os campos acima e salve o alvo para gerar o link...">
+            <button class="btn btn--secondary btn-small no-print" onclick="copiarLink()"><i class="fa-solid fa-copy"></i> Copiar Link</button>
+    </div>
+
+    <div id="alvo-calculado" class="card hidden">
+        <h2><span class="dot"></span> Relatório de Cultura Alvo: <span id="alvo-empresa-nome" style="color: var(--crescenza-orange);"></span></h2>
+        <p class="muted">Este é o seu alvo cultural, definido pela mediana das respostas de <strong id="alvo-num-gestores"></strong> gestores.</p>
+        
+        <div class="status-box info no-print" style="margin: 24px 0;">
+            <h4 style="color: var(--color-invest); margin-top: 0;">Como Ler este Relatório?</h4>
+            <p>Este relatório mostra a "cultura desejada" para a empresa, com base no consenso (mediana) do comitê.</p>
+            <ul style="margin-top: 8px; padding-left: 20px; font-weight: 500;">
+                <li><strong>Principais Focos:</strong> São as dimensões que receberam mais pontos. Elas representam os comportamentos e valores que a empresa mais deseja ver e incentivar.</li>
+                <li><strong>Pontos de Otimização:</strong> São as dimensões que receberam menos pontos. Elas não são "ruins", mas representam características que a empresa *menos* prioriza no momento.</li>
+            </ul>
+        </div>
+        
+        <div id="alvo-qualitativo-report" style="margin-top: 24px;"></div>
+
+        <h3 class="report-section-title" style="margin-top: 24px;">Pontuação Final (Mediana)</h3>
+        <table id="alvo-tabela" style="width:100%; border-collapse: collapse;"></table>
+
+        <div class="button-group no-print">
+                        <button class="btn btn--secondary" onclick="printSection('page-admin')"><i class="fa-solid fa-file-pdf"></i> Baixar Relatório da Cultura Alvo (PDF)</button>
+        </div>
+    </div>
 </div>
 
 <div class="page hidden" id="page-candidate-intro">
-   <header class="header no-print">
-      <div class="header__inner">
-        <h1 style="color: var(--crescenza-orange);">Seja Bem-Vindo(a)!</h1>
-        <p>Conheça um pouco mais sobre o nosso jeito de ser e nos ajude a entender você.</p>
-        <div class="header__bar"></div>
-      </div>
-    </header>
-    
-  <div class="card" style="text-align: center;">
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACtWK6eAAAAbFBMVEUAAAAAAAAbGxtoaGgZGRkYGBgXFxcWFhYXFxcXFxcXFxcYGBgXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcYGBgXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxeMrw+LAAAAI3RSTlMA9eQkCAX9+vj42dLAwMA/PjswMB8eHBsZGBgWFRQTEhEQ8A9jLqwAAAPvSURBVHja7dzZbqMwEIVhCBIEAcG9R5CiVdvS/v8/L1MCNmDAgMVu0qTznGyKPA85L5FFkZOTEwQg0w11Q51Q51Q51U51U91U11UP1YP1ZA/WU/23g/VgP1gI+hUv1dM1oF/Rg/Vo/d4Y2j9U5R+q8k9V+acq/9uQ8W8r8m9X+bcq/9uQ8W9F/q1E/FuJ+LcT8W8n4t9OxL+diH87Ef92Iv7tRPzbifg30wYk3EiFjViJChuxFBU2YimpbMROVNiJTgYd5LCSkYIcVjJSj4McsD+pNo4G8uGkBjGSYyQGMeKQPQJ5UvJHKP8s5Jnlz8h8s5Bnlz4j881AnlybYDQH8uRqg9EcyJGrDUZzIEmqYyQjiXQMRSQpiWMkIUmiYyQhiaJjJCF7BIqP2CPQeIQeQcIjegQJjegRJJiL9AiS3EX6BEluIv0BknMQ6ROknIN0H5D0P0M0AOkXQ+QYkB4xyBvQbp7ICNBeHsgI0F4eyAjQ3h7ICNBuHsiM5g13U3oG5qZqIJPqK0l1kKmVlTQjybRjKe2MJNvKSjKRbCspzUeyraQ0E8m2ktJ8JNtKSjORbCspJ0fyVlIyjuStpGQcyVtJMRnJt5JkY5JvJclGJu8mScck7yaJxyT9JklGJP0myV0k/SbJHSQ9Jsn9JT0myfUkHSbJXSQdJMk9JR0kyT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2semqXeqv+qj+qj/qw/qgPqrP6kv6qP6pj+qDeqL+qUfU/wE5OTk5+Vv9A6N7zYvWw+XGAAAAAElFTkSuQmCC" alt="Logo Crescenza 360" class="logo-img-intro">
-    
-    <h2>Avaliação de Perfil Cultural</h2>
-    <p style="font-size: 18px; color: var(--crescenza-dark-gray);">Acreditamos que pessoas engajadas e alinhadas aos nossos valores constroem o futuro. Esta avaliação nos ajuda a entender suas preferências de trabalho.</p>
+   <header class="header no-print">
+      <div class="header__inner">
+        <img src="logo-crescenza-light.png" alt="Logo Crescenza" class="header__logo">
 
-    <div id="candidate-name-block">
-        <label for="candidate-name-input">Seu Nome Completo:</label>
-        <input type="text" id="candidate-name-input" placeholder="Digite seu nome aqui...">
-    </div>
+        <div class="header__text">
+           <h1 style="color: var(--crescenza-orange);">Seja Bem-Vindo(a)!</h1>
+           <p>Conheça um pouco mais sobre o nosso jeito de ser e nos ajude a entender você.</p>
+        </div>
+        <div class="header__bar"></div>
+      </div>
+    </header>
+    
+  <div class="card" style="text-align: center;">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACtWK6eAAAAbFBMVEUAAAAAAAAbGxtoaGgZGRkYGBgXFxcWFhYXFxcXFxcXFxcYGBgXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcYGBgXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxeMrw+LAAAAI3RSTlMA9eQkCAX9+vj42dLAwMA/PjswMB8eHBsZGBgWFRQTEhEQ8A9jLqwAAAPvSURBVHja7dzZbqMwEIVhCBIEAcG9R5CiVdvS/v8/L1MCNmDAgMVu0qTznGyKPA85L5FFkZOTEwQg0w11Q51Q51Q51U51U91U11UP1YP1ZA/WU/23g/VgP1gI+hUv1dM1oF/Rg/Vo/d4Y2j9U5R+q8k9V+acq/9uQ8W8r8m9X+bcq/9uQ8W9F/q1E/FuJ+LcT8W8n4t9OxL+diH87Ef92Iv7tRPzbifg30wYk3EiFjViJChuxFBU2YimpbMROVNiJTgYd5LCSkYIcVjJSj4McsD+pNo4G8uGkBjGSYyQGMeKQPQJ5UvJHKP8s5Jnlz8h8s5Bnlz4j881AnlybYDQH8uRqg9EcyJGrDUZzIEmqYyQjiXQMRSQpiWMkIUmiYyQhiaJjJCF7BIqP2CPQeIQeQcIjegQJjegRJJiL9AiS3EX6BEluIv0BknMQ6ROknIN0H5D0P0M0AOkXQ+QYkB4xyBvQbp7ICNBeHsgI0F4eyAjQ3h7ICNBuHsiM5g13U3oG5qZqIJPqK0l1kKmVlTQjybRjKe2MJNvKSjKRbCspzUeyraQ0E8m2ktJ8JNtKSjORbCspJ0fyVlIyjuStpGQcyVtJMRnJt5JkY5JvJclGJu8mScck7yaJxyT9JklGJP0myV0k/SbJHSQ9Jsn9JT0myfUkHSbJXSQdJMk9JR0kyT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2kkwqK0nJNJJKSvJIZCUpzUaypaQ0E8m2ktJsJNvKShqPbCspJ0cK3kpKRpG8lZSMInkrKSlG8lZSMo7krSRpEsm3kmRjkm8lycZk8m6SjEnybpKEJ+k3STIniX+T5B5J+k2SO0h6TJK7SjpMkrtIOkiSe0o6SJKeJT0myT0lGZAk95RkQBqJ5SgjaSSWoywkiZVkBEmklZWUJWmkllF2semqXeqv+qj+qj/qw/qgPqrP6kv6qP6pj+qDeqL+qUfU/wE5OTk5+Vv9A6N7zYvWw+XGAAAAAElFTkSuQmCC" alt="Logo Crescenza 360" class="logo-img-intro">
+    
+    <h2>Avaliação de Perfil Cultural</h2>
+    <p style="font-size: 18px; color: var(--crescenza-dark-gray);">Acreditamos que pessoas engajadas e alinhadas aos nossos valores constroem o futuro. Esta avaliação nos ajuda a entender suas preferências de trabalho.</p>
 
-    <p class="muted">São <strong>20 blocos</strong> de afirmações (8-12 min). Em cada um, escolha a que <strong>Mais</strong> e a que <strong>Menos</strong> se parece com você. Não há respostas "certas" ou "erradas".</p>
-    
-    <button class="btn btn--primary" onclick="initCandidateTest()">Iniciar Avaliação</button>
-    
-    <div id="candidate-name-error" class="hidden">Por favor, preencha seu nome para iniciar.</div>
+    <div id="candidate-name-block">
+        <label for="candidate-name-input">Seu Nome Completo:</label>
+        <input type="text" id="candidate-name-input" placeholder="Digite seu nome aqui...">
+    </div>
 
-    <div class="status-box nok hidden" id="candidate-link-error" style="margin-top: 24px; text-align: left;">
-      <h4 style="color: var(--color-low);">Erro: Link de Avaliação Inválido</h4>
-      <p>Este link de avaliação está incompleto ou corrompido (faltando o parâmetro 'target'). Por favor, solicite um novo link ao recrutador.</p>
-    </div>
-  </div>
+    <p class="muted">São <strong>20 blocos</strong> de afirmações (8-12 min). Em cada um, escolha a que <strong>Mais</strong> e a que <strong>Menos</strong> se parece com você. Não há respostas "certas" ou "erradas".</p>
+    
+    <button class="btn btn--primary" onclick="initCandidateTest()">Iniciar Avaliação</button>
+    
+    <div id="candidate-name-error" class="hidden">Por favor, preencha seu nome para iniciar.</div>
+
+    <div class="status-box nok hidden" id="candidate-link-error" style="margin-top: 24px; text-align: left;">
+      <h4 style="color: var(--color-low);">Erro: Link de Avaliação Inválido</h4>
+      <p>Este link de avaliação está incompleto ou corrompido (faltando o parâmetro 'target'). Por favor, solicite um novo link ao recrutador.</p>
+    </div>
+  </div>
 </div>
 
 <div class="page hidden" id="page-candidate-test">
-  <div id="wizard-container">
-    <div id="wizard-progress"><div id="wizard-progress-bar"></div></div>
-    <h3 id="wizard-question-title">Bloco 1 de 20</h3>
-    <div class="wizard-block"><table width="100%"><thead><tr><th>Mais (+)</th><th>Afirmação</th><th>Menos (-)</th></tr></thead><tbody id="wizard-body"></tbody></table></div>
-    <div id="wizard-nav"><div id="wizard-error">Escolha um "Mais" e um "Menos".</div><button class="btn btn--primary" style="width: 200px;" id="btn-next" onclick="nextQuestion()">Próximo &rarr;</button></div>
-  </div>
+  <div id="wizard-container">
+    <div id="wizard-progress"><div id="wizard-progress-bar"></div></div>
+    <h3 id="wizard-question-title">Bloco 1 de 20</h3>
+    <div class="wizard-block"><table width="100%"><thead><tr><th>Mais (+)</th><th>Afirmação</th><th>Menos (-)</th></tr></thead><tbody id="wizard-body"></tbody></table></div>
+    <div id="wizard-nav"><div id="wizard-error">Escolha um "Mais" e um "Menos".</div><button class="btn btn--primary" style="width: 200px;" id="btn-next" onclick="nextQuestion()">Próximo &rarr;</button></div>
+  </div>
 </div>
 
 <div class="page hidden" id="page-candidate-loading">
-  <div class="card">
-    <div class="spinner"></div>
-    <h2 style="color: var(--crescenza-dark-gray); text-align: center;">Gerando seu Relatório...</h2>
-    <p style="font-size: 18px; color: var(--crescenza-dark-gray); text-align: center;">Estamos analisando suas respostas e comparando com a nossa cultura alvo. Aguarde um momento.</p>
-  </div>
+  <div class="card">
+    <div class="spinner"></div>
+    <h2 style="color: var(--crescenza-dark-gray); text-align: center;">Gerando seu Relatório...</h2>
+    <p style="font-size: 18px; color: var(--crescenza-dark-gray); text-align: center;">Estamos analisando suas respostas e comparando com a nossa cultura alvo. Aguarde um momento.</p>
+  </div>
 </div>
 
 
 <div class="page hidden printable-section" id="page-report-generator">
-    <header class="header no-print">
-      <div class="header__inner">
-        <h1>Crescenza 360º — Seu Relatório de Fit Cultural</h1>
-        <p>Veja seu alinhamento com nossa cultura e envie o PDF ao recrutador.</p>
-        <div class="header__bar"></div>
-      </div>
-    </header>
-    
-    <div class="card no-print" id="report-loader-card">
-        <h2><span class="dot"></span> Carregamento de Dados</h2>
-        <div class="upload-grid">
-            <div class="upload-box" id="upload-box-alvo">
-                <h4>1. Alvo (Gestores)</h4>
-                <p id="status-alvo" class="muted">...</p>
-            </div>
-            <div class="upload-box" id="upload-box-candidato">
-                <h4>2. Perfil (Candidato)</h4>
-                <p id="status-candidato" class="muted">...</p>
-            </div>
+    <header class="header no-print">
+      <div class="header__inner">
+        <img src="logo-crescenza-light.png" alt="Logo Crescenza" class="header__logo">
+
+        <div class="header__text">
+           <h1>Crescenza 360º — Seu Relatório de Fit Cultural</h1>
+           <p>Veja seu alinhamento com nossa cultura e envie o PDF ao recrutador.</p>
         </div>
-        <button class="btn btn--primary" id="btn-gerar-relatorio" onclick="gerarRelatorio()" disabled>Gerar Relatório de Aderência</button>
-        <p class="muted no-print" style="text-align: center; margin-top: 10px;">(Os dados são carregados automaticamente. Clique para gerar.)</p>
-    </div>
+        <div class="header__bar"></div>
+      </div>
+    </header>
+    
+    <div class="card no-print" id="report-loader-card">
+        <h2><span class="dot"></span> Carregamento de Dados</h2>
+        <div class="upload-grid">
+            <div class="upload-box" id="upload-box-alvo">
+                <h4>1. Alvo (Gestores)</h4>
+                <p id="status-alvo" class="muted">...</p>
+            </div>
+            <div class="upload-box" id="upload-box-candidato">
+                <h4>2. Perfil (Candidato)</h4>
+                <p id="status-candidato" class="muted">...</p>
+            </div>
+        </div>
+        <button class="btn btn--primary" id="btn-gerar-relatorio" onclick="gerarRelatorio()" disabled>Gerar Relatório de Aderência</button>
+        <p class="muted no-print" style="text-align: center; margin-top: 10px;">(Os dados são carregados automaticamente. Clique para gerar.)</p>
+    </div>
 
-    <div id="report-container" class="hidden">
-        <header class="header"> <div class="header__inner">
-            <h1 style="color: var(--crescenza-orange);">Relatório de Fit Cultural</h1>
-            <h2 id="report-candidate-name" style="color: #fff; opacity: 0.9; margin: 10px 0 0 0; font-size: 20px;">Candidato: ...</h2>
-            <p id="report-fit-subtitle">Análise de aderência entre seu perfil e o alvo da empresa.</p>
-          </div>
-        </header>
-        
-        <div class="card">
-          <div id="resultado-wrapper">
-              <div id="fit-score-box">
-                  <h3>Índice de Aderência</h3>
-                  <div id="fit-score">--%</div>
-              </div>
-              <div id="recruiter-chart-container" style="max-height: 400px;"><canvas id="recruiter-radar-chart"></canvas></div>
-          </div>
-          
-          <div class="status-box info no-print">
-              <h4 style="color: var(--color-invest); margin-top: 0;">Como ler este Relatório?</h4>
-              <p>Este relatório é uma ferramenta de **diálogo**, não um teste de aprovação. O "Índice de Aderência" mede a *similaridade* de preferências. Use os "Gaps" e "Aderências" para refletir sobre como você se adaptaria à nossa cultura.</p>
-              
-              <p style="margin-top: 10px; font-weight: 700; color: #000; border-top: 1px dashed var(--color-invest); padding-top: 10px;">
-                    Instruções para Envio: 
-                    <br>1. Clique em "1. Salvar Relatório como PDF".
-                    <br>2. Clique em "2. Enviar via WhatsApp" ou "2. Enviar via E-mail" e **anexe o PDF** que você acabou de salvar.
-              </p>
-          </div>
+    <div id="report-container" class="hidden">
+        <header class="header"> 
+            <div class="header__inner">
+                <img src="logo-crescenza.png" alt="Logo Crescenza" class="header__logo">
 
-          <div class="button-group no-print">
-            <button class="btn btn--secondary" style="flex-grow: 1.5;" onclick="printSection('page-report-generator')">1. Salvar Relatório como PDF</button>
-            <a id="whatsapp-link-final" href="#" target="_blank" class="btn btn--whatsapp" style="flex-grow: 1;">
-               2. Enviar via WhatsApp
-            </a>
-            <a id="email-link-final" href="#" class="btn btn--accent" style="flex-grow: 1;">
-               2. Enviar via E-mail
-            </a>
-          </div>
-          
-          <div class="report-section">
-            <h2 class="report-section-title">Análise Qualitativa</h2>
-            
-             <div class="report-card" style="margin-bottom: 24px; background: #fff;">
-                <h4 class="archetype-title" id="recruiter-archetype-title">Calculando...</h4>
-                <p class="archetype-desc" id="recruiter-archetype-desc">Este é um resumo do seu estilo de trabalho preferido.</p>
-                <h4 style="margin-top: 20px; color: var(--crescenza-black);">Seu Perfil Preferencial</h4>
-                <ul id="report-perfil"></ul>
-            </div>
-            
-            <div class="report-grid">
-                <div class="report-card" style="border-left: 4px solid var(--color-high); background: #f0fdf4;">
-                    <h4 style="color: var(--color-high);">Principais Aderências (Pontos de Alinhamento)</h4>
-                    <ul id="report-aderencia"></ul>
+                <div class="header__text">
+                    <h1 style="color: var(--crescenza-orange);">Relatório de Fit Cultural</h1>
+                    <h2 id="report-candidate-name" style="color: #fff; opacity: 0.9; margin: 10px 0 0 0; font-size: 20px;">Candidato: ...</h2>
+                    <p id="report-fit-subtitle">Análise de aderência entre seu perfil e o alvo da empresa.</p>
                 </div>
-                <div class="report-card" style="border-left: 4px solid var(--color-low); background: #fffbeb;">
-                    <h4 style="color: var(--color-low);">Principais Gaps (Pontos de Diálogo)</h4>
-                    <ul id="report-gaps"></ul>
-                </div>
-            </div>
-          </div>
-          
-          <div class="report-section">
-            <h2 class="report-section-title">Reflexões para Diálogo</h2>
-            <p class="muted no-print">Reflita sobre estas perguntas baseadas nos Gaps. Elas poderão ser usadas na entrevista.</p>
-            <div class="report-card" style="background: #e3f2fd; border-color: var(--color-invest);">
-                <ul id="report-perguntas"></ul>
-            </div>
-          </div>
+            </div>
+        </header>
+        
+        <div class="card">
+          <div id="resultado-wrapper">
+              <div id="fit-score-box">
+                  <h3>Índice de Aderência</h3>
+                  <div id="fit-score">--%</div>
+              </div>
+              <div id="recruiter-chart-container" style="max-height: 400px;"><canvas id="recruiter-radar-chart"></canvas></div>
+          </div>
+          
+          <div class="status-box info no-print">
+              <h4 style="color: var(--color-invest); margin-top: 0;">Como ler este Relatório?</h4>
+              <p>Este relatório é uma ferramenta de **diálogo**, não um teste de aprovação. O "Índice de Aderência" mede a *similaridade* de preferências. Use os "Gaps" e "Aderências" para refletir sobre como você se adaptaria à nossa cultura.</p>
+              
+              <p style="margin-top: 10px; font-weight: 700; color: #000; border-top: 1px dashed var(--color-invest); padding-top: 10px;">
+                    Instruções para Envio: 
+                    <br>1. Clique em "1. Salvar Relatório como PDF".
+                    <br>2. Clique em "2. Enviar via WhatsApp" ou "2. Enviar via E-mail" e **anexe o PDF** que você acabou de salvar.
+              </p>
+          </div>
 
-        </div>
-      </div>
+          <div class="button-group no-print">
+                        <button class="btn btn--secondary" style="flex-grow: 1.5;" onclick="printSection('page-report-generator')">
+                <i class="fa-solid fa-file-pdf"></i> 1. Salvar Relatório como PDF
+            </button>
+            <a id="whatsapp-link-final" href="#" target="_blank" class="btn btn--whatsapp" style="flex-grow: 1;">
+                <i class="fa-brands fa-whatsapp"></i> 2. Enviar via WhatsApp
+            </a>
+            <a id="email-link-final" href="#" class="btn btn--accent" style="flex-grow: 1;">
+                <i class="fa-solid fa-envelope"></i> 2. Enviar via E-mail
+            </a>
+          </div>
+          
+          <div class="report-section">
+            <h2 class="report-section-title">Análise Qualitativa</h2>
+            
+             <div class="report-card" style="margin-bottom: 24px; background: #fff;">
+                <h4 class="archetype-title" id="recruiter-archetype-title">Calculando...</h4>
+                <p class="archetype-desc" id="recruiter-archetype-desc">Este é um resumo do seu estilo de trabalho preferido.</p>
+                <h4 style="margin-top: 20px; color: var(--crescenza-black);">Seu Perfil Preferencial</h4>
+                <ul id="report-perfil"></ul>
+            </div>
+            
+            <div class="report-grid">
+                <div class="report-card" style="border-left: 4px solid var(--color-high); background: #f0fdf4;">
+                    <h4 style="color: var(--color-high);">Principais Aderências (Pontos de Alinhamento)</h4>
+                    <ul id="report-aderencia"></ul>
+                </div>
+                <div class="report-card" style="border-left: 4px solid var(--color-low); background: #fffbeb;">
+                    <h4 style="color: var(--color-low);">Principais Gaps (Pontos de Diálogo)</h4>
+                    <ul id="report-gaps"></ul>
+                </div>
+            </div>
+          </div>
+          
+          <div class="report-section">
+            <h2 class="report-section-title">Reflexões para Diálogo</h2>
+            <p class="muted no-print">Reflita sobre estas perguntas baseadas nos Gaps. Elas poderão ser usadas na entrevista.</p>
+            <div class="report-card" style="background: #e3f2fd; border-color: var(--color-invest);">
+                <ul id="report-perguntas"></ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
 </div>
 
 
 <footer class="no-print">
-    <div class="footer-inner">
-      <p class="copy"><strong>© Crescenza. Todos os direitos reservados.</strong></p>
-      <p>
-        <strong>Controladora:</strong> Crescenza Consultoria —
-        <strong>Contato:</strong> <a href="mailto:contato@crescenzaonline.com">contato@crescenzaonline.com</a> |
-        <strong>WhatsApp:</strong> <a href="https://wa.me/5555996842002" target="_blank" rel="noopener">(55) 99684-2002</a> |
-        <strong>Site Oficial:</strong> <a href="https://www.crescenzaonline.com" target="_blank" rel="noopener">www.crescenzaonline.com</a>
-      </p>
-      <p style="margin-top: 10px;"><strong>Aviso ético:</strong> Ferramentas de assessment como Fit Cultural e DISC são instrumentos de desenvolvimento e autoconhecimento. Não devem ser usadas isoladamente para decisões de contratação, promoção ou desligamento. Use-as para enriquecer o diálogo e o desenvolvimento.</p>
-    </div>
+    <div class="footer-inner">
+      <p class="copy"><strong>© Crescenza. Todos os direitos reservados.</strong></p>
+      <p>
+        <strong>Controladora:</strong> Crescenza Consultoria —
+        <strong>Contato:</strong> <a href="mailto:contato@crescenzaonline.com">contato@crescenzaonline.com</a> |
+        <strong>WhatsApp:</strong> <a href="https://wa.me/5555996842002" target="_blank" rel="noopener">(55) 99684-2002</a> |
+        <strong>Site Oficial:</strong> <a href="https://www.crescenzaonline.com" target="_blank" rel="noopener">www.crescenzaonline.com</a>
+      </p>
+      <p style="margin-top: 10px;"><strong>Aviso ético:</strong> Ferramentas de assessment como Fit Cultural e DISC são instrumentos de desenvolvimento e autoconhecimento. Não devem ser usadas isoladamente para decisões de contratação, promoção ou desligamento. Use-as para enriquecer o diálogo e o desenvolvimento.</p>
+    </div>
 </footer>
 
 
 <script>
-  // --- CHAVES DE ARMAZENAMENTO ---
-  const ALVO_KEY = 'crescenzaFitCulturalAlvo_v17'; 
-  const CANDIDATO_KEY = 'crescenzaFitCulturalCandidato_v17';
-  const CANDIDATO_NAME_KEY = 'crescenzaFitCandidateName_v17'; 
-  
-  // --- Contatos fixos ---
-  const RECRUITER_EMAIL = 'contato@crescenzaonline.com';
-  const RECRUITER_PHONE = '55996842002'; 
-  
-  // --- NOVO v17.8: Senha do Admin ---
-  // Altere esta senha para o que desejar
-  const ADMIN_PASSWORD = 'Crescer@2025'; 
+  // --- CHAVES DE ARMAZENAMENTO ---
+  const ALVO_KEY = 'crescenzaFitCulturalAlvo_v17'; 
+  const CANDIDATO_KEY = 'crescenzaFitCulturalCandidato_v17';
+  const CANDIDATO_NAME_KEY = 'crescenzaFitCandidateName_v17'; 
+  
+  // --- Contatos fixos ---
+  const RECRUITER_EMAIL = 'contato@crescenzaonline.com';
+  const RECRUITER_PHONE = '55996842002'; 
+  
+  // --- NOVO v17.8: Senha do Admin ---
+  // Altere esta senha para o que desejar
+  const ADMIN_PASSWORD = 'Crescer@2025'; 
 
-  // --- CONFIGURAÇÃO CENTRAL ---
-  const DIM_KEYS = ["Estrutura","Resultado","Inovação","Autonomia","Colaboração","Comunicação","Cliente","Aprendizado","Ritmo","Inclusão"];
-  let recruiterRadarChart = null; 
-  let candidateOwnRadarChart = null; 
-  let currentQuestion = 0;
-  let candidateRawScores = {}; 
-  
-  // (Sua Propriedade Intelectual - Aprimorada)
-  const DIMENSION_DESCRIPTIONS = { 
-    "Estrutura": { 
-        desc: "Preferência por regras, processos e previsibilidade.", 
-        alto: "Valoriza processos claros, regras e um ambiente previsível.", 
-        baixo: "Prefere flexibilidade, ambiguidade e adaptação.",
-        label_low: "Flexibilidade Total", label_high: "Processos Rígidos",
-        question_high_gap: "Notei que você valoriza mais flexibilidade do que o esperado para esta função. Como você se adapta a ambientes que exigem conformidade estrita com processos?",
-        question_low_gap: "Seu perfil sugere uma preferência por estrutura. Como você lide com situações ambíguas ou quando um processo precisa ser alterado rapidamente?"
-    },
-    "Resultado": { 
-        desc: "Foco em metas (o 'quê') vs. processo (o 'como').", 
-        alto: "Motivado por metas, competição e entrega de resultados.", 
-        baixo: "Motivado pela qualidade da execução, pelo processo e pelo 'como' se chega lá.",
-        label_low: "Foco no Processo", label_high: "Foco na Meta",
-        question_high_gap: "Percebi que você é muito focado na qualidade da processo. Como você equilibra isso quando há uma pressão forte para entregar uma meta, mesmo que o 'como' não seja perfeito?",
-        question_low_gap: "Você parece muito orientado a metas. Me conte sobre uma situação em que você teve que 'quebrar as regras' ou sacrificar a qualidade para atingir um resultado. Como se sentiu?"
-    },
-    "Inovação": { 
-        desc: "Abertura a risco, ruptura e novas ideias vs. otimização.", 
-        alto: "Busca ruptura, novas ideias e experimentação (assumir riscos).", 
-        baixo: "Prefere otimização, segurança e melhoria contínua (evitar riscos).",
-        label_low: "Otimização/Segurança", label_high: "Ruptura/Risco",
-        question_high_gap: "Esta função tem um foco grande em otimização. Como você, que prefere a ruptura, se manteria engajado em tarefas de melhoria contínua?",
-        question_low_gap: "Valorizamos muito a inovação aqui. Como você, que prefere um ambiente mais estável, reage quando é solicitado a testar uma ideia completamente nova que pode falhar?"
-    },
-    "Autonomia": { 
-        desc: "Necessidade de liberdade e decisão individual.", 
-        alto: "Necessita de liberdade, confiança e espaço para decidir sozinho.", 
-        baixo: "Prefere direcionamento claro, validação e supervisão próxima.",
-        label_low: "Direcionamento/Validação", label_high: "Liberdade/Confiança",
-        question_high_gap: "A cultura aqui valoriza o direcionamento e a validação em pares. Como você, que prefere autonomia total, lidaria com check-ins frequentes e decisões em comitê?",
-        question_low_gap: "Buscamos pessoas com alta autonomia. Como você agiria se seu gestor estivesse viajando e um problema crítico que não é da sua área surgisse?"
-    },
-    "Colaboração": { 
-        desc: "Preferência por trabalho em equipe vs. foco individual.", 
-        alto: "Prioriza o time, co-criação e sucesso do grupo.", 
-        baixo: "Prioriza foco individual, especialização e responsabilidade própria.",
-        label_low: "Foco Individual", label_high: "Foco no Time",
-        question_high_gap: "Você parece preferir o trabalho focado e individual. Esta função exige muita co-criação. Descreva uma experiência de trabalho em grupo que você *não* gostou e por quê.",
-        question_low_gap: "Somos muito focados no trabalho em equipe. Como você garante que sua responsabilidade individual e suas entregas se destaquem dentro do sucesso do grupo?"
-    },
-    "Comunicação": { 
-        desc: "Preferência por transparência vs. formalidade.", 
-        alto: "Valoriza transparência total, feedback aberto e acesso à informação.", 
-        baixo: "Prefere comunicação formal, hierárquica e canais oficiais.",
-        label_low: "Formal/Hierárquica", label_high: "Transparência/Aberta",
-        question_high_gap: "Nossa comunicação é mais formal. Como você, que prefere transparência total, lidaria com informações confidenciais ou que precisam seguir uma hierarquia para serem divulgadas?",
-        question_low_gap: "Praticamos transparência radical aqui. Como você reage ao receber um feedback direto e público sobre um erro seu, vindo de um colega de outra área?"
-    },
-    "Cliente": { 
-        desc: "Foco no cliente externo vs. operação interna.", 
-        alto: "Foco externo, priorizando o impacto no cliente final.", 
-        baixo: "Foco interno, priorizando a eficiência operacional e o cliente interno.",
-        label_low: "Eficiência Interna", label_high: "Impacto no Cliente",
-        question_high_gap: "Você demonstrou um foco maior na operação interna. Como você reagiria se uma demanda urgente de um cliente exigisse que você parasse uma otimização interna importante?",
-        question_low_gap: "Seu foco no cliente externo é claro. Mas e se uma nova regra interna de compliance (que não afeta o cliente) exigir uma grande mudança no seu processo? Como você prioriza isso?"
-    },
-    "Aprendizado": { 
-        desc: "Abertura ao erro, experimentação e desenvolvimento.", 
-        alto: "Vê o erro como aprendizado e busca experimentar (crescimento).", 
-        baixo: "Evita erros, prioriza consistência e execução correta (consistência).",
-        label_low: "Consistência/Evitar Erro", label_high: "Experimentação/Aprender",
-        question_high_gap: "Esta é uma área de alta consistência, onde erros não são bem-vindos. Como você, que gosta de experimentar, se adaptaria a um ambiente focado em 'fazer certo da primeira vez'?",
-        question_low_gap: "Gostamos de 'errar rápido' aqui. Descreva um erro significativo que você cometeu no trabalho. O que você fez imediatamente após perceber e o que aprendeu?"
-    },
-    "Ritmo": { 
-        desc: "Preferência por ambiente ágil vs. cadenciado.", 
-        alto: "Prospera em alta velocidade, agilidade e intensidade.", 
-        baixo: "Prefere ambiente cadenciado, planejado e constante.",
-        label_low: "Cadenciado/Planejado", label_high: "Ágil/Intenso",
-        question_high_gap: "Você prefere um ritmo mais planejado. Aqui, as prioridades mudam diariamente. Como você organiza seu dia sabendo que seu planejamento pode ser interrompido a qualquer momento?",
-        question_low_gap: "Você gosta de um ritmo intenso. Como você lida com períodos de baixa demanda ou com tarefas que exigem um longo tempo de planejamento antes da execução?"
-    },
-    "Inclusão": { 
-        desc: "Valorização da diversidade de pensamento.", 
-        alto: "Busca ativamente a diversidade de pensamento e a inclusão.", 
-        baixo: "Prefere afinidade, consenso e homogeneidade de pensamento.",
-        label_low: "Consenso/Afinidade", label_high: "Diversidade/Debate",
-        question_high_gap: "Nosso time valoriza o consenso rápido. Como você, que busca ativamente a diversidade de opiniões, reagiria se sentisse que o grupo está 'concordando rápido demais'?",
-        question_low_gap: "Temos muitos debates e opiniões divergentes aqui. Como você, que prefere afinidade, age quando há um conflito de ideias forte em uma reunião?"
-    }
-   };
-   
-  // (Sua Propriedade Intelectual)
-  const BASE_BLOCKS = [ 
-    [{ dim: "Estrutura", text: "Eu prefiro ter processos claros e regras definidas." },{ dim: "Inovação", text: "Eu gosto de questionar o 'status quo' e tentar coisas novas." },{ dim: "Colaboração", text: "Eu me sinto melhor trabalhando em equipe do que sozinho." },{ dim: "Ritmo", text: "Eu prospero em ambientes de alta velocidade e com prazos curtos." }],
-    [{ dim: "Resultado", text: "Meu foco principal é bater as metas, não importa como." },{ dim: "Autonomia", text: "Eu gosto de ter liberdade para decidir como fazer meu trabalho." },{ dim: "Aprendizado", text: "Eu vejo erros como oportunidades de aprender e experimentar." },{ dim: "Cliente", text: "Eu sempre penso primeiro no impacto que minha ação terá no cliente." }],
-    [{ dim: "Comunicação", text: "Acredito que a informação deve ser aberta e transparente para todos." },{ dim: "Inclusão", text: "Eu valorizo ativamente perspectivas de pessoas com históricos diferentes do meu." },{ dim: "Estrutura", text: "Eu me sinto confortável com ambiguidades e pouca estrutura formal.", isInverted: true },{ dim: "Resultado", text: "Eu prefiro focar na qualidade da execução e processo, mesmo que a meta atrase.", isInverted: true }],
-    [{ dim: "Inovação", text: "Eu prefiro otimizar e melhorar sistemas existentes a criar algo do zero.", isInverted: true },{ dim: "Ritmo", text: "Eu gosto de um ritmo de trabalho cadenciado e bem planejado.", isInverted: true },{ dim: "Colaboração", text: "Eu sou mais produtivo quando posso focar no meu trabalho individual.", isInverted: true },{ dim: "Autonomia", text: "Eu prefiro ter um direcionamento claro do meu gestor sobre o que fazer.", isInverted: true }],
-    [{ dim: "Cliente", text: "É mais importante focar na eficiência interna do que nas demandas do cliente.", isInverted: true },{ dim: "Aprendizado", text: "Para mim, é crucial evitar erros e garantir a consistência.", isInverted: true },{ dim: "Comunicação", text: "Eu acredito que a comunicação deve seguir a hierarquia formal.", isInverted: true },{ dim: "Inclusão", text: "Eu me sinto mais à vontade trabalhando com pessoas que pensam como eu.", isInverted: true }],
-    [{ dim: "Estrutura", text: "Eu gosto de 'descobrir o caminho' à medida que trabalho.", isInverted: true },{ dim: "Ritmo", text: "Eu prefiro um ambiente ágil e intenso." },{ dim: "Autonomia", text: "Eu funciono melhor com supervisão e validação constantes.", isInverted: true },{ dim: "Inovação", text: "Eu sou mais focado em executar tarefas do que em inovar.", isInverted: true }],
-    [{ dim: "Colaboração", text: "O sucesso do time é mais importante que o meu sucesso individual." },{ dim: "Resultado", text: "Eu sou motivado por desafios e metas agressivas." },{ dim: "Cliente", text: "Minha prioridade é garantir que a operação interna funcione bem.", isInverted: true },{ dim: "Comunicação", text: "Eu prefiro que a comunicação seja direta e objetiva, mesmo que pareça dura." }],
-    [{ dim: "Aprendizado", text: "Eu gosto de experimentar novas abordagens, mesmo que falhem." },{ dim: "Inclusão", text: "Eu busco ativamente incluir opiniões de todos no grupo." },{ dim: "Estrutura", text: "Eu sigo os procedimentos à risca, sempre." },{ dim: "Autonomia", text: "Eu tomo a iniciativa e resolvo problemas sem esperar por permissão." }],
-    [{ dim: "Inovação", text: "Eu sou uma pessoa que gera muitas ideias novas." },{ dim: "Ritmo", text: "Eu me sinto pressionado em ambientes muito rápidos.", isInverted: true },{ dim: "Resultado", text: "Eu me preocupo mais com a forma como o trabalho é feito do que com o resultado final.", isInverted: true },{ dim: "Cliente", text: "Eu me coloco no lugar do cliente para tomar decisões." }],
-    [{ dim: "Colaboração", text: "Eu prefiro ser o especialista na minha área a ser um generalista no time.", isInverted: true },{ dim: "Comunicação", text: "Eu acredito que a transparência total pode ser improdutiva.", isInverted: true },{ dim: "Aprendizado", text: "Eu prefiro usar métodos comprovados a arriscar com algo novo.", isInverted: true },{ dim: "Inclusão", text: "Eu acho que a diversidade de pensamento enriquece a equipe." }]
-   ];
-  const SHUFFLED_BLOCKS = BASE_BLOCKS.map(block => [...block].sort(() => 0.5 - Math.random()));
-  const QUESTION_BLOCKS = [...BASE_BLOCKS, ...SHUFFLED_BLOCKS]; // 20 blocos
+  // --- CONFIGURAÇÃO CENTRAL ---
+  const DIM_KEYS = ["Estrutura","Resultado","Inovação","Autonomia","Colaboração","Comunicação","Cliente","Aprendizado","Ritmo","Inclusão"];
+  let recruiterRadarChart = null; 
+  let candidateOwnRadarChart = null; 
+  let currentQuestion = 0;
+  let candidateRawScores = {}; 
+  
+  // (Sua Propriedade Intelectual - Aprimorada)
+  const DIMENSION_DESCRIPTIONS = { 
+    "Estrutura": { 
+        desc: "Preferência por regras, processos e previsibilidade.", 
+        alto: "Valoriza processos claros, regras e um ambiente previsível.", 
+        baixo: "Prefere flexibilidade, ambiguidade e adaptação.",
+        label_low: "Flexibilidade Total", label_high: "Processos Rígidos",
+        question_high_gap: "Notei que você valoriza mais flexibilidade do que o esperado para esta função. Como você se adapta a ambientes que exigem conformidade estrita com processos?",
+        question_low_gap: "Seu perfil sugere uma preferência por estrutura. Como você lide com situações ambíguas ou quando um processo precisa ser alterado rapidamente?"
+    },
+    "Resultado": { 
+        desc: "Foco em metas (o 'quê') vs. processo (o 'como').", 
+        alto: "Motivado por metas, competição e entrega de resultados.", 
+        baixo: "Motivado pela qualidade da execução, pelo processo e pelo 'como' se chega lá.",
+        label_low: "Foco no Processo", label_high: "Foco na Meta",
+        question_high_gap: "Percebi que você é muito focado na qualidade da processo. Como você equilibra isso quando há uma pressão forte para entregar uma meta, mesmo que o 'como' não seja perfeito?",
+        question_low_gap: "Você parece muito orientado a metas. Me conte sobre uma situação em que você teve que 'quebrar as regras' ou sacrificar a qualidade para atingir um resultado. Como se sentiu?"
+    },
+    "Inovação": { 
+        desc: "Abertura a risco, ruptura e novas ideias vs. otimização.", 
+        alto: "Busca ruptura, novas ideias e experimentação (assumir riscos).", 
+        baixo: "Prefere otimização, segurança e melhoria contínua (evitar riscos).",
+        label_low: "Otimização/Segurança", label_high: "Ruptura/Risco",
+        question_high_gap: "Esta função tem um foco grande em otimização. Como você, que prefere a ruptura, se manteria engajado em tarefas de melhoria contínua?",
+        question_low_gap: "Valorizamos muito a inovação aqui. Como você, que prefere um ambiente mais estável, reage quando é solicitado a testar uma ideia completamente nova que pode falhar?"
+    },
+    "Autonomia": { 
+        desc: "Necessidade de liberdade e decisão individual.", 
+        alto: "Necessita de liberdade, confiança e espaço para decidir sozinho.", 
+        baixo: "Prefere direcionamento claro, validação e supervisão próxima.",
+        label_low: "Direcionamento/Validação", label_high: "Liberdade/Confiança",
+        question_high_gap: "A cultura aqui valoriza o direcionamento e a validação em pares. Como você, que prefere autonomia total, lidaria com check-ins frequentes e decisões em comitê?",
+        question_low_gap: "Buscamos pessoas com alta autonomia. Como você agiria se seu gestor estivesse viajando e um problema crítico que não é da sua área surgisse?"
+    },
+    "Colaboração": { 
+        desc: "Preferência por trabalho em equipe vs. foco individual.", 
+        alto: "Prioriza o time, co-criação e sucesso do grupo.", 
+        baixo: "Prioriza foco individual, especialização e responsabilidade própria.",
+        label_low: "Foco Individual", label_high: "Foco no Time",
+        question_high_gap: "Você parece preferir o trabalho focado e individual. Esta função exige muita co-criação. Descreva uma experiência de trabalho em grupo que você *não* gostou e por quê.",
+        question_low_gap: "Somos muito focados no trabalho em equipe. Como você garante que sua responsabilidade individual e suas entregas se destaquem dentro do sucesso do grupo?"
+    },
+    "Comunicação": { 
+        desc: "Preferência por transparência vs. formalidade.", 
+        alto: "Valoriza transparência total, feedback aberto e acesso à informação.", 
+        baixo: "Prefere comunicação formal, hierárquica e canais oficiais.",
+        label_low: "Formal/Hierárquica", label_high: "Transparência/Aberta",
+        question_high_gap: "Nossa comunicação é mais formal. Como você, que prefere transparência total, lidaria com informações confidenciais ou que precisam seguir uma hierarquia para serem divulgadas?",
+        question_low_gap: "Praticamos transparência radical aqui. Como você reage ao receber um feedback direto e público sobre um erro seu, vindo de um colega de outra área?"
+    },
+    "Cliente": { 
+        desc: "Foco no cliente externo vs. operação interna.", 
+        alto: "Foco externo, priorizando o impacto no cliente final.", 
+        baixo: "Foco interno, priorizando a eficiência operacional e o cliente interno.",
+        label_low: "Eficiência Interna", label_high: "Impacto no Cliente",
+        question_high_gap: "Você demonstrou um foco maior na operação interna. Como você reagiria se uma demanda urgente de um cliente exigisse que você parasse uma otimização interna importante?",
+        question_low_gap: "Seu foco no cliente externo é claro. Mas e se uma nova regra interna de compliance (que não afeta o cliente) exigir uma grande mudança no seu processo? Como você prioriza isso?"
+    },
+    "Aprendizado": { 
+        desc: "Abertura ao erro, experimentação e desenvolvimento.", 
+        alto: "Vê o erro como aprendizado e busca experimentar (crescimento).", 
+        baixo: "Evita erros, prioriza consistência e execução correta (consistência).",
+        label_low: "Consistência/Evitar Erro", label_high: "Experimentação/Aprender",
+        question_high_gap: "Esta é uma área de alta consistência, onde erros não são bem-vindos. Como você, que gosta de experimentar, se adaptaria a um ambiente focado em 'fazer certo da primeira vez'?",
+        question_low_gap: "Gostamos de 'errar rápido' aqui. Descreva um erro significativo que você cometeu no trabalho. O que você fez imediatamente após perceber e o que aprendeu?"
+    },
+    "Ritmo": { 
+        desc: "Preferência por ambiente ágil vs. cadenciado.", 
+        alto: "Prospera em alta velocidade, agilidade e intensidade.", 
+        baixo: "Prefere ambiente cadenciado, planejado e constante.",
+        label_low: "Cadenciado/Planejado", label_high: "Ágil/Intenso",
+        question_high_gap: "Você prefere um ritmo mais planejado. Aqui, as prioridades mudam diariamente. Como você organiza seu dia sabendo que seu planejamento pode ser interrompido a qualquer momento?",
+        question_low_gap: "Você gosta de um ritmo intenso. Como você lida com períodos de baixa demanda ou com tarefas que exigem um longo tempo de planejamento antes da execução?"
+    },
+    "Inclusão": { 
+        desc: "Valorização da diversidade de pensamento.", 
+        alto: "Busca ativamente a diversidade de pensamento e a inclusão.", 
+        baixo: "Prefere afinidade, consenso e homogeneidade de pensamento.",
+        label_low: "Consenso/Afinidade", label_high: "Diversidade/Debate",
+        question_high_gap: "Nosso time valoriza o consenso rápido. Como você, que busca ativamente a diversidade de opiniões, reagiria se sentisse que o grupo está 'concordando rápido demais'?",
+        question_low_gap: "Temos muitos debates e opiniões divergentes aqui. Como você, que prefere afinidade, age quando há um conflito de ideias forte em uma reunião?"
+    }
+   };
+   
+  // (Sua Propriedade Intelectual)
+  const BASE_BLOCKS = [ 
+    [{ dim: "Estrutura", text: "Eu prefiro ter processos claros e regras definidas." },{ dim: "Inovação", text: "Eu gosto de questionar o 'status quo' e tentar coisas novas." },{ dim: "Colaboração", text: "Eu me sinto melhor trabalhando em equipe do que sozinho." },{ dim: "Ritmo", text: "Eu prospero em ambientes de alta velocidade e com prazos curtos." }],
+    [{ dim: "Resultado", text: "Meu foco principal é bater as metas, não importa como." },{ dim: "Autonomia", text: "Eu gosto de ter liberdade para decidir como fazer meu trabalho." },{ dim: "Aprendizado", text: "Eu vejo erros como oportunidades de aprender e experimentar." },{ dim: "Cliente", text: "Eu sempre penso primeiro no impacto que minha ação terá no cliente." }],
+    [{ dim: "Comunicação", text: "Acredito que a informação deve ser aberta e transparente para todos." },{ dim: "Inclusão", text: "Eu valorizo ativamente perspectivas de pessoas com históricos diferentes do meu." },{ dim: "Estrutura", text: "Eu me sinto confortável com ambiguidades e pouca estrutura formal.", isInverted: true },{ dim: "Resultado", text: "Eu prefiro focar na qualidade da execução e processo, mesmo que a meta atrase.", isInverted: true }],
+    [{ dim: "Inovação", text: "Eu prefiro otimizar e melhorar sistemas existentes a criar algo do zero.", isInverted: true },{ dim: "Ritmo", text: "Eu gosto de um ritmo de trabalho cadenciado e bem planejado.", isInverted: true },{ dim: "Colaboração", text: "Eu sou mais produtivo quando posso focar no meu trabalho individual.", isInverted: true },{ dim: "Autonomia", text: "Eu prefiro ter um direcionamento claro do meu gestor sobre o que fazer.", isInverted: true }],
+    [{ dim: "Cliente", text: "É mais importante focar na eficiência interna do que nas demandas do cliente.", isInverted: true },{ dim: "Aprendizado", text: "Para mim, é crucial evitar erros e garantir a consistência.", isInverted: true },{ dim: "Comunicação", text: "Eu acredito que a comunicação deve seguir a hierarquia formal.", isInverted: true },{ dim: "Inclusão", text: "Eu me sinto mais à vontade trabalhando com pessoas que pensam como eu.", isInverted: true }],
+    [{ dim: "Estrutura", text: "Eu gosto de 'descobrir o caminho' à medida que trabalho.", isInverted: true },{ dim: "Ritmo", text: "Eu prefiro um ambiente ágil e intenso." },{ dim: "Autonomia", text: "Eu funciono melhor com supervisão e validação constantes.", isInverted: true },{ dim: "Inovação", text: "Eu sou mais focado em executar tarefas do que em inovar.", isInverted: true }],
+    [{ dim: "Colaboração", text: "O sucesso do time é mais importante que o meu sucesso individual." },{ dim: "Resultado", text: "Eu sou motivado por desafios e metas agressivas." },{ dim: "Cliente", text: "Minha prioridade é garantir que a operação interna funcione bem.", isInverted: true },{ dim: "Comunicação", text: "Eu prefiro que a comunicação seja direta e objetiva, mesmo que pareça dura." }],
+    [{ dim: "Aprendizado", text: "Eu gosto de experimentar novas abordagens, mesmo que falhem." },{ dim: "Inclusão", text: "Eu busco ativamente incluir opiniões de todos no grupo." },{ dim: "Estrutura", text: "Eu sigo os procedimentos à risca, sempre." },{ dim:V:"Autonomia", text: "Eu tomo a iniciativa e resolvo problemas sem esperar por permissão." }],
+    [{ dim: "Inovação", text: "Eu sou uma pessoa que gera muitas ideias novas." },{ dim: "Ritmo", text: "Eu me sinto pressionado em ambientes muito rápidos.", isInverted: true },{ dim: "Resultado", text: "Eu me preocupo mais com a forma como o trabalho é feito do que com o resultado final.", isInverted: true },{ dim: "Cliente", text: "Eu me coloco no lugar do cliente para tomar decisões." }],
+    [{ dim: "Colaboração", text: "Eu prefiro ser o especialista na minha área a ser um generalista no time.", isInverted: true },{ dim: "Comunicação", text: "Eu acredito que a transparência total pode ser improdutiva.", isInverted: true },{ dim: "Aprendizado", text: "Eu prefiro usar métodos comprovados a arriscar com algo novo.", isInverted: true },{ dim: "Inclusão", text: "Eu acho que a diversidade de pensamento enriquece a equipe." }]
+   ];
+  const SHUFFLED_BLOCKS = BASE_BLOCKS.map(block => [...block].sort(() => 0.5 - Math.random()));
+  const QUESTION_BLOCKS = [...BASE_BLOCKS, ...SHUFFLED_BLOCKS]; // 20 blocos
 
-  // --- LÓGICA DE NAVEGAÇÃO E INICIALIZAÇÃO ---
-  function hideAllPages() { document.querySelectorAll('.page').forEach(page => page.classList.add('hidden')); }
-  function togglePage(pageId) {
-      hideAllPages();
-      document.getElementById(pageId)?.classList.remove('hidden');
-      window.scrollTo(0, 0);
-  }
+  // --- LÓGICA DE NAVEGAÇÃO E INICIALIZAÇÃO ---
+  function hideAllPages() { document.querySelectorAll('.page').forEach(page => page.classList.add('hidden')); }
+  function togglePage(pageId) {
+      hideAllPages();
+      document.getElementById(pageId)?.classList.remove('hidden');
+      window.scrollTo(0, 0);
+  }
 
-  // ******** CORREÇÃO v17.7 APLICADA AQUI ********
-  
-  // Nova função para decodificar Base64 URL-Safe
-  function base64UrlDecode(str) {
-      str = str.replace(/-/g, '+').replace(/_/g, '/'); // Reverte '-' para '+' e '_' para '/'
-      while (str.length % 4) {
-          str += '='; // Adiciona o padding '=' removido
-      }
-      return atob(str);
-  }
+  // ******** CORREÇÃO v17.7 APLICADA AQUI ********
+  
+  // Nova função para decodificar Base64 URL-Safe
+  function base64UrlDecode(str) {
+      str = str.replace(/-/g, '+').replace(/_/g, '/'); // Reverte '-' para '+' e '_' para '/'
+      while (str.length % 4) {
+          str += '='; // Adiciona o padding '=' removido
+      }
+      return atob(str);
+  }
 
-  window.onload = () => {
-      const params = new URLSearchParams(window.location.search);
-      const mode = params.get('mode');
-      const targetData = params.get('target'); 
-      const defaultPage = window.location.href.split('?')[0] + '?mode=candidate';
+  window.onload = () => {
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get('mode');
+      const targetData = params.get('target'); 
+      const defaultPage = window.location.href.split('?')[0] + '?mode=candidate';
 
-      if (mode === 'admin') {
-          // NOVO v17.8: Pedir senha para o Admin
-          const inputPassword = prompt("Digite a senha de administrador para acessar:");
-          if (inputPassword === ADMIN_PASSWORD) {
-              console.log("Acesso de Admin concedido.");
-              initAdmin();
-          } else {
-              if (inputPassword !== null) { // Só mostra alerta se não clicou em "Cancelar"
-                alert("Senha incorreta. Acesso negado.");
-              }
-              // Redireciona para a página de candidato, que mostrará o erro de link inválido
-              window.location.href = defaultPage;
-          }
+      if (mode === 'admin') {
+          // NOVO v17.8: Pedir senha para o Admin
+          const inputPassword = prompt("Digite a senha de administrador para acessar:");
+          if (inputPassword === ADMIN_PASSWORD) {
+              console.log("Acesso de Admin concedido.");
+              initAdmin();
+          } else {
+              if (inputPassword !== null) { // Só mostra alerta se não clicou em "Cancelar"
+                alert("Senha incorreta. Acesso negado.");
+              }
+              // Redireciona para a página de candidato, que mostrará o erro de link inválido
+              window.location.href = defaultPage;
+          }
 
-      } else if (mode === 'candidate') {
-          if (!targetData) { 
-              initCandidateIntro(false); // Link inválido, sem target
-          } else {
-              try {
-                  // A CORREÇÃO: Usamos a nova função de decode URL-Safe
-                  const decodedAlvoString = base64UrlDecode(targetData);
-                  // ************************************************
+      } else if (mode === 'candidate') {
+          if (!targetData) { 
+              initCandidateIntro(false); // Link inválido, sem target
+          } else {
+              try {
+                  // A CORREÇÃO: Usamos a nova função de decode URL-Safe
+                  const decodedAlvoString = base64UrlDecode(targetData);
+                  // ************************************************
 
-                  const alvoJson = JSON.parse(decodedAlvoString);
-                  
-                  localStorage.setItem(ALVO_KEY, JSON.stringify(alvoJson));
-                  
-                  console.log("Alvo carregado com sucesso no navegador do candidato.");
-                  initCandidateIntro(true); // Sucesso
-                  
-              } catch (e) {
-                  // Se falhar, o link está realmente corrompido
-                  console.error("Erro ao decodificar o Alvo do link:", e);
-                  initCandidateIntro(false); // Falha
-              }
-          }
-      } else if (mode === 'report') {
-          initReport();
-      } else {
-          // Modo padrão (sem parâmetros)
-          // Redireciona para a página de candidato, que mostrará o erro de link inválido
-          // Isso "tranca" a raiz do site.
-          window.location.href = defaultPage;
-      }
-  };
-  // ************************************************
+                  const alvoJson = JSON.parse(decodedAlvoString);
+                  
+                  localStorage.setItem(ALVO_KEY, JSON.stringify(alvoJson));
+                  
+                  console.log("Alvo carregado com sucesso no navegador do candidato.");
+                  initCandidateIntro(true); // Sucesso
+                  
+              } catch (e) {
+                  // Se falhar, o link está realmente corrompido
+                  console.error("Erro ao decodificar o Alvo do link:", e);
+                  initCandidateIntro(false); // Falha
+              }
+          }
+      } else if (mode === 'report') {
+          initReport();
+      } else {
+          // Modo padrão (sem parâmetros)
+          // Redireciona para a página de candidato, que mostrará o erro de link inválido
+          // Isso "tranca" a raiz do site.
+          window.location.href = defaultPage;
+      }
+  };
+  // ************************************************
 
-  function initAdmin() {
-      togglePage('page-admin');
-      if (!document.querySelector('#gestor-panels-container .gestor-card')) {
-          renderGestorPanels(3);
-      }
-      updateGestorButtons();
-      try {
-          const alvoData = JSON.parse(localStorage.getItem(ALVO_KEY));
-          if(alvoData) {
-              document.getElementById('empresa-nome').value = alvoData.empresaNome || '';
-              if(alvoData.numGestores) {
-                  renderGestorPanels(alvoData.numGestores);
-              }
-              gerarLinkCandidato(); 
-          }
-      } catch(e) {
-          console.warn("Nenhum dado de alvo salvo encontrado.");
-      }
-  }
+  function initAdmin() {
+      togglePage('page-admin');
+      if (!document.querySelector('#gestor-panels-container .gestor-card')) {
+          renderGestorPanels(3);
+      }
+      updateGestorButtons();
+      try {
+          const alvoData = JSON.parse(localStorage.getItem(ALVO_KEY));
+          if(alvoData) {
+              document.getElementById('empresa-nome').value = alvoData.empresaNome || '';
+              if(alvoData.numGestores) {
+                  renderGestorPanels(alvoData.numGestores);
+              }
+              gerarLinkCandidato(); 
+          }
+  _   } catch(e) {
+          console.warn("Nenhum dado de alvo salvo encontrado.");
+      }
+  }
 
-  function initCandidateIntro(success = false) { 
-      togglePage('page-candidate-intro'); 
-      if (!success) {
-          document.querySelector('#page-candidate-intro .btn').classList.add('hidden');
-          document.getElementById('candidate-name-block').classList.add('hidden');
-          document.getElementById('candidate-link-error').classList.remove('hidden');
-      } else {
-          // Limpa o nome antigo e o perfil antigo, se houver
-          localStorage.removeItem(CANDIDATO_NAME_KEY);
-          localStorage.removeItem(CANDIDATO_KEY);
-      }
-  }
+  function initCandidateIntro(success = false) { 
+      togglePage('page-candidate-intro'); 
+      if (!success) {
+          document.querySelector('#page-candidate-intro .btn').classList.add('hidden');
+          document.getElementById('candidate-name-block').classList.add('hidden');
+          document.getElementById('candidate-link-error').classList.remove('hidden');
+      } else {
+          // Limpa o nome antigo e o perfil antigo, se houver
+          localStorage.removeItem(CANDIDATO_NAME_KEY);
+          localStorage.removeItem(CANDIDATO_KEY);
+      }
+  }
 
-  function initCandidateTest() {
-      const nameInput = document.getElementById('candidate-name-input');
-      const nameError = document.getElementById('candidate-name-error');
-      const candidateName = nameInput.value.trim();
+  function initCandidateTest() {
+      const nameInput = document.getElementById('candidate-name-input');
+      const nameError = document.getElementById('candidate-name-error');
+      const candidateName = nameInput.value.trim();
 
-      if (candidateName === "") {
-          nameError.classList.remove('hidden');
-          nameInput.focus();
-          return;
-      }
-      
-      nameError.classList.add('hidden');
-      localStorage.setItem(CANDIDATO_NAME_KEY, candidateName);
+      if (candidateName === "") {
+          nameError.classList.remove('hidden');
+          nameInput.focus();
+          return;
+      }
+      
+      nameError.classList.add('hidden');
+      localStorage.setItem(CANDIDATO_NAME_KEY, candidateName);
 
-      togglePage('page-candidate-test');
-      currentQuestion = 0; 
-      candidateRawScores = {}; 
-      DIM_KEYS.forEach(k => candidateRawScores[k] = 0); 
-      renderWizardQuestion(currentQuestion);
-  }
+      togglePage('page-candidate-test');
+      currentQuestion = 0; 
+      candidateRawScores = {}; 
+      DIM_KEYS.forEach(k => candidateRawScores[k] = 0); 
+      renderWizardQuestion(currentQuestion);
+  }
 
-  function initReport() {
-      togglePage('page-report-generator');
-      
-      const candidateName = localStorage.getItem(CANDIDATO_NAME_KEY) || "Candidato";
-      
-      const wppLink = document.getElementById('whatsapp-link-final');
-      const emailLink = document.getElementById('email-link-final');
-      const phone = RECRUITER_PHONE;
-      
-      const wppText = `Olá! Sou ${candidateName} e finalizei meu teste de Fit Cultural. Estou enviando meu relatório (PDF) em anexo.`;
-      const wppUrl = `https://wa.me/${phone}?text=${encodeURIComponent(wppText)}`;
-      wppLink.href = wppUrl;
+  function initReport() {
+      togglePage('page-report-generator');
+      
+      const candidateName = localStorage.getItem(CANDIDATO_NAME_KEY) || "Candidato";
+      
+      const wppLink = document.getElementById('whatsapp-link-final');
+      const emailLink = document.getElementById('email-link-final');
+      const phone = RECRUITER_PHONE;
+      
+      const wppText = `Olá! Sou ${candidateName} e finalizei meu teste de Fit Cultural. Estou enviando meu relatório (PDF) em anexo.`;
+      const wppUrl = `https://wa.me/${phone}?text=${encodeURIComponent(wppText)}`;
+      wppLink.href = wppUrl;
 
-      const emailSubject = `Relatório de Fit Cultural - ${candidateName}`;
-      const emailBody = `Olá, Crescenza!\n\nSou ${candidateName} e estou enviando em anexo o meu Relatório de Fit Cultural (PDF) para análise.\n\nObrigado(a).`;
-      emailLink.href = `mailto:${RECRUITER_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-      
-      
-      const alvoBox = document.getElementById('upload-box-alvo');
-      const candBox = document.getElementById('upload-box-candidato');
-      const statusAlvo = document.getElementById('status-alvo');
-      const statusCand = document.getElementById('status-candidato');
-      const btn = document.getElementById('btn-gerar-relatorio');
+      const emailSubject = `Relatório de Fit Cultural - ${candidateName}`;
+      const emailBody = `Olá, Crescenza!\n\nSou ${candidateName} e estou enviando em anexo o meu Relatório de Fit Cultural (PDF) para análise.\n\nObrigado(a).`;
+      emailLink.href = `mailto:${RECRUITER_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+      
+      
+      const alvoBox = document.getElementById('upload-box-alvo');
+      const candBox = document.getElementById('upload-box-candidato');
+      const statusAlvo = document.getElementById('status-alvo');
+      const statusCand = document.getElementById('status-candidato');
+      const btn = document.getElementById('btn-gerar-relatorio');
 
-      let alvoPronto = !!localStorage.getItem(ALVO_KEY);
-      let candPronto = !!localStorage.getItem(CANDIDATO_KEY);
+      let alvoPronto = !!localStorage.getItem(ALVO_KEY);
+      let candPronto = !!localStorage.getItem(CANDIDATO_KEY);
 
-      if(alvoPronto) {
-          alvoBox.classList.add('loaded');
-          statusAlvo.textContent = `Alvo da Empresa carregado.`;
-      } else {
-          alvoBox.classList.add('missing');
-          statusAlvo.textContent = "Alvo não encontrado.";
-      }
-      
-      if(candPronto) {
-          candBox.classList.add('loaded');
-          statusCand.textContent = "Seu Perfil foi calculado.";
-      } else {
-          candBox.classList.add('missing');
-          statusCand.textContent = "Seu Perfil não foi encontrado.";
-      }
-      
-      btn.disabled = !(alvoPronto && candPronto);
-  }
+      if(alvoPronto) {
+          alvoBox.classList.add('loaded');
+          statusAlvo.textContent = `Alvo da Empresa carregado.`;
+      } else {
+          alvoBox.classList.add('missing');
+          statusAlvo.textContent = "Alvo não encontrado.";
+      }
+      
+      if(candPronto) {
+          candBox.classList.add('loaded');
+          statusCand.textContent = "Seu Perfil foi calculado.";
+      } else {
+          candBox.classList.add('missing');
+          statusCand.textContent = "Seu Perfil não foi encontrado.";
+      }
+      
+      btn.disabled = !(alvoPronto && candPronto);
+  }
 
-  // --- LÓGICA DO PASSO 1: PAINEL ADMIN ---
+  // --- LÓGICA DO PASSO 1: PAINEL ADMIN ---
 
-  function renderGestorPanels(count) {
-      const container = document.getElementById('gestor-panels-container'); 
-      container.innerHTML = '';
-      for (let i = 1; i <= count; i++) {
-          const gestorId = `gestor-${i}`; const card = document.createElement('div');
-          card.className = 'card gestor-card'; card.id = gestorId;
-          card.innerHTML = `<h3>Gestor ${i}</h3><button class="remove-gestor-btn no-print" onclick="removeGestor(${i})" title="Remover Gestor ${i}">&times;</button>`;
-          
-          let panelHtml = '';
-          DIM_KEYS.forEach(key => { panelHtml += createAdminInput(key, gestorId); });
-          card.innerHTML += panelHtml;
-          
-          card.innerHTML += `<div class="total-bar" id="total-${gestorId}">Total: 0 / 100</div>`;
-          container.appendChild(card);
-          updateAdminTotal(gestorId);
-      }
-      document.getElementById('num-gestores-display').textContent = count; 
-      updateGestorButtons();
-  }
+  function renderGestorPanels(count) {
+      const container = document.getElementById('gestor-panels-container'); 
+      container.innerHTML = '';
+      for (let i = 1; i <= count; i++) {
+          const gestorId = `gestor-${i}`; const card = document.createElement('div');
+          card.className = 'card gestor-card'; card.id = gestorId;
+          card.innerHTML = `<h3>Gestor ${i}</h3><button class="remove-gestor-btn no-print" onclick="removeGestor(${i})" title="Remover Gestor ${i}">&times;</button>`;
+          
+          let panelHtml = '';
+          DIM_KEYS.forEach(key => { panelHtml += createAdminInput(key, gestorId); });
+          card.innerHTML += panelHtml;
+          
+          card.innerHTML += `<div class="total-bar" id="total-${gestorId}">Total: 0 / 100</div>`;
+          container.appendChild(card);
+          updateAdminTotal(gestorId);
+      }
+      document.getElementById('num-gestores-display').textContent = count; 
+      updateGestorButtons();
+  }
 
-  function addGestor() { 
-      const c = document.getElementById('gestor-panels-container'); 
-      if (c.children.length < 7) renderGestorPanels(c.children.length + 1); 
-  }
+  function addGestor() { 
+      const c = document.getElementById('gestor-panels-container'); 
+      if (c.children.length < 7) renderGestorPanels(c.children.length + 1); 
+  }
 
-  function removeGestor(index = -1) { 
-      const c = document.getElementById('gestor-panels-container');
-      if (c.children.length > 3) {
-          if(index > 0 && index <= c.children.length) {
-               c.removeChild(c.children[index-1]);
-               renderGestorPanels(c.children.length);
-          } else {
-               c.removeChild(c.lastChild);
-               document.getElementById('num-gestores-display').textContent = c.children.length;
-               updateGestorButtons();
-          }
-      }
-  }
+  function removeGestor(index = -1) { 
+      const c = document.getElementById('gestor-panels-container');
+      if (c.children.length > 3) {
+          if(index > 0 && index <= c.children.length) {
+               c.removeChild(c.children[index-1]);
+               renderGestorPanels(c.children.length);
+          } else {
+               c.removeChild(c.lastChild);
+a              document.getElementById('num-gestores-display').textContent = c.children.length;
+               updateGestorButtons();
+          }
+      }
+  }
 
-  function updateGestorButtons() { 
-      const c = document.getElementById('gestor-panels-container'); const count = c.children.length; 
-      document.querySelector('#gestor-controls button:nth-of-type(1)').disabled = count >= 7; 
-      document.querySelector('#gestor-controls button:nth-of-type(2)').disabled = count <= 3; 
-  }
+  function updateGestorButtons() { 
+      const c = document.getElementById('gestor-panels-container'); const count = c.children.length; 
+      document.querySelector('#gestor-controls button:nth-of-type(1)').disabled = count >= 7; 
+      document.querySelector('#gestor-controls button:nth-of-type(2)').disabled = count <= 3; 
+  }
 
-  function createAdminInput(dimKey, gestorId) {
-    const uniqueId = `${gestorId}-${dimKey}`;
-    const desc = DIMENSION_DESCRIPTIONS[dimKey].desc; 
-    const label_low = DIMENSION_DESCRIPTIONS[dimKey].label_low; 
-    const label_high = DIMENSION_DESCRIPTIONS[dimKey].label_high;
-    
-    return `
-    <div class="dimensao-admin">
-        <div class="label-row"> 
-            <label for="${uniqueId}">${DIM_KEYS.indexOf(dimKey) + 1}. ${dimKey}</label> 
-            <input type="number" id="${uniqueId}" data-key="${dimKey}" min="0" max="100" value="10" oninput="updateAdminTotal('${gestorId}')"> 
-        </div>
-        <p class="desc">${desc}</p>
-        <p class="scale-desc"><strong>0</strong> = ${label_low} &harr; <strong>50</strong> = Equilíbrio &harr; <strong>100</strong> = ${label_high}</p>
-    </div>`;
-  }
+  function createAdminInput(dimKey, gestorId) {
+    const uniqueId = `${gestorId}-${dimKey}`;
+    const desc = DIMENSION_DESCRIPTIONS[dimKey].desc; 
+    const label_low = DIMENSION_DESCRIPTIONS[dimKey].label_low; 
+    const label_high = DIMENSION_DESCRIPTIONS[dimKey].label_high;
+    
+    return `
+    <div class="dimensao-admin">
+        <div class="label-row"> 
+            <label for="${uniqueId}">${DIM_KEYS.indexOf(dimKey) + 1}. ${dimKey}</label> 
+            <input type="number" id="${uniqueId}" data-key="${dimKey}" min="0" max="100" value="10" oninput="updateAdminTotal('${gestorId}')"> 
+        </div>
+        <p class="desc">${desc}</p>
+        <p class="scale-desc"><strong>0</strong> = ${label_low} &harr; <strong>50</strong> = Equilíbrio &harr; <strong>100</strong> = ${label_high}</p>
+    </div>`;
+  }
 
-  function updateAdminTotal(gestorId) {
-      let total = 0; 
-      document.querySelectorAll(`#${gestorId} input[type=number]`).forEach(i => { total += parseInt(i.value, 10) || 0; });
-      const totalEl = document.getElementById(`total-${gestorId}`);
-      if(totalEl){ 
-          totalEl.textContent = `Total: ${total} / 100`; 
-          totalEl.classList.toggle('valid', total === 100); 
-          totalEl.classList.toggle('invalid', total !== 100); 
-      }
-      return total; 
-  }
+  function updateAdminTotal(gestorId) {
+      let total = 0; 
+      document.querySelectorAll(`#${gestorId} input[type=number]`).forEach(i => { total += parseInt(i.value, 10) || 0; });
+      const totalEl = document.getElementById(`total-${gestorId}`);
+      if(totalEl){ 
+          totalEl.textContent = `Total: ${total} / 100`; 
+          totalEl.classList.toggle('valid', total === 100); 
+          totalEl.classList.toggle('invalid', total !== 100); 
+      }
+      return total; 
+  }
 
-  function getAdminPerfil(gestorId) {
-      const p = {}; 
-      document.querySelectorAll(`#${gestorId} input[type=number]`).forEach(i => { p[i.getAttribute('data-key')] = parseInt(i.value, 10); }); 
-      return p;
-  }
+  function getAdminPerfil(gestorId) {
+      const p = {}; 
+      document.querySelectorAll(`#${gestorId} input[type=number]`).forEach(i => { p[i.getAttribute('data-key')] = parseInt(i.value, 10); }); 
+      return p;
+  }
 
-  function salvarAlvo() {
-      const empresaNome = document.getElementById('empresa-nome').value;
-      const recruiterPhone = RECRUITER_PHONE; 
-      
-      if (!empresaNome || empresaNome.trim() === "") {
-          alert('Erro: Por favor, preencha o Nome da Empresa.');
-          document.getElementById('empresa-nome').focus();
-          return;
-      }
+  function salvarAlvo() {
+      const empresaNome = document.getElementById('empresa-nome').value;
+      const recruiterPhone = RECRUITER_PHONE; 
+      
+      if (!empresaNome || empresaNome.trim() === "") {
+          alert('Erro: Por favor, preencha o Nome da Empresa.');
+          document.getElementById('empresa-nome').focus();
+          return;
+      }
 
-      const gestorCards = document.querySelectorAll('#gestor-panels-container .gestor-card'); 
-      const profiles = [];
-      const numGestores = gestorCards.length; 
+      const gestorCards = document.querySelectorAll('#gestor-panels-container .gestor-card'); 
+      const profiles = [];
+      const numGestores = gestorCards.length; 
 
-      if (numGestores < 3) {
-          alert('Erro: São necessários no mínimo 3 gestores para calcular a mediana.');
-          return;
-      }
+      if (numGestores < 3) {
+          alert('Erro: São necessários no mínimo 3 gestores para calcular a mediana.');
+          return;
+      }
 
-      for (const card of gestorCards) {
-          const id = card.id;
-          const total = updateAdminTotal(id);
-          if (total !== 100) {
-              const gestorNome = card.querySelector('h3').textContent || `(ID: ${id})`;
-              alert(`Erro de Validação!\nO ${gestorNome} está com Total ${total}.\nO total DEVE ser 100.`);
-              card.style.borderColor = 'var(--color-low)';
-              card.style.boxShadow = '0 0 10px var(--color-low)';
-              return; 
-          }
-          card.style.borderColor = '#fff';
-          card.style.boxShadow = 'var(--shadow)';
-          profiles.push(getAdminPerfil(id));
-      }
+      for (const card of gestorCards) {
+          const id = card.id;
+          const total = updateAdminTotal(id);
+          if (total !== 100) {
+              const gestorNome = card.querySelector('h3').textContent || `(ID: ${id})`;
+              alert(`Erro de Validação!\nO ${gestorNome} está com Total ${total}.\nO total DEVE ser 100.`);
+              card.style.borderColor = 'var(--color-low)';
+              card.style.boxShadow = '0 0 10px var(--color-low)';
+              return; 
+          }
+          card.style.borderColor = '#fff';
+          card.style.boxShadow = 'var(--shadow)';
+          profiles.push(getAdminPerfil(id));
+      }
 
-      const alvoMediana = {}; 
-      DIM_KEYS.forEach(k => { 
-          const v = profiles.map(p => p[k]).sort((a,b)=>a-b); 
-          const mid = Math.floor(v.length / 2); 
-          alvoMediana[k] = v.length % 2 !== 0 ? Math.round(v[mid]) : Math.round((v[mid - 1] + v[mid]) / 2); 
-      });
-      
-      const alvoParaSalvar = { 
-            type: "cultural-target", 
-            profile: alvoMediana, 
-            empresaNome: empresaNome,
-            recruiterPhone: recruiterPhone,
-            numGestores: numGestores 
-      };
-      
-      try {
-        localStorage.setItem(ALVO_KEY, JSON.stringify(alvoParaSalvar));
+      const alvoMediana = {}; 
+      DIM_KEYS.forEach(k => { 
+          const v = profiles.map(p => p[k]).sort((a,b)=>a-b); 
+          const mid = Math.floor(v.length / 2); 
+          alvoMediana[k] = v.length % 2 !== 0 ? Math.round(v[mid]) : Math.round((v[mid - 1] + v[mid]) / 2); 
+      });
+      
+      const alvoParaSalvar = { 
+            type: "cultural-target", 
+            profile: alvoMediana, 
+            empresaNome: empresaNome,
+            recruiterPhone: recruiterPhone,
+            numGestores: numGestores 
+      };
+      
+      try {
+        localStorage.setItem(ALVO_KEY, JSON.stringify(alvoParaSalvar));
 
-        const tabela = document.getElementById('alvo-tabela');
-        if(tabela){ tabela.innerHTML = '<thead><tr><th>Dimensão</th><th>Pontos (Mediana)</th></tr></thead><tbody>' + DIM_KEYS.map(k => `<tr style="border-bottom: 1px solid #eee;"><td>${k}</td><td>${alvoMediana[k]}</td></tr>`).join('') + '</tbody>'; }
-        
-        renderAlvoQualitativeReport(alvoMediana, empresaNome, numGestores);
+        const tabela = document.getElementById('alvo-tabela');
+        if(tabela){ tabela.innerHTML = '<thead><tr><th>Dimensão</th><th>Pontos (Mediana)</th></tr></thead><tbody>' + DIM_KEYS.map(k => `<tr style="border-bottom: 1px solid #eee;"><td>${k}</td><td>${alvoMediana[k]}</td></tr>`).join('') + '</tbody>'; }
+        
+        renderAlvoQualitativeReport(alvoMediana, empresaNome, numGestores);
 
-        document.getElementById('alvo-calculado')?.classList.remove('hidden');
-        gerarLinkCandidato(); // Atualiza o link
-        alert('Alvo (Mediana) salvo com sucesso no navegador!');
-      
-      } catch (e) {
-          alert('Erro ao salvar o alvo no armazenamento local.');
-          console.error("Erro localStorage:", e);
-      }
-  }
+        document.getElementById('alvo-calculado')?.classList.remove('hidden');
+        gerarLinkCandidato(); // Atualiza o link
+        alert('Alvo (Mediana) salvo com sucesso no navegador!');
+      
+      } catch (e) {
+          alert('Erro ao salvar o alvo no armazenamento local.');
+section       console.error("Erro localStorage:", e);
+      }
+  }
 
-  function renderAlvoQualitativeReport(alvoProfile, empresaNome, numGestores) {
-      document.getElementById('alvo-empresa-nome').textContent = empresaNome;
-      document.getElementById('alvo-num-gestores').textContent = numGestores;
+  function renderAlvoQualitativeReport(alvoProfile, empresaNome, numGestores) {
+      document.getElementById('alvo-empresa-nome').textContent = empresaNome;
+      document.getElementById('alvo-num-gestores').textContent = numGestores;
 
-      const container = document.getElementById('alvo-qualitativo-report');
-      if (!container) return;
-      
-      const scored = [];
-      DIM_KEYS.forEach(key => scored.push({ key: key, score: alvoProfile[key] }));
-      scored.sort((a, b) => b.score - a.score); 
+      const container = document.getElementById('alvo-qualitativo-report');
+      if (!container) return;
+      
+      const scored = [];
+      DIM_KEYS.forEach(key => scored.push({ key: key, score: alvoProfile[key] }));
+      scored.sort((a, b) => b.score - a.score); 
 
-      let html = '<h3 class="report-section-title" style="margin-top: 0;">Perfil da Cultura Alvo</h3>';
-      html += '<div class="report-grid"><div class="report-card" style="background: #f0fdf4;"><h4>Principais Focos da Cultura (Notas Altas)</h4><ul>';
-      scored.slice(0, 3).forEach(i => {
-          html += `<li><strong>Foco em ${i.key} (${i.score.toFixed(0)} pts):</strong> ${DIMENSION_DESCRIPTIONS[i.key].alto}</li>`;
-      });
-      html += '</ul></div><div class="report-card" style="background: #fffbeb;"><h4>Principais Focos de Otimização (Notas Baixas)</h4><ul>';
-      scored.slice(-3).reverse().forEach(i => {
-          html += `<li><strong>Foco em ${i.key} (${i.score.toFixed(0)} pts):</strong> ${DIMENSION_DESCRIPTIONS[i.key].baixo}</li>`;
-      });
-      html += '</ul></div></div>';
-      container.innerHTML = html;
-  }
-  
-  // ******** CORREÇÃO v17.7 APLICADA AQUI ********
-  
-  // Nova função para criar Base64 URL-Safe
-  function base64UrlEncode(str) {
-      return btoa(str)
-          .replace(/\+/g, '-') // Substitui '+' por '-'
-          .replace(/\//g, '_') // Substitui '/' por '_'
-          .replace(/=+$/, ''); // Remove padding '='
-  }
-  
-  function gerarLinkCandidato() {
-      const linkInput = document.getElementById('candidate-link'); 
-      
-      let dataParaLink;
-      try {
-          const alvoData = JSON.parse(localStorage.getItem(ALVO_KEY));
-          
-          dataParaLink = {
-              profile: alvoData.profile,
-              empresaNome: alvoData.empresaNome
-          }
+      let html = '<h3 class="report-section-title" style="margin-top: 0;">Perfil da Cultura Alvo</h3>';
+      html += '<div class="report-grid"><div class="report-card" style="background: #f0fdf4;"><h4>Principais Focos da Cultura (Notas Altas)</h4><ul>';
+      scored.slice(0, 3).forEach(i => {
+          html += `<li><strong>Foco em ${i.key} (${i.score.toFixed(0)} pts):</strong> ${DIMENSION_DESCRIPTIONS[i.key].alto}</li>`;
+      });
+      html += '</ul></div><div class="report-card" style="background: #fffbeb;"><h4>Principais Focos de Otimização (Notas Baixas)</h4><ul>';
+      scored.slice(-3).reverse().forEach(i => {
+          html += `<li><strong>Foco em ${i.key} (${i.score.toFixed(0)} pts):</strong> ${DIMENSION_DESCRIPTIONS[i.key].baixo}</li>`;
+      });
+      html += '</ul></div></div>';
+      container.innerHTML = html;
+  }
+  
+  // ******** CORREÇÃO v17.7 APLICADA AQUI ********
+  
+  // Nova função para criar Base64 URL-Safe
+  function base64UrlEncode(str) {
+      return btoa(str)
+          .replace(/\+/g, '-') // Substitui '+' por '-'
+          .replace(/\//g, '_') // Substitui '/' por '_'
+          .replace(/=+$/, ''); // Remove padding '='
+  }
+  
+  function gerarLinkCandidato() {
+      const linkInput = document.getElementById('candidate-link'); 
+      
+      let dataParaLink;
+      try {
+          const alvoData = JSON.parse(localStorage.getItem(ALVO_KEY));
+          
+          dataParaLink = {
+              profile: alvoData.profile,
+              empresaNome: alvoData.empresaNome
+          }
 
-          if (!dataParaLink || !dataParaLink.profile) {
-              throw new Error("Alvo não encontrado ou inválido no localStorage.");
-          }
-      } catch (e) {
-          console.error(e);
-          linkInput.value = "Erro: Salve o Alvo primeiro.";
-          return;
-      }
-      
-      if (linkInput && dataParaLink) { 
-          const alvoString = JSON.stringify(dataParaLink);
-          
-          // A CORREÇÃO: Usamos a nova função de encode URL-Safe
-          const alvoUrlSafe = base64UrlEncode(alvoString); 
-          
-          let link = window.location.href.split('?')[0]; 
-          linkInput.value = `${link}?mode=candidate&target=${alvoUrlSafe}`; 
-      }
-  }
-  // ************************************************
+          if (!dataParaLink || !dataParaLink.profile) {
+section           throw new Error("Alvo não encontrado ou inválido no localStorage.");
+          }
+      } catch (e) {
+          console.error(e);
+          linkInput.value = "Erro: Salve o Alvo primeiro.";
+          return;
+      }
+      
+      if (linkInput && dataParaLink) { 
+          const alvoString = JSON.stringify(dataParaLink);
+          
+          // A CORREÇÃO: Usamos a nova função de encode URL-Safe
+          const alvoUrlSafe = base64UrlEncode(alvoString); 
+          
+          let link = window.location.href.split('?')[0]; 
+          linkInput.value = `${link}?mode=candidate&target=${alvoUrlSafe}`; 
+      }
+  }
+  // ************************************************
 
-  function copiarLink() {
-      gerarLinkCandidato(); 
-      const linkInput = document.getElementById('candidate-link'); 
-      if (linkInput.value.includes('...')) {
-          alert('Por favor, salve o alvo primeiro para gerar o link completo.');
-          return;
-      }
-      linkInput.select(); 
-      document.execCommand('copy'); 
-      alert('Link copiado!'); 
-  }
+  function copiarLink() {
+      gerarLinkCandidato(); 
+      const linkInput = document.getElementById('candidate-link'); 
+      if (linkInput.value.includes('...')) {
+          alert('Por favor, salve o alvo primeiro para gerar o link completo.');
+section           return;
+      }
+      linkInput.select(); 
+      document.execCommand('copy'); 
+      alert('Link copiado!'); 
+  }
 
-  // --- LÓGICA DO PASSO 2: WIZARD CANDIDATO ---
+  // --- LÓGICA DO PASSO 2: WIZARD CANDIDATO ---
 
-  function renderWizardQuestion(index) {
-      const block = QUESTION_BLOCKS[index]; 
-      const body = document.getElementById('wizard-body'); 
-      if (!body) return; body.innerHTML = '';
-      
-      block.forEach((item, i) => { 
-          const id = `q${index}-i${i}`; const tr = document.createElement('tr'); 
-          tr.innerHTML = `<td><input type="radio" id="most-${id}" name="most-${index}" value="${i}"></td><td><label for="most-${id}" onclick="document.getElementById('most-${id}').checked = true; document.getElementById('most-${id}').dispatchEvent(new Event('change'));">${item.text}</label></td><td><input type="radio" id="least-${id}" name="least-${index}" value="${i}"></td>`; 
-          body.appendChild(tr); 
-      });
-      
-      document.getElementById('wizard-question-title').textContent = `Bloco ${index + 1} de ${QUESTION_BLOCKS.length}`;
-      document.getElementById('wizard-progress-bar').style.width = `${((index + 1) / QUESTION_BLOCKS.length) * 100}%`;
-      document.getElementById('btn-next').textContent = (index === QUESTION_BLOCKS.length - 1) ? 'Finalizar e Gerar Relatório' : 'Próximo →';
-      
-      document.querySelectorAll(`#wizard-body input[type=radio]`).forEach(r => { 
-          r.onchange = (e) => { 
-              if (!e.target.checked) return;
-              const n = e.target.name, v = e.target.value; 
-              const other = n.startsWith('most')?'least':'most'; 
-              const otherRadio = document.querySelector(`input[name=${other}-${index}][value="${v}"]`); 
-              if (otherRadio?.checked) otherRadio.checked = false; 
-          }; 
-      });
-  }
+  function renderWizardQuestion(index) {
+      const block = QUESTION_BLOCKS[index]; 
+      const body = document.getElementById('wizard-body'); 
+      if (!body) return; body.innerHTML = '';
+      
+      block.forEach((item, i) => { 
+          const id = `q${index}-i${i}`; const tr = document.createElement('tr'); 
+          tr.innerHTML = `<td><input type="radio" id="most-${id}" name="most-${index}" value="${i}"></td><td><label for="most-${id}" onclick="document.getElementById('most-${id}').checked = true; document.getElementById('most-${id}').dispatchEvent(new Event('change'));">${item.text}</label></td><td><input type="radio" id="least-${id}" name="least-${index}" value="${i}"></td>`; 
+          body.appendChild(tr); 
+      });
+      
+      document.getElementById('wizard-question-title').textContent = `Bloco ${index + 1} de ${QUESTION_BLOCKS.length}`;
+      document.getElementById('wizard-progress-bar').style.width = `${((index + 1) / QUESTION_BLOCKS.length) * 100}%`;
+      document.getElementById('btn-next').textContent = (index === QUESTION_BLOCKS.length - 1) ? 'Finalizar e Gerar Relatório' : 'Próximo →';
+      
+      document.querySelectorAll(`#wizard-body input[type=radio]`).forEach(r => { 
+          r.onchange = (e) => { 
+              if (!e.target.checked) return;
+              const n = e.target.name, v = e.target.value;content               const other = n.startsWith('most')?'least':'most'; 
+              const otherRadio = document.querySelector(`input[name=${other}-${index}][value="${v}"]`); 
+              if (otherRadio?.checked) otherRadio.checked = false; 
+          }; 
+      });
+  }
 
-  function nextQuestion() {
-      const err = document.getElementById('wizard-error'); 
-      const most = document.querySelector(`input[name=most-${currentQuestion}]:checked`); 
-      const least = document.querySelector(`input[name=least-${currentQuestion}]:checked`);
-      
-      if (!most || !least) { 
-          if(err) err.style.display = 'block'; return; 
-      } 
-      if(err) err.style.display = 'none';
-      
-      const block = QUESTION_BLOCKS[currentQuestion], mostItem = block[most.value], leastItem = block[least.value];
-      candidateRawScores[mostItem.dim] += (mostItem.isInverted ? -1 : 1); 
-      candidateRawScores[leastItem.dim] += (leastItem.isInverted ? 1 : -1);
-      
-      currentQuestion++;
-      
-      if (currentQuestion < QUESTION_BLOCKS.length) {
-          renderWizardQuestion(currentQuestion);
-      } else {
-          try {
-              const dataPayload = { 
-                  type: "cultural-profile", 
-                  profile: candidateRawScores 
-              };
-              localStorage.setItem(CANDIDATO_KEY, JSON.stringify(dataPayload));
-              
-              togglePage('page-candidate-loading');
-              
-              setTimeout(() => {
-                  window.location.search = '?mode=report';
-              }, 1500); 
-              
-          } catch(e) {
-              alert("Houve um erro ao salvar suas respostas. Tente novamente.");
-              console.error("Erro localStorage:", e);
-          }
-      }
-  }
-  
+  function nextQuestion() {
+      const err = document.getElementById('wizard-error'); 
+      const most = document.querySelector(`input[name=most-${currentQuestion}]:checked`); 
+      const least = document.querySelector(`input[name=least-${currentQuestion}]:checked`);
+      
+      if (!most || !least) { 
+          if(err) err.style.display = 'block'; return; 
+      } 
+      if(err) err.style.display = 'none';
+      
+      const block = QUESTION_BLOCKS[currentQuestion], mostItem = block[most.value], leastItem = block[least.value];
+      candidateRawScores[mostItem.dim] += (mostItem.isInverted ? -1 : 1); 
+      candidateRawScores[leastItem.dim] += (leastItem.isInverted ? 1 : -1);
+      
+      currentQuestion++;
+      
+      if (currentQuestion < QUESTION_BLOCKS.length) {
+          renderWizardQuestion(currentQuestion);
+      } else {
+          try {
+              const dataPayload = { 
+                  type: "cultural-profile", 
+                  profile: candidateRawScores 
+              };
+              localStorage.setItem(CANDIDATO_KEY, JSON.stringify(dataPayload));
+              
+              togglePage('page-candidate-loading');
+              
+              setTimeout(() => {
+                  window.location.search = '?mode=report';
+              }, 1500); 
+              
+          } catch(e) {
+              alert("Houve um erro ao salvar suas respostas. Tente novamente.");
+              console.error("Erro localStorage:", e);
+          }
+      }
+  }
+  
 
-  // --- LÓGICA DO PASSO 3: RELATÓRIO (FINAL DO CANDIDATO) ---
+  // --- LÓGICA DO PASSO 3: RELATÓRIO (FINAL DO CANDIDATO) ---
 
-  function normalizeProfileToPercent(profile) {
-      const scores = Object.values(profile); 
-      const min = Math.min(...scores); 
-      const max = Math.max(...scores); 
-      const range = max - min; 
-      if (range === 0) return DIM_KEYS.reduce((acc, key) => { acc[key] = 50; return acc; }, {}); 
-      const norm = {}; 
-      DIM_KEYS.forEach(key => { norm[key] = Math.round(((profile[key] - min) / range) * 100); }); 
-      return norm;
-  }
-  
-  function getArchetype(profile) {
-      const scored = Object.keys(profile).map(key => ({ key, score: profile[key] })).sort((a, b) => b.score - a.score);
-      const top1 = scored[0].key;
-      const top2 = scored[1].key;
-      
-      if (["Resultado", "Ritmo"].includes(top1) && ["Resultado", "Ritmo"].includes(top2)) {
-          return { title: "Executor(a) Ágil", desc: "Perfil orientado para a entrega rápida e eficiente de metas, prosperando em ambientes de alta velocidade." };
-      }
-      if (["Inovação", "Aprendizado"].includes(top1) && ["Inovação", "Aprendizado"].includes(top2)) {
-          return { title: "Experimentador(a) Criativo(a)", desc: "Perfil focado em criar o novo e aprender com os erros, valorizando a experimentação e a ruptura." };
-      }
-      if (["Estrutura", "Cliente"].includes(top1) && ["Estrutura", "Cliente"].includes(top2)) {
-          return { title: "Especialista em Processos", desc: "Perfil que valoriza a previsibilidade e a eficiência, com foco em otimizar a jornada do cliente ou a operação." };
-      }
-      if (["Colaboração", "Comunicação"].includes(top1) && ["Colaboração", "Comunicação"].includes(top2)) {
-          return { title: "Conector(a) de Equipe", desc: "Perfil que atua como um facilitador, valorizando a transparência, o trabalho em equipe e a inclusão de ideias." };
-      }
-      if (["Autonomia", "Inovação"].includes(top1) && ["Autonomia", "Inovação"].includes(top2)) {
-          return { title: "Pioneiro(a) Independente", desc: "Perfil 'desbravador', que prefere ter liberdade para explorar novas ideias e tomar decisões por conta própria." };
-      }
-      
-      switch(top1) {
-          case "Resultado": return { title: "Foco em Resultado", desc: "A principal motivação é a entrega de metas e o atingimento de objetivos." };
-          case "Autonomia": return { title: "Foco em Autonomia", desc: "A principal motivação é a liberdade para tomar decisões e executar o trabalho." };
-          case "Estrutura": return { title: "Foco em Estrutura", desc: "A principal motivação é um ambiente claro, previsível e com regras definidas." };
-          case "Colaboração": return { title: "Foco em Colaboração", desc: "A principal motivação é o trabalho em equipe e o sucesso coletivo." };
-          default: return { title: "Perfil Equilibrado", desc: "Perfil com preferências distribuídas, capaz de se adaptar a diferentes contextos." };
-      }
-  }
+  function normalizeProfileToPercent(profile) {
+      const scores = Object.values(profile); 
+      const min = Math.min(...scores); 
+      const max = Math.max(...scores); 
+      const range = max - min; 
+      if (range === 0) return DIM_KEYS.reduce((acc, key) => { acc[key] = 50; return acc; }, {}); 
+      const norm = {}; 
+      DIM_KEYS.forEach(key => { norm[key] = Math.round(((profile[key] - min) / range) * 100); }); 
+      return norm;
+  }
+  
+  function getArchetype(profile) {
+      const scored = Object.keys(profile).map(key => ({ key, score: profile[key] })).sort((a, b) => b.score - a.score);
+      const top1 = scored[0].key;
+      const top2 = scored[1].key;
+      
+      if (["Resultado", "Ritmo"].includes(top1) && ["Resultado", "Ritmo"].includes(top2)) {
+          return { title: "Executor(a) Ágil", desc: "Perfil orientado para a entrega rápida e eficiente de metas, prosperando em ambientes de alta velocidade." };
+      }
+      if (["Inovação", "Aprendizado"].includes(top1) && ["Inovação", "Aprendizado"].includes(top2)) {
+          return { title: "Experimentador(a) Criativo(a)", desc: "Perfil focado em criar o novo e aprender com os erros, valorizando a experimentação e a ruptura." };
+      }
+      if (["Estrutura", "Cliente"].includes(top1) && ["Estrutura", "Cliente"].includes(top2)) {
+          return { title: "Especialista em Processos", desc: "Perfil que valoriza a previsibilidade e a eficiência, com foco em otimizar a jornada do cliente ou a operação." };
+      }
+      if (["Colaboração", "Comunicação"].includes(top1) && ["Colaboração", "Comunicação"].includes(top2)) {
+          return { title: "Conector(a) de Equipe", desc: "Perfil que atua como um facilitador, valorizando a transparência, o trabalho em equipe e a inclusão de ideias." };
+      }
+      if (["Autonomia", "Inovação"].includes(top1) && ["Autonomia", "Inovação"].includes(top2)) {
+          return { title: "Pioneiro(a) Independente", desc: "Perfil 'desbravador', que prefere ter liberdade para explorar novas ideias e tomar decisões por conta própria." };
+      }
+      
+      switch(top1) {
+          case "Resultado": return { title: "Foco em Resultado", desc: "A principal motivação é a entrega de metas e o atingimento de objetivos." };
+section           case "Autonomia": return { title: "Foco em Autonomia", desc: "A principal motivação é a liberdade para tomar decisões e executar o trabalho." };
+          case "Estrutura": return { title: "Foco em Estrutura", desc: "A principal motivação é um ambiente claro, previsível e com regras definidas." };
+          case "Colaboração": return { title: "Foco em Colaboração", desc: "A principal motivação é o trabalho em equipe e o sucesso coletivo." };
+          default: return { title: "Perfil Equilibrado", desc: "Perfil com preferências distribuídas, capaz de se adaptar a diferentes contextos." };
+      }
+  }
 
-  function gerarRelatorio() {
-      let loadedAlvoData, loadedCandidatoData, candidateName;
-      
-      try {
-        loadedAlvoData = JSON.parse(localStorage.getItem(ALVO_KEY));
-        loadedCandidatoData = JSON.parse(localStorage.getItem(CANDIDATO_KEY));
-        candidateName = localStorage.getItem(CANDIDATO_NAME_KEY) || "Candidato não informado";
-      } catch (e) {
-          alert("Erro ao ler os dados salvos. Tente refazer o teste.");
-          return;
-      }
+  function gerarRelatorio() {
+      let loadedAlvoData, loadedCandidatoData, candidateName;
+      
+      try {
+        loadedAlvoData = JSON.parse(localStorage.getItem(ALVO_KEY));
+        loadedCandidatoData = JSON.parse(localStorage.getItem(CANDIDATO_KEY));
+        candidateName = localStorage.getItem(CANDIDATO_NAME_KEY) || "Candidato não informado";
+      } catch (e) {
+          alert("Erro ao ler os dados salvos. Tente refazer o teste.");
+          return;
+      }
 
-      if (!loadedAlvoData || !loadedCandidatoData) { 
-          alert("Dados faltando. Certifique-se de que o link estava correto e o teste foi finalizado."); 
-          return; 
-      }
-      
-      document.getElementById('report-loader-card').classList.add('hidden');
-      document.getElementById('report-container')?.classList.remove('hidden');
-      
-      const alvo = loadedAlvoData.profile; 
-      const empresaNome = loadedAlvoData.empresaNome || 'A Empresa';
-      const candidato_raw = loadedCandidatoData.profile;
-      const candidato_0_100 = normalizeProfileToPercent(candidato_raw);
-      
-      let totalDelta = 0; 
-      DIM_KEYS.forEach(key => { 
-          const alvoScore = alvo[key] || 0;
-          const candScore = candidato_0_100[key] || 0;
-          totalDelta += Math.abs(alvoScore - candScore); 
-      }); 
-      
-      const fitScore = 100 - (totalDelta / 10);
-      
-      document.getElementById('report-candidate-name').textContent = `Candidato: ${candidateName}`;
-      
-      document.getElementById('fit-score').textContent = `${Math.max(0, fitScore).toFixed(0)}%`;
-      document.getElementById('report-fit-subtitle').textContent = `Análise de aderência entre seu perfil e o alvo da '${empresaNome}'.`;
+      if (!loadedAlvoData || !loadedCandidatoData) {s           alert("Dados faltando. Certifique-se de que o link estava correto e o teste foi finalizado."); 
+          return; 
+      }
+      
+      document.getElementById('report-loader-card').classList.add('hidden');
+      document.getElementById('report-container')?.classList.remove('hidden');
+      
+      const alvo = loadedAlvoData.profile; 
+      const empresaNome = loadedAlvoData.empresaNome || 'A Empresa';
+    f   const candidato_raw = loadedCandidatoData.profile;
+      const candidato_0_100 = normalizeProfileToPercent(candidato_raw);
+      
+      let totalDelta = 0; 
+      DIM_KEYS.forEach(key => { 
+          const alvoScore = alvo[key] || 0;
+section           const candScore = candidato_0_100[key] || 0;
+          totalDelta += Math.abs(alvoScore - candScore); 
+      }); 
+      
+      const fitScore = 100 - (totalDelta / 10);
+      
+      document.getElementById('report-candidate-name').textContent = `Candidato: ${candidateName}`;
+      
+      document.getElementById('fit-score').textContent = `${Math.max(0, fitScore).toFixed(0)}%`;
+      document.getElementById('report-fit-subtitle').textContent = `Análise de aderência entre seu perfil e o alvo da '${empresaNome}'.`;
 
-      renderRecruiterRadarChart(DIM_KEYS.map(k=>alvo[k] || 0), DIM_KEYS.map(k=>candidato_0_100[k] || 0)); 
-      renderQualitativeReport(candidato_0_100, alvo);
-  }
+      renderRecruiterRadarChart(DIM_KEYS.map(k=>alvo[k] || 0), DIM_KEYS.map(k=>candidato_0_100[k] || 0)); 
+      renderQualitativeReport(candidato_0_100, alvo);
+  }
 
-  function renderRecruiterRadarChart(alvoData, candidatoData) {
-      const canvas = document.getElementById('recruiter-radar-chart'); if (!canvas) return; 
-      const ctx = canvas.getContext('2d'); 
-      if (recruiterRadarChart) recruiterRadarChart.destroy();
-      recruiterRadarChart = new Chart(ctx, { 
-          type: 'radar', 
-          data: { 
-              labels: DIM_KEYS, 
-              datasets: [ 
-                  { label: 'Alvo da Empresa', data: alvoData, fill: true, backgroundColor: 'rgba(255, 102, 0, 0.2)', borderColor: 'rgb(255, 102, 0)', pointBackgroundColor: 'rgb(255, 102, 0)'}, 
-                  { label: 'Seu Perfil', data: candidatoData, fill: true, backgroundColor: 'rgba(21, 101, 192, 0.2)', borderColor: 'rgb(21, 101, 192)', pointBackgroundColor: 'rgb(21, 101, 192)'} 
-              ]
-          }, 
-          options: { 
-              responsive: true, maintainAspectRatio: false, 
-              scales: { r: { suggestedMin: 0, suggestedMax: 100, pointLabels: { font: { size: 11 } } } }, 
-              plugins: { legend: { position: 'top' } } 
-          } 
-      });
-  }
+  function renderRecruiterRadarChart(alvoData, candidatoData) {
+      const canvas = document.getElementById('recruiter-radar-chart'); if (!canvas) return;t       const ctx = canvas.getContext('2d'); 
+      if (recruiterRadarChart) recruiterRadarChart.destroy();
+      recruiterRadarChart = new Chart(ctx, { 
+          type: 'radar', 
+          data: { 
+              labels: DIM_KEYS,s               datasets: [ 
+                  { label: 'Alvo da Empresa', data: alvoData, fill: true, backgroundColor: 'rgba(255, 102, 0, 0.2)', borderColor: 'rgb(255, 102, 0)', pointBackgroundColor: 'rgb(255, 102, 0)'}, 
+                  { label: 'Seu Perfil', data: candidatoData, fill: true, backgroundColor: 'rgba(21, 101, 192, 0.2)', borderColor: 'rgb(21, 101, 192)', pointBackgroundColor: 'rgb(21, 101, 192)'} 
+              ]
+          }, 
+          options: { 
+              responsive: true, maintainAspectRatio: false, 
+              scales: { r: { suggestedMin: 0, suggestedMax: 100, pointLabels: { font: { size: 11 } } } }, 
+              plugins: { legend: { position: 'top' } } 
+          } 
+      });
+  }
 
-  function renderQualitativeReport(candidato, alvo) {
-      const scored = []; 
-      DIM_KEYS.forEach(key => { 
-          const alvoScore = alvo[key] || 0;
-          const candScore = candidato[key] || 0;
-          scored.push({ 
-              key: key, 
-              candScore: candScore, 
-              alvoScore: alvoScore, 
-              diff: candScore - alvoScore 
-          }); 
-      });
-      
-      const perfilOrd = [...scored].sort((a, b) => b.candScore - a.candScore); 
-      const ulPerfil = document.getElementById('report-perfil'); 
-      ulPerfil.innerHTML = '';
-      
-      const archetype = getArchetype(candidato);
-      document.getElementById('recruiter-archetype-title').textContent = `Seu Arquétipo: ${archetype.title}`;
-      document.getElementById('recruiter-archetype-desc').textContent = archetype.desc;
-      
-      ulPerfil.innerHTML += '<li style="list-style: none; font-weight: 700; margin-bottom: 5px;">Você tende a priorizar:</li>';
-      perfilOrd.slice(0, 3).forEach(i => {
-          ulPerfil.innerHTML += `<li><strong>${i.key}:</strong> ${DIMENSION_DESCRIPTIONS[i.key].alto}</li>`;
-      });
-      ulPerfil.innerHTML += '<li style="list-style: none; font-weight: 700; margin-top: 15px; margin-bottom: 5px;">Você tende a preferir ambientes com menos:</li>';
-      perfilOrd.slice(-3).reverse().forEach(i => {
-          ulPerfil.innerHTML += `<li><strong>${i.key}:</strong> ${DIMENSION_DESCRIPTIONS[i.key].baixo}</li>`;
-      });
+  function renderQualitativeReport(candidato, alvo) {
+s       const scored = []; 
+      DIM_KEYS.forEach(key => { 
+          const alvoScore = alvo[key] || 0;
+          const candScore = candidato[key] || 0;
+          scored.push({ 
+              key: key, 
+              candScore: candScore, 
+              alvoScore: alvoScore, 
+              diff: candScore - alvoScore 
+          }); 
+      });
+      
+      const perfilOrd = [...scored].sort((a, b) => b.candScore - a.candScore);s       const ulPerfil = document.getElementById('report-perfil'); 
+      ulPerfil.innerHTML = '';
+      
+      const archetype = getArchetype(candidato);
+      document.getElementById('recruiter-archetype-title').textContent = `Seu Arquétipo: ${archetype.title}`;
+      document.getElementById('recruiter-archetype-desc').textContent = archetype.desc;
+      
+      ulPerfil.innerHTML += '<li style="list-style: none; font-weight: 700; margin-bottom: 5px;">Você tende a priorizar:</li>';
+      perfilOrd.slice(0, 3).forEach(i => {
+          ulPerfil.innerHTML += `<li><strong>${i.key}:</strong> ${DIMENSION_DESCRIPTIONS[i.key].alto}</li>`;
+      });
+      ulPerfil.innerHTML += '<li style="list-style: none; font-weight: 700; margin-top: 15px; margin-bottom: 5px;">Você tende a preferir ambientes com menos:</li>';
+      perfilOrd.slice(-3).reverse().forEach(i => {
+          ulPerfil.innerHTML += `<li><strong>${i.key}:</strong> ${DIMENSION_DESCRIPTIONS[i.key].baixo}</li>`;
+      });
 
-      const gapsOrd = [...scored].sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff)); 
-      const ulAderencia = document.getElementById('report-aderencia'); 
-      const ulGaps = document.getElementById('report-gaps'); 
-      const ulPerguntas = document.getElementById('report-perguntas');
-      ulAderencia.innerHTML = ''; ulGaps.innerHTML = ''; ulPerguntas.innerHTML = '';
-      
-      let aderenciasCount = 0;
-      let gapsCount = 0;
-      let perguntasCount = 0;
-      const ADERENCIA_THRESHOLD = 20; 
-      const MAX_ITEMS = 4;
-      const MAX_PERGUNTAS = 3;
+      const gapsOrd = [...scored].sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff)); 
+      const ulAderencia = document.getElementById('report-aderencia'); 
+      const ulGaps = document.getElementById('report-gaps'); 
+      const ulPerguntas = document.getElementById('report-perguntas');
+      ulAderencia.innerHTML = ''; ulGaps.innerHTML = ''; ulPerguntas.innerHTML = '';
+      
+      let aderenciasCount = 0;
+      let gapsCount = 0;
+      let perguntasCount = 0;
+      const ADERENCIA_THRESHOLD = 20;s       const MAX_ITEMS = 4;
+      const MAX_PERGUNTAS = 3;
 
-      gapsOrd.forEach(i => {
-          const diffAbs = Math.abs(i.diff);
+      gapsOrd.forEach(i => {
+          const diffAbs = Math.abs(i.diff);
 
-          if (diffAbs <= ADERENCIA_THRESHOLD) {
-              if (aderenciasCount < MAX_ITEMS) {
-                ulAderencia.innerHTML += `<li><strong>${i.key}:</strong> Perfil alinhado (Seu: ${i.candScore.toFixed(0)} vs Alvo: ${i.alvoScore.toFixed(0)}).</li>`;
-                aderenciasCount++;
-              }
-          } else { 
-              if (gapsCount < MAX_ITEMS) {
-                if (i.diff > 0) { 
-                    ulGaps.innerHTML += `<li><strong>${i.key} (Gap Alto):</strong> Você (<strong>${i.candScore.toFixed(0)}</strong>) valoriza esta dimensão **mais** do que o Alvo (<strong>${i.alvoScore.toFixed(0)}</strong>).</li>`;
-                    if (perguntasCount < MAX_PERGUNTAS) {
-                        ulPerguntas.innerHTML += `<li style="margin-bottom: 15px;"><strong>[Reflexão sobre ${i.key}]</strong> ${DIMENSION_DESCRIPTIONS[i.key].question_high_gap}</li>`;
-                        perguntasCount++;
-                    }
-                } else { 
-                    ulGaps.innerHTML += `<li><strong>${i.key} (Gap Baixo):</strong> Você (<strong>${i.candScore.toFixed(0)}</strong>) valoriza esta dimensão **menos** do que o Alvo (<strong>${i.alvoScore.toFixed(0)}</strong>).</li>`;
-                    if (perguntasCount < MAX_PERGUNTAS) {
-                        ulPerguntas.innerHTML += `<li style="margin-bottom: 15px;"><strong>[Reflexão sobre ${i.key}]</strong> ${DIMENSION_DESCRIPTIONS[i.key].question_low_gap}</li>`;
-                        perguntasCount++;
-                    }
-                }
-                gapsCount++;
-              }
-          }
-      });
-      
-      if (ulAderencia.innerHTML === '') ulAderencia.innerHTML = '<li>Não foram identificadas aderências significativas (diferença < 20 pontos).</li>'; 
-      if (ulGaps.innerHTML === '') ulGaps.innerHTML = '<li>Não foram identificados gaps significativos (diferença > 20 pontos).</li>';
-      if (ulPerguntas.innerHTML === '') ulPerguntas.innerHTML = '<li>Seu alinhamento é alto, não foram geradas perguntas de gap. Reflita sobre suas principais aderências!</li>';
-  }
+          if (diffAbs <= ADERENCIA_THRESHOLD) {
+              if (aderenciasCount < MAX_ITEMS) {
+                ulAderencia.innerHTML += `<li><strong>${i.key}:</strong> Perfil alinhado (Seu: ${i.candScore.toFixed(0)} vs Alvo: ${i.alvoScore.toFixed(0)}).</li>`;
+s               aderenciasCount++;
+              }
+          } else { 
+              if (gapsCount < MAX_ITEMS) {
+                if (i.diff > 0) { 
+                    ulGaps.innerHTML += `<li><strong>${i.key} (Gap Alto):</strong> Você (<strong>${i.candScore.toFixed(0)}</strong>) valoriza esta dimensão **mais** do que o Alvo (<strong>${i.alvoScore.toFixed(0)}</strong>).</li>`;
+                    if (perguntasCount < MAX_PERGUNTAS) {
+                        ulPerguntas.innerHTML += `<li style="margin-bottom: 15px;"><strong>[Reflexão sobre ${i.key}]</strong> ${DIMENSION_DESCRIPTIONS[i.key].question_high_gap}</li>`;
+                        perguntasCount++;
+                    }
+              s } else { 
+                    ulGaps.innerHTML += `<li><strong>${i.key} (Gap Baixo):</strong> Você (<strong>${i.candScore.toFixed(0)}</strong>) valoriza esta dimensão **menos** do que o Alvo (<strong>${i.alvoScore.toFixed(0)}</strong>).</li>`;
+                    if (perguntasCount < MAX_PERGUNTAS) {
+                        ulPerguntas.innerHTML += `<li style="margin-bottom: 15px;"><strong>[Reflexão sobre ${i.key}]</strong> ${DIMENSION_DESCRIPTIONS[i.key].question_low_gap}</li>`;
+                        perguntasCount++;
+                    }
+                }
+                gapsCount++;
+section           }
+          }
+      });
+      
+      if (ulAderencia.innerHTML === '') ulAderencia.innerHTML = '<li>Não foram identificadas aderências significativas (diferença < 20 pontos).</li>'; 
+      if (ulGaps.innerHTML === '') ulGaps.innerHTML = '<li>Não foram identificados gaps significativos (diferença > 20 pontos).</li>';
+      if (ulPerguntas.innerHTML === '') ulPerguntas.innerHTML = '<li>Seu alinhamento é alto, não foram geradas perguntas de gap. Reflita sobre suas principais aderências!</li>';
+  }
 
-  // --- FUNÇÕES UTILITÁRIAS ---
+  // --- FUNÇÕES UTILITÁRIAS ---
 
-  function limparStorage() {
-      // Esta função é apenas para o Admin
-      if (confirm('Isso apagará o Alvo da Empresa salvo neste navegador. Deseja continuar?')) {
-          localStorage.removeItem(ALVO_KEY);
-          alert('Alvo limpo. A página será recarregada.');
-          window.location.href = window.location.href.split('?')[0]; // Recarrega para o Admin
-      }
-  }
+  function limparStorage() {
+      // Esta função é apenas para o Admin
+      if (confirm('Isso apagará o Alvo da Empresa salvo neste navegador. Deseja continuar?')) {
+          localStorage.removeItem(ALVO_KEY);
+          alert('Alvo limpo. A página será recarregada.');
+          window.location.href = window.location.href.split('?')[0]; // Recarrega para o Admin
+      }
+  }
 
-  function printSection(pageId) {
-      console.log("Imprimindo seção:", pageId);
-      document.body.classList.add('printing-mode');
-      const targetPage = document.getElementById(pageId); 
-      if(!targetPage) { console.error("Elemento não encontrado:", pageId); document.body.classList.remove('printing-mode'); return; }
-      
-      hideAllPages(); 
-      targetPage.classList.remove('hidden');
-      
-      if (pageId === 'page-report-generator' && recruiterRadarChart) {
-          recruiterRadarChart.resize();
-      }
-      
-      setTimeout(() => {
-          window.print();
-           setTimeout(() => {
-              document.body.classList.remove('printing-mode');
-              const params = new URLSearchParams(window.location.search); const mode = params.get('mode');
-              if (mode === 'report') initReport(); 
-              else if (mode === 'candidate') initReport(); 
-              else initAdmin();
-           }, 1000);
-      }, 500);
-   }
+  function printSection(pageId) {
+      console.log("Imprimindo seção:", pageId);
+      document.body.classList.add('printing-mode');
+      const targetPage = document.getElementById(pageId); 
+      if(!targetPage) { console.error("Elemento não encontrado:", pageId); document.body.classList.remove('printing-mode'); return; }
+      
+      hideAllPages(); 
+      targetPage.classList.remove('hidden');
+      
+      if (pageId === 'page-report-generator' && recruiterRadarChart) {
+          recruiterRadarChart.resize();
+      }
+      
+      setTimeout(() => {
+          window.print();
+           setTimeout(() => {
+              document.body.classList.remove('printing-mode');
+              const params = new URLSearchParams(window.location.search); const mode = params.get('mode');
+              if (mode === 'report') initReport(); 
+              else if (mode === 'candidate') initReport(); 
+              else initAdmin();
+           }, 1000);
+      }, 500);
+   }
 
 </script>
 </body>
