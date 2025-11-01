@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Crescenza 360° • Sistema de Fit Cultural v19.0 (Admin Seguro)</title>
+<title>Crescenza 360° • Sistema de Fit Cultural v20.1 (Admin Seguro)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   /* =============================
@@ -52,6 +52,12 @@
   }
   .hidden { display: none !important; }
 
+  /* Ajuste para centralizar a tela de login */
+  body.login-mode {
+    justify-content: center;
+    align-items: center;
+  }
+
   /* =============================
      CABEÇALHO
      ============================= */
@@ -61,7 +67,7 @@
   .header p { margin: 0; opacity: .9; }
   .header__bar { margin-top: 14px; height: 3px; width: 100%; background: var(--crescenza-orange); }
 
-  /* --- Logo em CSS (Aprimoramento v17.9) --- */
+  /* --- Logo em CSS --- */
   .logo-img-intro-css {
       background: var(--crescenza-black);
       color: #fff;
@@ -121,7 +127,7 @@
     display: block;
   }
  
-  input[type=text], input[type=number], input[type=tel], select { 
+  input[type=text], input[type=number], input[type=tel], input[type=password], select { 
     width: 100%; 
     font: inherit;
     font-size: 16px; 
@@ -158,6 +164,9 @@
   .btn--danger { background: var(--color-low); }
   .btn--accent { background: var(--color-invest); }
   .btn--whatsapp { background-color: #25D366; }
+  .btn--login { background-color: var(--crescenza-orange); } /* Botão de login com cor da marca */
+  .btn--login:hover { background-color: var(--color-urgent); }
+
 
   .btn-small { 
     padding: 8px 12px; 
@@ -170,6 +179,38 @@
   /* =============================
      LAYOUTS ESPECÍFICOS
      ============================= */
+
+  /* --- Tela de Login Dedicada (v20.0) --- */
+  #page-admin-login .card {
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    border-top: 5px solid var(--crescenza-orange);
+  }
+  #page-admin-login h2 {
+    text-align: center;
+    color: var(--crescenza-black);
+  }
+  #page-admin-login p {
+    text-align: center;
+    color: var(--crescenza-dark-gray);
+    margin-top: -10px;
+    margin-bottom: 24px;
+  }
+  #admin-login-error {
+    display: none; /* Escondido por padrão */
+    background: #ffebee;
+    color: var(--color-low);
+    border: 1px solid var(--color-low);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    margin-top: 16px;
+    text-align: center;
+    font-weight: 600;
+  }
+  .form-group {
+    margin-bottom: 16px;
+  }
  
   /* --- Caixas de Status e Avisos --- */
   .status-box { 
@@ -347,7 +388,28 @@
 </head>
 <body>
 
-<div class="page printable-section" id="page-admin">
+<div class="page hidden" id="page-admin-login">
+    <div class="card">
+        <h2><span class="dot" style="background: var(--crescenza-orange);"></span> Acesso Administrativo</h2>
+        <p>Crescenza 360º — Fit Cultural</p>
+        
+        <form id="admin-login-form">
+            <div class="form-group">
+                <label for="admin-password-input">Senha de Administrador</label>
+                <input type="password" id="admin-password-input" placeholder="Digite sua senha" required>
+            </div>
+            
+            <div id="admin-login-error">
+                Senha incorreta ou ambiente não seguro.
+            </div>
+
+            <button type="submit" class="btn btn--login">Entrar</button>
+        </form>
+    </div>
+</div>
+
+
+<div class="page printable-section hidden" id="page-admin">
     <header class="header no-print">
       <div class="header__inner">
         <h1>Crescenza 360º — Fit Cultural (Admin)</h1>
@@ -596,10 +658,10 @@
   const RECRUITER_EMAIL = 'contato@crescenzaonline.com';
   const RECRUITER_PHONE = '55996842002'; 
  
-  // --- MELHORIA DE SEGURANÇA v19.0 (Netlify-Ready) ---
-  // A senha 'Crescer@2025' foi convertida para um hash SHA-256.
-  // Esta é a abordagem moderna e robusta que você solicitou.
-  const ADMIN_HASH = 'e5a953b063a8a3182859b8a7c15e8f4c71850123565f4d1d1139e1449c258d1b'; 
+  // --- MELHORIA DE SEGURANÇA v20.1 (Netlify-Ready) ---
+  // Esta é a senha 'Crescer@2025' em hash SHA-256.
+  // ***** ESTA É A CORREÇÃO CRÍTICA *****
+  const ADMIN_HASH = 'e5a953b063a8a3182859b8a7c15e8f4c71850123565f4d1d1139e1449c258d1b';
 
   // --- CONFIGURAÇÃO CENTRAL ---
   const DIM_KEYS = ["Estrutura","Resultado","Inovação","Autonomia","Colaboração","Comunicação","Cliente","Aprendizado","Ritmo","Inclusão"];
@@ -696,7 +758,7 @@
   const BASE_BLOCKS = [ 
     [{ dim: "Estrutura", text: "Eu prefiro ter processos claros e regras definidas." },{ dim: "Inovação", text: "Eu gosto de questionar o 'status quo' e tentar coisas novas." },{ dim: "Colaboração", text: "Eu me sinto melhor trabalhando em equipe do que sozinho." },{ dim: "Ritmo", text: "Eu prospero em ambientes de alta velocidade e com prazos curtos." }],
     [{ dim: "Resultado", text: "Meu foco principal é bater as metas, não importa como." },{ dim: "Autonomia", text: "Eu gosto de ter liberdade para decidir como fazer meu trabalho." },{ dim: "Aprendizado", text: "Eu vejo erros como oportunidades de aprender e experimentar." },{ dim: "Cliente", text: "Eu sempre penso primeiro no impacto que minha ação terá no cliente." }],
-    [{ dim: "Comunicação", text: "Acredito que η informação deve ser aberta e transparente para todos." },{ dim: "Inclusão", text: "Eu valorizo ativamente perspectivas de pessoas com históricos diferentes do meu." },{ dim: "Estrutura", text: "Eu me sinto confortável com ambiguidades e pouca estrutura formal.", isInverted: true },{ dim: "Resultado", text: "Eu prefiro focar na qualidade da execução e processo, mesmo que a meta atrase.", isInverted: true }],
+    [{ dim: "Comunicação", text: "Acredito que a informação deve ser aberta e transparente para todos." },{ dim: "Inclusão", text: "Eu valorizo ativamente perspectivas de pessoas com históricos diferentes do meu." },{ dim: "Estrutura", text: "Eu me sinto confortável com ambiguidades e pouca estrutura formal.", isInverted: true },{ dim: "Resultado", text: "Eu prefiro focar na qualidade da execução e processo, mesmo que a meta atrase.", isInverted: true }],
     [{ dim: "Inovação", text: "Eu prefiro otimizar e melhorar sistemas existentes a criar algo do zero.", isInverted: true },{ dim: "Ritmo", text: "Eu gosto de um ritmo de trabalho cadenciado e bem planejado.", isInverted: true },{ dim: "Colaboração", text: "Eu sou mais produtivo quando posso focar no meu trabalho individual.", isInverted: true },{ dim: "Autonomia", text: "Eu prefiro ter um direcionamento claro do meu gestor sobre o que fazer.", isInverted: true }],
     [{ dim: "Cliente", text: "É mais importante focar na eficiência interna do que nas demandas do cliente.", isInverted: true },{ dim: "Aprendizado", text: "Para mim, é crucial evitar erros e garantir a consistência.", isInverted: true },{ dim: "Comunicação", text: "Eu acredito que a comunicação deve seguir a hierarquia formal.", isInverted: true },{ dim: "Inclusão", text: "Eu me sinto mais à vontade trabalhando com pessoas que pensam como eu.", isInverted: true }],
     [{ dim: "Estrutura", text: "Eu gosto de 'descobrir o caminho' à medida que trabalho.", isInverted: true },{ dim: "Ritmo", text: "Eu prefiro um ambiente ágil e intenso." },{ dim: "Autonomia", text: "Eu funciono melhor com supervisão e validação constantes.", isInverted: true },{ dim: "Inovação", text: "Eu sou mais focado em executar tarefas do que em inovar.", isInverted: true }],
@@ -712,11 +774,12 @@
   function hideAllPages() { document.querySelectorAll('.page').forEach(page => page.classList.add('hidden')); }
   function togglePage(pageId) {
       hideAllPages();
+      document.body.classList.remove('login-mode'); // Garante que o body não fique centralizado
       document.getElementById(pageId)?.classList.remove('hidden');
       window.scrollTo(0, 0);
   }
 
-  // --- FUNÇÕES DE HASH (SEGURANÇA v19.0) ---
+  // --- FUNÇÕES DE HASH (SEGURANÇA v20.0) ---
   /**
    * Converte uma string para um hash SHA-256 em hexadecimal.
    * @param {string} inputString A string a ser hasheada.
@@ -774,14 +837,14 @@
    * Roteador Principal da Aplicação (window.onload)
    * Lida com os modos: 'admin', 'candidate', 'report'
    */
-  window.onload = async () => {
+  window.onload = () => {
       const params = new URLSearchParams(window.location.search);
       const mode = params.get('mode');
       const targetData = params.get('target'); 
       const defaultPage = window.location.href.split('?')[0] + '?mode=candidate';
 
       if (mode === 'admin') {
-          // ROTA DE ADMIN (SEGURA)
+          // ROTA DE ADMIN (v20.0)
           
           // 1. Verificar se o ambiente é seguro (HTTPS), o que o Netlify é.
           if (!window.crypto || !window.crypto.subtle) {
@@ -790,25 +853,14 @@
               return; // Para a execução
           }
 
-          // 2. Pedir a senha
-          const inputPassword = prompt("Digite a senha de administrador para acessar:");
-          
-          // 3. Verificar a senha (usando HASH)
-          try {
-              if (await checkAdminPassword(inputPassword)) {
-                  console.log("Acesso de Admin concedido.");
-                  initAdmin(); // Inicia a página de admin
-              } else {
-                  if (inputPassword !== null) { // Não mostra alerta se o usuário clicou em "Cancelar"
-                    alert("Senha incorreta. Acesso negado.");
-                  }
-                  window.location.href = defaultPage; // Redireciona se a senha estiver errada
-              }
-          } catch (err) {
-              console.error("Erro fatal durante a verificação de senha:", err);
-              alert("Ocorreu um erro de criptografia. Não foi possível fazer o login.");
-              window.location.href = defaultPage;
-          }
+          // 2. Mostrar a tela de login
+          hideAllPages();
+          document.body.classList.add('login-mode'); // Centraliza a caixa de login
+          document.getElementById('page-admin-login')?.classList.remove('hidden');
+
+          // 3. Adicionar o listener ao formulário
+          const loginForm = document.getElementById('admin-login-form');
+          loginForm?.addEventListener('submit', handleAdminLogin);
 
       } else if (mode === 'candidate') {
           // ROTA DE CANDIDATO
@@ -843,13 +895,46 @@
       }
   };
 
+  /**
+   * Lida com o submit do formulário de login do admin
+   */
+  async function handleAdminLogin(event) {
+      event.preventDefault(); // Impede o recarregamento da página
+      const passInput = document.getElementById('admin-password-input');
+      const errorMsg = document.getElementById('admin-login-error');
+      const pass = passInput.value;
+
+      try {
+          if (await checkAdminPassword(pass)) {
+              // SUCESSO
+              console.log("Acesso de Admin concedido.");
+              errorMsg.style.display = 'none';
+              document.body.classList.remove('login-mode'); // Descentraliza o body
+              initAdmin(); // Inicia a página de admin
+          } else {
+              // FALHA
+              console.warn("Senha incorreta.");
+              errorMsg.style.display = 'block';
+              errorMsg.textContent = 'Senha incorreta. Tente novamente.';
+              passInput.value = '';
+              passInput.focus();
+          }
+      } catch (err) {
+          // FALHA DE CRIPTOGRAFIA (ex: ambiente inseguro)
+          console.error("Erro fatal durante a verificação de senha:", err);
+          errorMsg.style.display = 'block';
+          errorMsg.textContent = 'Erro de criptografia. Ambiente não seguro.';
+      }
+  }
+
+
   // --- LÓGICA DO PASSO 1: PAINEL ADMIN ---
 
   /**
    * Inicia a página de Admin (renderiza painéis, carrega dados salvos)
    */
   function initAdmin() {
-      togglePage('page-admin');
+      togglePage('page-admin'); // Mostra a página de admin
       // Renderiza 3 painéis de gestor por padrão, se ainda não houver nenhum
       if (!document.querySelector('#gestor-panels-container .gestor-card')) {
           renderGestorPanels(3);
@@ -881,7 +966,6 @@
           const gestorId = `gestor-${i}`; const card = document.createElement('div');
           card.className = 'card gestor-card'; card.id = gestorId;
           
-          // Bug-fix: Removido o botão 'X' individual para prevenir perda de dados.
           card.innerHTML = `<h3>Gestor ${i}</h3>`;
          
           let panelHtml = '';
@@ -1144,6 +1228,47 @@
   // --- LÓGICA DO PASSO 2: WIZARD CANDIDATO ---
 
   /**
+   * Inicia a página de Introdução do Candidato
+   */
+  function initCandidateIntro(success = false) { 
+      togglePage('page-candidate-intro'); 
+      if (!success) {
+          // Link inválido, esconde os botões e mostra o erro
+          document.querySelector('#page-candidate-intro .btn')?.classList.add('hidden');
+          document.getElementById('candidate-name-block')?.classList.add('hidden');
+          document.getElementById('candidate-link-error')?.classList.remove('hidden');
+      } else {
+          // Link válido, limpa dados antigos
+          localStorage.removeItem(CANDIDATO_NAME_KEY);
+          localStorage.removeItem(CANDIDATO_KEY);
+      }
+  }
+
+  /**
+   * Valida o nome e inicia o teste
+   */
+  function initCandidateTest() {
+      const nameInput = document.getElementById('candidate-name-input');
+      const nameError = document.getElementById('candidate-name-error');
+      const candidateName = nameInput.value.trim();
+
+      if (candidateName === "") {
+          nameError?.classList.remove('hidden');
+          nameInput?.focus();
+          return;
+      }
+     
+      nameError?.classList.add('hidden');
+      localStorage.setItem(CANDIDATO_NAME_KEY, candidateName);
+
+      togglePage('page-candidate-test');
+      currentQuestion = 0; 
+      candidateRawScores = {}; 
+      DIM_KEYS.forEach(k => candidateRawScores[k] = 0); 
+      renderWizardQuestion(currentQuestion);
+  }
+
+  /**
    * Renderiza um bloco de perguntas do wizard
    */
   function renderWizardQuestion(index) {
@@ -1244,7 +1369,7 @@
       if (wppLink) wppLink.href = wppUrl;
 
       const emailSubject = `Relatório de Fit Cultural - ${candidateName}`;
-      const emailBody = `Olá, Crescenza!\n\nSou ${candidateName} e estou enviando em anexo o meu Relatório de Fit Cultural (PDF) para análise.\n\nObrigado(a).`;
+      const emailBody = `Olá, Crescenza!\n\nSou ${candidateName} e estou enviando em anexo o meu Relatório de Fit Cultural (PDF) para análise.\n\Obrigado(a).`;
       if (emailLink) emailLink.href = `mailto:${RECRUITER_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
      
      
