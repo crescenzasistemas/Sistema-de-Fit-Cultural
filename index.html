@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Crescenza 360° • Sistema de Fit Cultural </title>
+<title>Crescenza 360° • Sistema de Fit Cultural v17.8 (Admin Seguro)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   /* =============================
@@ -288,7 +288,7 @@
     font: 14px/1.6 Arial, Helvetica, sans-serif; 
   }
   footer a { color: #ffa64d; text-decoration: none; }
-  /* CORREÇÃO v17.7: Centraliza todos os textos do rodapé */
+  /* CORREÇÃO v17.8: Centraliza todos os textos do rodapé */
   footer .footer-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
   footer p { margin: 0 0 6px; }
   footer p.copy { margin: 0 0 10px; }
@@ -571,11 +571,15 @@
   // --- CHAVES DE ARMAZENAMENTO ---
   const ALVO_KEY = 'crescenzaFitCulturalAlvo_v17'; 
   const CANDIDATO_KEY = 'crescenzaFitCulturalCandidato_v17';
-  const CANDIDATO_NAME_KEY = 'crescenzaFitCandidateName_v17'; // Chave para o nome
+  const CANDIDATO_NAME_KEY = 'crescenzaFitCandidateName_v17'; 
   
   // --- Contatos fixos ---
   const RECRUITER_EMAIL = 'contato@crescenzaonline.com';
   const RECRUITER_PHONE = '55996842002'; 
+  
+  // --- NOVO v17.8: Senha do Admin ---
+  // Altere esta senha para o que desejar
+  const ADMIN_PASSWORD = 'Crescer@2025'; 
 
   // --- CONFIGURAÇÃO CENTRAL ---
   const DIM_KEYS = ["Estrutura","Resultado","Inovação","Autonomia","Colaboração","Comunicação","Cliente","Aprendizado","Ritmo","Inclusão"];
@@ -707,13 +711,28 @@
       const params = new URLSearchParams(window.location.search);
       const mode = params.get('mode');
       const targetData = params.get('target'); 
+      const defaultPage = window.location.href.split('?')[0] + '?mode=candidate';
 
-      if (mode === 'candidate') {
+      if (mode === 'admin') {
+          // NOVO v17.8: Pedir senha para o Admin
+          const inputPassword = prompt("Digite a senha de administrador para acessar:");
+          if (inputPassword === ADMIN_PASSWORD) {
+              console.log("Acesso de Admin concedido.");
+              initAdmin();
+          } else {
+              if (inputPassword !== null) { // Só mostra alerta se não clicou em "Cancelar"
+                alert("Senha incorreta. Acesso negado.");
+              }
+              // Redireciona para a página de candidato, que mostrará o erro de link inválido
+              window.location.href = defaultPage;
+          }
+
+      } else if (mode === 'candidate') {
           if (!targetData) { 
               initCandidateIntro(false); // Link inválido, sem target
           } else {
               try {
-                  // A CORREÇÃO: Usamos a nova função de decode
+                  // A CORREÇÃO: Usamos a nova função de decode URL-Safe
                   const decodedAlvoString = base64UrlDecode(targetData);
                   // ************************************************
 
@@ -733,7 +752,10 @@
       } else if (mode === 'report') {
           initReport();
       } else {
-          initAdmin();
+          // Modo padrão (sem parâmetros)
+          // Redireciona para a página de candidato, que mostrará o erro de link inválido
+          // Isso "tranca" a raiz do site.
+          window.location.href = defaultPage;
       }
   };
   // ************************************************
@@ -1356,4 +1378,3 @@
 </script>
 </body>
 </html>
-
